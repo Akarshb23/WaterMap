@@ -1,133 +1,479 @@
-WaterMap Frontend
-The WaterMap frontend is a React + Vite application for exploring
-ward-level urban water stress, understanding risk factors, viewing
-forecasts, testing hypothetical interventions, and reviewing
-recommendations.
-Project status: This README describes the planned frontend
-architecture. Keep commands, routes, and API contracts synchronized
-with the actual implementation. Label synthetic or illustrative demo
-data clearly.
+# 💧 WaterMap Backend
 
-Features
-- Landing page introducing WaterMap
-- City dashboard with summary indicators and risk distribution
-- Interactive ward-level city map
-- Ward details with stress scores and contributing factors
-- Forecast and trend visualizations
-- What-if scenario simulation interface
-- Prioritized intervention recommendations
-- Data source and methodology pages
-- Responsive layouts, loading states, empty states, and error handling
-Tech stack
-- React and Vite
-- React Router
-- Plain CSS with shared design tokens
-- Recharts or another selected charting library
-- MapLibre GL JS or Leaflet (choose one)
-- Fetch or Axios for API requests
-Requirements
-- Node.js LTS and npm
-- WaterMap backend running locally, unless using clearly labeled demo
-  data
-Getting started
-From the repository root:
-cd frontend
-npm install
-Create .env based on .env.example:
-VITE_API_BASE_URL=http://localhost:8000/api/v1
-Start the development server:
-npm run dev
-Vite prints the local URL, usually http://localhost:5173.
-Build and preview:
-npm run build
-npm run preview
-Run linting if configured:
-npm run lint
-Suggested page routes
-  Route                Page
-  /                  Landing page
-  /dashboard         City dashboard
-  /map               Interactive city map
-  /wards/:wardId     Ward details
-  /predictions       Prediction and analysis
-  /simulation        Scenario simulation
-  /recommendations   Recommendations
-  /data-sources      Data sources and coverage
-  /about             About and methodology
-  *                  Not found
-These routes are proposed defaults. Keep them aligned with the router
-and backend API contract.
-Project organization
-frontend/
-├── public/                 # Static public assets
-├── src/
-│   ├── app/                # App setup, router, providers
-│   ├── assets/             # Imported images and icons
-│   ├── components/         # Shared and feature components
-│   ├── pages/              # Route-level screens
-│   ├── services/            # API client and feature services
-│   ├── hooks/              # Reusable React hooks
-│   ├── context/            # Shared city/filter state
-│   ├── utils/              # Formatting and domain utilities
-│   ├── constants/          # Routes, navigation, risk categories
-│   └── styles/             # Global CSS and design tokens
-├── tests/                  # Frontend tests
+> **Predictive Urban Water-Stress Intelligence Platform**
+
+The WaterMap backend powers ward-level water-stress monitoring, geospatial data access, data-source transparency, and the foundation for predictive water intelligence.
+
+---
+
+## 📌 Table of Contents
+
+- [Overview](#-overview)
+- [Tech Stack](#-tech-stack)
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Environment Configuration](#-environment-configuration)
+- [Database Setup](#-database-setup)
+- [Running the Server](#-running-the-server)
+- [API Endpoints](#-api-endpoints)
+- [Data Pipeline](#-data-pipeline)
+- [Geospatial Processing](#-geospatial-processing)
+- [Testing](#-testing)
+- [Architecture](#-architecture)
+- [Security Guidelines](#-security-guidelines)
+- [Project Status](#-project-status)
+
+---
+
+## 🌍 Overview
+
+**WaterMap** is designed to help understand and analyze urban water stress at the ward level.
+
+The backend provides a REST API for retrieving ward information, dashboard summaries, map data, and registered data sources. It also establishes the infrastructure needed for water-stress calculations, forecasting, scenario simulations, and recommendations.
+
+### Core Objectives
+
+- Provide structured access to ward-level water information.
+- Support interactive geospatial visualization.
+- Ingest, validate, and process water-related datasets.
+- Maintain transparent data-source information.
+- Support explainable and data-driven water-stress analysis.
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| **Python** | Backend programming language |
+| **FastAPI** | REST API development |
+| **PostgreSQL** | Relational data storage |
+| **PostGIS** | Geospatial database capabilities |
+| **SQLAlchemy** | Database ORM and session management |
+| **Pydantic** | Request validation and response schemas |
+| **Pytest** | Automated testing |
+| **Uvicorn** | ASGI application server |
+
+---
+
+## ✨ Features
+
+### ✅ Backend Infrastructure
+
+- FastAPI application foundation and API routing.
+- Health-check endpoint.
+- Dashboard summary API.
+- Ward listing and ward detail APIs.
+- Map-data API modules.
+- Data-source registration and retrieval.
+- Database connection, session, and ORM infrastructure.
+- Repository and service layers.
+- Data ingestion and validation modules.
+- Geospatial boundary and geometry-processing modules.
+
+### 🚧 Water Intelligence Engine
+
+The following modules are reserved for separate implementation:
+
+- **Water Stress Index (WSI):** Weighted water-stress assessment.
+- **Forecasting:** Future water-stress estimation.
+- **Scenario Simulation:** What-if analysis for demand reduction and other interventions.
+- **Recommendations:** Prioritized actions based on available indicators and risk factors.
+
+> **Note:** These features should be considered complete only after their implementation and validation.
+
+---
+
+## 📁 Project Structure
+
+```text
+backend/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── router.py
+│   │   └── routes/
+│   │       ├── health.py
+│   │       ├── dashboard.py
+│   │       ├── wards.py
+│   │       ├── map.py
+│   │       ├── data_sources.py
+│   │       ├── predictions.py
+│   │       ├── simulations.py
+│   │       ├── recommendations.py
+│   │       └── methodology.py
+│   ├── core/
+│   │   ├── config.py
+│   │   ├── logging.py
+│   │   ├── exceptions.py
+│   │   └── dependencies.py
+│   ├── database/
+│   │   ├── connection.py
+│   │   ├── session.py
+│   │   ├── base.py
+│   │   ├── models.py
+│   │   ├── queries.py
+│   │   └── seed.py
+│   ├── schemas/
+│   ├── services/
+│   ├── repositories/
+│   ├── data_pipeline/
+│   ├── geospatial/
+│   ├── water_stress/
+│   ├── forecasting/
+│   ├── simulation/
+│   └── recommendations/
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── sample/
+├── scripts/
+├── tests/
+├── docs/
 ├── .env.example
-├── package.json
-└── vite.config.js
-Design system
-WaterMap uses a minimal, nature-inspired green-and-blue visual identity.
-- Primary green: #176B52
-- Water blue: #2788E8
-- Main background: #F7FAF7
-- Surface: #FFFFFF
-- Pale mint: #E6F4EC
-- Main text: #17332C
-Use green for the core brand and primary actions, blue for water-related
-indicators and interactive accents, and distinct risk colors for map
-layers and status labels. Keep spacing, typography, buttons, cards, and
-navigation consistent.
-Backend integration
-- Keep the API base URL in VITE_API_BASE_URL.
-- Centralize HTTP behavior in src/services/apiClient.js.
-- Put feature-specific requests in services such as wardService.js,
-  mapService.js, and simulationService.js.
-- Use consistent ward IDs across the map, dashboard, and ward details.
-- Handle loading, empty, validation, and server-error states.
-- Do not put secrets in frontend environment variables. Variables
-  prefixed with VITE_ are exposed to the browser.
-The proposed API prefix is /api/v1. Confirm endpoint names and
-response shapes with the backend team before wiring up screens.
-Data and visualization rules
-- Label synthetic or mock values as demo data.
-- Do not display missing values as zero or imply missing data means
-  low risk.
-- Show units and reporting periods for indicators.
-- Distinguish historical observations from forecasts and simulated
-  outcomes.
-- Do not present simulated impact as a guaranteed real-world result.
-Development workflow
-1. Agree on API request and response schemas with the backend team.
-2. Build the shared layout and global styles.
-3. Implement the dashboard and map using a small, known dataset.
-4. Add ward details, simulation, and recommendations.
-5. Connect real API responses and remove mock data where available.
-6. Test responsive behavior, loading states, and error states.
-Troubleshooting
-- API request fails: Confirm the backend is running and
-  VITE_API_BASE_URL is correct.
-- CORS error: Configure allowed frontend origins in FastAPI for
-  the local Vite URL.
-- Map is blank: Check the map library, map style/source
-  configuration, and geometry format.
-- Environment variable changes do not apply: Restart Vite after
-  changing .env.
-- Unexpected ward values: Check ward IDs, units, reporting
-  periods, and risk thresholds.
-Contributing
-- Keep components focused and reusable.
-- Use shared design tokens instead of hardcoding colors.
-- Avoid duplicating API request logic across pages.
-- Add tests for important formatting, filtering, and visualization
-  utilities.
-- Keep .env files and secrets out of version control.
+├── .gitignore
+├── requirements.txt
+├── pyproject.toml
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure the following are installed:
+
+- **Python 3.11+**, or another version supported by the project dependencies.
+- **PostgreSQL**
+- **PostGIS**, if using spatial database functionality.
+- **Git**
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd WaterMap
+```
+
+### 2. Navigate to the Backend
+
+```bash
+cd backend
+```
+
+### 3. Create a Virtual Environment
+
+**Windows — PowerShell**
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+**Linux / macOS**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 4. Install Dependencies
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+---
+
+## ⚙️ Environment Configuration
+
+Create a `.env` file from the provided example.
+
+**Windows:**
+
+```powershell
+Copy-Item .env.example .env
+```
+
+**Linux / macOS:**
+
+```bash
+cp .env.example .env
+```
+
+Configure the required values in `.env`, according to the settings defined in `app/core/config.py`.
+
+Typical settings include:
+
+```dotenv
+PROJECT_NAME=WaterMap
+DEBUG=false
+DATABASE_URL=postgresql+psycopg2://username:password@localhost:5432/watermap
+DATABASE_ECHO=false
+```
+
+> **Security:** Replace example credentials with your local configuration. Never commit `.env`, passwords, API keys, or other secrets to Git.
+
+The variable names must match the actual application settings. Update this example if the configuration implementation uses different names.
+
+---
+
+## 🗄️ Database Setup
+
+### 1. Create a PostgreSQL Database
+
+Create a database named `watermap`, or use another name and update the connection URL accordingly.
+
+### 2. Enable PostGIS
+
+If spatial database functionality is required, execute the following SQL using a database role with the necessary permissions:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS postgis;
+```
+
+### 3. Initialize the Schema
+
+Use the database initialization or migration workflow provided by the project.
+
+Before loading data, verify that:
+
+- The database connection works.
+- Required tables exist.
+- Ward identifiers are stable and unique.
+- Geometry columns use the expected coordinate reference system.
+- Indicator records contain appropriate units, timestamps, and source references.
+
+**Important:** Database initialization and migrations must be verified against the actual implementation. Do not assume tables are automatically created.
+
+---
+
+## ▶️ Running the Server
+
+From the `backend/` directory, start the development server:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+The default local address is:
+
+```text
+http://127.0.0.1:8000
+```
+
+### API Documentation
+
+When enabled, FastAPI provides interactive documentation:
+
+- **Swagger UI:** http://127.0.0.1:8000/docs
+- **ReDoc:** http://127.0.0.1:8000/redoc
+- **OpenAPI Schema:** http://127.0.0.1:8000/openapi.json
+
+> **Startup note:** This command assumes `app/main.py` exposes a module-level `app` object. If the implementation only provides a `create_app()` factory, configure the appropriate Uvicorn factory command or expose the application instance.
+
+---
+
+## 🔌 API Endpoints
+
+The following endpoints were reported as registered in the current implementation.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/health` | Check API availability |
+| `GET` | `/dashboard` | Retrieve dashboard summary |
+| `GET` | `/wards` | List wards |
+| `GET` | `/wards/{ward_id}` | Retrieve ward details |
+| `GET` | `/map/layers` | Retrieve available map layers |
+| `GET` | `/map/wards/{ward_id}` | Retrieve ward map information |
+| `GET` | `/data-sources` | List registered data sources |
+| `POST` | `/data-sources` | Register a data source |
+| `GET` | `/data-sources/{source_id}` | Retrieve a specific data source |
+
+**Verify actual paths and HTTP methods** using the running application's OpenAPI documentation. Router prefixes may change the final URLs.
+
+### Health Check Example
+
+**Request**
+
+```http
+GET /health
+```
+
+**Example response**
+
+```json
+{
+  "status": "ok"
+}
+```
+
+The response above represents the health-check result reported during initial verification.
+
+---
+
+## 🔄 Data Pipeline
+
+The data pipeline separates ingestion and processing into reusable modules.
+
+### Processing Workflow
+
+1. **Ingestion** — Read supported source files.
+2. **Cleaning** — Handle malformed records and inconsistent values.
+3. **Validation** — Check required fields, types, and constraints.
+4. **Normalization** — Transform indicator values when appropriate metadata is available.
+5. **Aggregation** — Associate observations with canonical ward identifiers.
+6. **Persistence** — Store validated records in PostgreSQL.
+7. **Reporting** — Record rejected rows, validation failures, and ingestion errors.
+
+### Data Organization
+
+| Directory | Purpose |
+|---|---|
+| `data/raw/` | Original input datasets |
+| `data/processed/` | Cleaned and transformed datasets |
+| `data/sample/` | Small datasets for development and testing |
+
+> Use real, attributable datasets for real-world analysis. Clearly label synthetic or sample records, and do not present them as verified measurements.
+
+---
+
+## 🗺️ Geospatial Processing
+
+The geospatial modules support ward-level geographic data for integration with **MapLibre** or **Leaflet**.
+
+Responsibilities include:
+
+- Importing ward boundary datasets.
+- Validating geometry and detecting invalid features.
+- Handling coordinate reference systems.
+- Matching indicator observations to stable ward IDs.
+- Preparing GeoJSON-compatible map responses.
+- Reporting invalid or unmatched geographic records.
+
+All API and database modules should use the same canonical ward identifiers.
+
+---
+
+## 🧪 Testing
+
+Run the test suite from the `backend/` directory:
+
+```bash
+pytest -v
+```
+
+For a coverage report, install `pytest-cov` if it is not already included:
+
+```bash
+pytest --cov=app --cov-report=term-missing
+```
+
+### Initial Verification Status
+
+The initial test run reported:
+
+- **1 test passed**
+- **9 tests skipped**
+- Database-dependent tests were skipped because PostgreSQL was unavailable in that environment.
+
+This confirms the health-check test passed, but does not establish that all database operations or geospatial workflows work correctly.
+
+Run the full suite again after configuring the database.
+
+---
+
+## 🏗️ Architecture
+
+WaterMap separates backend responsibilities into two implementation areas.
+
+### Part 1 — Backend & Data Infrastructure
+
+Responsible for:
+
+- FastAPI application setup and shared configuration.
+- Database models, sessions, queries, and repositories.
+- Dashboard, ward, map, and data-source APIs.
+- Data ingestion, cleaning, validation, and aggregation.
+- Geospatial processing and map-data preparation.
+
+### Part 2 — Water Intelligence & Decision Engine
+
+Responsible for:
+
+- Water Stress Index calculation and explainability.
+- Forecasting and baseline comparisons.
+- What-if scenario simulation and impact estimation.
+- Rule-based recommendations and prioritization.
+
+Both parts must share the same database schema, canonical ward IDs, and documented data contracts.
+
+---
+
+## 🔐 Security Guidelines
+
+- Store credentials in environment variables.
+- Keep `.env` out of version control.
+- Validate incoming request parameters and payloads.
+- Use parameterized database operations.
+- Avoid exposing internal stack traces or secrets in API responses.
+- Configure CORS for trusted frontend origins.
+- Apply pagination and sensible limits to collection endpoints.
+- Validate uploaded datasets before processing them.
+- Avoid destructive database initialization or seeding operations.
+
+---
+
+## 📚 Documentation
+
+Additional technical documentation is available in `docs/`.
+
+| File | Purpose |
+|---|---|
+| `docs/api_contracts.md` | API request and response contracts |
+| `docs/data_dictionary.md` | Database fields and indicator definitions |
+| `docs/methodology.md` | Water-stress methodology |
+| `docs/architecture.md` | System architecture and module boundaries |
+
+---
+
+## 📈 Project Status
+
+**Current stage:** Backend infrastructure implementation and integration.
+
+| Component | Status |
+|---|---|
+| FastAPI foundation | Implemented; health check verified |
+| API route registration | Reported as verified |
+| Database integration | Requires testing with PostgreSQL |
+| Data pipeline | Implementation requires dataset-level validation |
+| Geospatial integration | Requires testing with real boundary data |
+| Water Stress Index | Reserved for Part 2 |
+| Forecasting | Reserved for Part 2 |
+| Scenario simulation | Reserved for Part 2 |
+| Recommendations | Reserved for Part 2 |
+
+---
+
+## 🤝 Contribution Guidelines
+
+When contributing to WaterMap:
+
+1. Follow the existing module structure.
+2. Keep route handlers thin and place business logic in services.
+3. Use repositories for database access.
+4. Validate API inputs with Pydantic schemas.
+5. Add tests for new functionality.
+6. Update the documentation when API contracts or database models change.
+7. Coordinate shared schema changes with the other backend developer.
+8. Never claim a feature is complete without appropriate verification.
+
+---
+
+**WaterMap — Turning urban water data into actionable intelligence.** 💧
