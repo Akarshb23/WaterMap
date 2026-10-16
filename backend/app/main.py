@@ -1,0 +1,44 @@
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+
+from .core.config import get_settings
+from .api.router import router as api_router
+
+
+def create_app() -> FastAPI:
+    settings = get_settings()
+
+    app = FastAPI(
+        title=settings.project_name,
+        version=settings.project_version,
+        debug=settings.debug,
+        openapi_url=settings.openapi_url,
+        docs_url=settings.docs_url,
+        redoc_url=settings.redoc_url,
+    )
+
+    app.include_router(api_router)
+
+    register_exception_handlers(app)
+    register_middleware(app)
+
+    return app
+
+
+def register_exception_handlers(app: FastAPI) -> None:
+    @app.exception_handler(Exception)
+    async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal server error"},
+        )
+
+
+def register_middleware(app: FastAPI) -> None:
+    class RequestIDMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request: Request, call_next):
+            response = await call_next(request)
+            return response
+
+    app.add_middleware(RequestIDMiddleware)
