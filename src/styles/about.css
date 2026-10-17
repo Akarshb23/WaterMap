@@ -1,0 +1,877 @@
+/* ==========================================================================
+   About WaterMap Page Styles
+   ========================================================================== */
+
+.about-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   1. Header & Scenic Skyline Banner
+   -------------------------------------------------------------------------- */
+
+.about-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  position: relative;
+  min-height: 5.25rem;
+}
+
+.about-header__intro {
+  min-width: 0;
+  flex: 1;
+}
+
+.about-header__title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--wm-color-text);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.about-header__subtitle {
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--wm-color-muted);
+  font-weight: 500;
+}
+
+.about-header__banner {
+  position: relative;
+  width: 32rem;
+  height: 5.25rem;
+  border-radius: var(--wm-radius);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-inline-end: 0.85rem;
+  flex-shrink: 0;
+}
+
+.about-header__landscape-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.about-header__card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--wm-radius);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 16px rgba(7, 93, 76, 0.1);
+}
+
+.about-header__card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  background-color: var(--wm-color-low-soft);
+  color: var(--wm-color-positive);
+  flex-shrink: 0;
+}
+
+.about-header__card-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+}
+
+.about-header__card-line1 {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+}
+
+.about-header__card-line2 {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--wm-color-muted);
+}
+
+/* --------------------------------------------------------------------------
+   2. Four Pillar Cards (Mission, Vision, Approach, Impact)
+   -------------------------------------------------------------------------- */
+
+.about-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.about-pillar-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.95rem;
+  padding: 1.15rem 1.25rem;
+  background-color: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  box-shadow: var(--wm-shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.about-pillar-card:hover {
+  box-shadow: var(--wm-shadow);
+  transform: translateY(-1px);
+}
+
+.about-pillar-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.about-pillar-card__icon--blue {
+  background-color: rgba(37, 137, 233, 0.12);
+  color: #2589e9;
+}
+
+.about-pillar-card__icon--green {
+  background-color: var(--wm-color-low-soft);
+  color: #10b981;
+}
+
+.about-pillar-card__content {
+  min-width: 0;
+}
+
+.about-pillar-card__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+  margin-bottom: 0.25rem;
+}
+
+.about-pillar-card__desc {
+  font-size: 0.78rem;
+  color: var(--wm-color-muted);
+  line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   3. Main Content Two-Column Grid
+   -------------------------------------------------------------------------- */
+
+.about-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.88fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.about-content-grid__main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.about-content-grid__side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   4. How WaterMap Works Card
+   -------------------------------------------------------------------------- */
+
+.about-workflow-card {
+  padding: 1.35rem 1.5rem;
+  background-color: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.about-workflow-card__header {
+  margin-bottom: 1.35rem;
+}
+
+.about-workflow-card__title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+  letter-spacing: -0.01em;
+}
+
+.about-workflow-card__subtitle {
+  font-size: 0.82rem;
+  color: var(--wm-color-muted);
+  margin-top: 0.2rem;
+}
+
+.about-workflow-card__flow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.about-workflow-step-wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+.about-workflow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  min-width: 0;
+  padding: 0 0.35rem;
+}
+
+.about-workflow-step__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: 50%;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.about-workflow-step:hover .about-workflow-step__icon {
+  transform: scale(1.05);
+}
+
+.about-workflow-step__icon--blue {
+  background-color: rgba(37, 137, 233, 0.12);
+  color: #2589e9;
+}
+
+.about-workflow-step__icon--green {
+  background-color: var(--wm-color-low-soft);
+  color: #10b981;
+}
+
+.about-workflow-step__icon--purple {
+  background-color: rgba(139, 92, 246, 0.14);
+  color: #8b5cf6;
+}
+
+.about-workflow-step__title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
+}
+
+.about-workflow-step__desc {
+  font-size: 0.74rem;
+  color: var(--wm-color-muted);
+  line-height: 1.4;
+  max-width: 13.5rem;
+}
+
+.about-workflow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  flex-shrink: 0;
+  margin-top: 0.85rem;
+  padding: 0 0.2rem;
+}
+
+/* --------------------------------------------------------------------------
+   5. Key Components & WSI Formula Sub-Grid
+   -------------------------------------------------------------------------- */
+
+.about-factors-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* Key Components Card */
+.about-key-components-card {
+  padding: 1.35rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.about-key-components-card__header {
+  margin-bottom: 1.15rem;
+}
+
+.about-key-components-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+}
+
+.about-key-components-card__subtitle {
+  font-size: 0.8rem;
+  color: var(--wm-color-muted);
+  margin-top: 0.2rem;
+}
+
+.about-key-components-card__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem 1rem;
+  flex: 1;
+  align-content: start;
+}
+
+.about-key-component-tile {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.about-key-component-tile__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.about-key-component-tile__icon--blue {
+  background-color: rgba(37, 137, 233, 0.12);
+  color: #2589e9;
+}
+
+.about-key-component-tile__icon--green {
+  background-color: var(--wm-color-low-soft);
+  color: #10b981;
+}
+
+.about-key-component-tile__info {
+  min-width: 0;
+}
+
+.about-key-component-tile__title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+  margin-bottom: 0.15rem;
+}
+
+.about-key-component-tile__desc {
+  font-size: 0.74rem;
+  color: var(--wm-color-muted);
+  line-height: 1.4;
+}
+
+/* Water Stress Index Formula Card */
+.about-formula-card {
+  padding: 1.35rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.about-formula-card__header {
+  margin-bottom: 1.05rem;
+}
+
+.about-formula-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+}
+
+.about-formula-card__subtitle {
+  font-size: 0.8rem;
+  color: var(--wm-color-muted);
+  margin-top: 0.2rem;
+}
+
+.about-formula-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.about-formula-banner {
+  background: #ebf7f2;
+  border: 1px solid #cceee1;
+  border-radius: var(--wm-radius-sm);
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+.about-formula-banner__code {
+  font-family: inherit;
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #075d4c;
+  letter-spacing: 0.025em;
+}
+
+.about-formula-legend {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.about-formula-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.78rem;
+}
+
+.about-formula-legend__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.about-formula-legend__symbol {
+  font-weight: 700;
+  width: 0.85rem;
+  color: var(--wm-color-text);
+}
+
+.about-formula-legend__sep {
+  display: none;
+}
+
+.about-formula-legend__name {
+  color: var(--wm-color-muted);
+}
+
+/* --------------------------------------------------------------------------
+   6. Methodology Overview Card
+   -------------------------------------------------------------------------- */
+
+.about-methodology-card {
+  padding: 1.35rem 1.45rem;
+  background-color: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.about-methodology-card__header {
+  margin-bottom: 1.15rem;
+}
+
+.about-methodology-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+}
+
+.about-methodology-card__subtitle {
+  font-size: 0.8rem;
+  color: var(--wm-color-muted);
+  margin-top: 0.2rem;
+}
+
+.about-methodology-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about-methodology-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.about-methodology-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.about-methodology-item__icon--blue {
+  background-color: rgba(37, 137, 233, 0.12);
+  color: #2589e9;
+}
+
+.about-methodology-item__icon--purple {
+  background-color: rgba(139, 92, 246, 0.14);
+  color: #8b5cf6;
+}
+
+.about-methodology-item__icon--green {
+  background-color: var(--wm-color-low-soft);
+  color: #10b981;
+}
+
+.about-methodology-item__icon--coral {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.about-methodology-item__info {
+  min-width: 0;
+}
+
+.about-methodology-item__title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+  margin-bottom: 0.15rem;
+}
+
+.about-methodology-item__desc {
+  font-size: 0.74rem;
+  color: var(--wm-color-muted);
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   7. Risk Categories Card
+   -------------------------------------------------------------------------- */
+
+.about-risk-card {
+  padding: 1.35rem 1.45rem;
+  background-color: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.about-risk-card__header {
+  margin-bottom: 1.15rem;
+}
+
+.about-risk-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+}
+
+.about-risk-card__subtitle {
+  font-size: 0.8rem;
+  color: var(--wm-color-muted);
+  margin-top: 0.2rem;
+}
+
+.about-risk-card__table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.about-risk-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.about-risk-row__level {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 7.2rem;
+  flex-shrink: 0;
+}
+
+.about-risk-row__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.about-risk-row__name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--wm-color-text);
+}
+
+.about-risk-row__range {
+  flex-shrink: 0;
+}
+
+.about-risk-badge {
+  display: inline-block;
+  padding: 0.18rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  border: 1px solid;
+}
+
+.about-risk-row__desc {
+  font-size: 0.76rem;
+  color: var(--wm-color-muted);
+  flex: 1;
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   8. Our Team & Collaboration Card
+   -------------------------------------------------------------------------- */
+
+.about-team-card {
+  padding: 1.35rem 1.5rem;
+  background-color: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.about-team-card__header {
+  margin-bottom: 1.25rem;
+}
+
+.about-team-card__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+}
+
+.about-team-card__subtitle {
+  font-size: 0.82rem;
+  color: var(--wm-color-muted);
+  margin-top: 0.2rem;
+}
+
+.about-team-card__body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.75rem;
+}
+
+.about-team-roles {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.15rem;
+  flex: 1;
+}
+
+.about-team-role {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.about-team-role__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.about-team-role__icon--blue {
+  background-color: rgba(37, 137, 233, 0.12);
+  color: #2589e9;
+}
+
+.about-team-role__icon--green {
+  background-color: var(--wm-color-low-soft);
+  color: #10b981;
+}
+
+.about-team-role__content {
+  min-width: 0;
+}
+
+.about-team-role__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+  margin-bottom: 0.15rem;
+}
+
+.about-team-role__desc {
+  font-size: 0.72rem;
+  color: var(--wm-color-muted);
+  line-height: 1.35;
+}
+
+.about-team-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.95rem 1.15rem;
+  background: #f0faf6;
+  border: 1px solid #bfe7d8;
+  border-radius: var(--wm-radius);
+  max-width: 22.5rem;
+  flex-shrink: 0;
+}
+
+.about-team-banner__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  background-color: var(--wm-color-low-soft);
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.about-team-banner__content {
+  min-width: 0;
+}
+
+.about-team-banner__title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #075d4c;
+  margin-bottom: 0.2rem;
+}
+
+.about-team-banner__caption {
+  font-size: 0.72rem;
+  color: #4b6358;
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   9. Responsive Adaptations
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+  .about-pillars-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-team-roles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .about-team-card__body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .about-team-banner {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 980px) {
+  .about-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .about-header__banner {
+    width: 100%;
+  }
+
+  .about-content-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-workflow-card__flow {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .about-workflow-step-wrapper {
+    min-width: 8.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .about-pillars-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-factors-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-team-roles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-workflow-card__flow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .about-workflow-step-wrapper {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .about-workflow-arrow {
+    margin-top: 0.25rem;
+    transform: rotate(90deg);
+  }
+
+  .about-risk-row {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .about-risk-row__desc {
+    width: 100%;
+    margin-left: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-team-roles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-key-components-card__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { Bell, ChevronDown, MapPin, Menu, Search } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
+import { useFilters } from '../../context/FilterContext.jsx'
 import { CITY_OPTIONS, RECENT_ALERTS } from '../../data/demoData.js'
 
 /**
  * Top navigation bar: mobile menu toggle, city selector, search field,
- * notifications popover and profile popover. All state is local — the
- * selectors only change what is displayed in this dashboard-only build.
+ * notifications popover and profile popover.
  */
 const Topbar = ({ onToggleSidebar, isSidebarOpen = false }) => {
+  const location = useLocation()
+  const { searchQuery, setSearchQuery } = useFilters()
   const [city, setCity] = useState('new-delhi')
-  const [query, setQuery] = useState('')
   const [openMenu, setOpenMenu] = useState(null)
   const actionsRef = useRef(null)
 
@@ -74,15 +76,25 @@ const Topbar = ({ onToggleSidebar, isSidebarOpen = false }) => {
       <div className="topbar__search">
         <Search size={15} className="topbar__search-icon" aria-hidden="true" />
         <label className="sr-only" htmlFor="topbar-search-input">
-          Search wards and areas
+          {location.pathname.startsWith('/data-sources')
+            ? 'Search datasets, indicators, sources...'
+            : location.pathname.startsWith('/about')
+            ? 'Search wards, indicators, methodology...'
+            : 'Search wards, interventions, policies...'}
         </label>
         <input
           id="topbar-search-input"
           type="search"
           className="search-bar"
-          placeholder="Search wards, areas, landmarks..."
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          placeholder={
+            location.pathname.startsWith('/data-sources')
+              ? 'Search datasets, indicators, sources...'
+              : location.pathname.startsWith('/about')
+              ? 'Search wards, indicators, methodology...'
+              : 'Search wards, interventions, policies...'
+          }
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
         />
       </div>
 

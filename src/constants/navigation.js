@@ -17,4 +17,6 @@ export const NAV_ITEMS = [
   { label: 'About', path: ROUTES.ABOUT },
 ]
 
-export const SIDEBAR_NAV_ITEMS = NAV_ITEMS.filter((item) => item.path !== ROUTES.HOME)
+export const SIDEBAR_NAV_ITEMS = NAV_ITEMS.filter(
+  (item) => item.path !== ROUTES.HOME && item.path !== ROUTES.WARD_DETAILS_HOME,
+)

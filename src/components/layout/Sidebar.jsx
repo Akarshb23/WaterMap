@@ -4,9 +4,9 @@ import {
   FlaskConical,
   Info,
   LayoutDashboard,
-  Lightbulb,
   Map,
   MapPinned,
+  ShieldCheck,
   TrendingUp,
   X,
 } from 'lucide-react'
@@ -21,7 +21,7 @@ const NAV_ICONS = {
   [ROUTES.WARD_DETAILS_HOME]: MapPinned,
   [ROUTES.PREDICTIONS]: TrendingUp,
   [ROUTES.SIMULATION]: FlaskConical,
-  [ROUTES.RECOMMENDATIONS]: Lightbulb,
+  [ROUTES.RECOMMENDATIONS]: ShieldCheck,
   [ROUTES.DATA_SOURCES]: Database,
   [ROUTES.ABOUT]: Info,
 }
@@ -88,6 +88,11 @@ const Sidebar = ({ isOpen = false, onClose }) => {
       </nav>
 
       <div className="sidebar__promo">
+        <div
+          className="sidebar__illustration-placeholder"
+          role="img"
+          aria-label="Sidebar city and water illustration placeholder"
+        />
         <span className="sidebar__promo-bubble sidebar__promo-bubble--one" aria-hidden="true" />
         <span className="sidebar__promo-bubble sidebar__promo-bubble--two" aria-hidden="true" />
         <span className="sidebar__promo-drop" aria-hidden="true" />

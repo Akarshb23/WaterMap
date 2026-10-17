@@ -1,6 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from '../components/layout/AppLayout.jsx'
-import PublicLayout from '../components/layout/PublicLayout.jsx'
 import { ROUTES } from '../constants/routes.js'
 import AboutPage from '../pages/AboutPage.jsx'
 import CityMapPage from '../pages/CityMapPage.jsx'
@@ -21,9 +20,6 @@ import WardDetailsPage from '../pages/WardDetailsPage.jsx'
 const Router = () => (
   <BrowserRouter>
     <Routes>
-      <Route element={<PublicLayout />}>
-        <Route path={ROUTES.ABOUT} element={<AboutPage />} />
-      </Route>
       <Route element={<AppLayout />}>
         <Route path={ROUTES.HOME} element={<Navigate replace to={ROUTES.DASHBOARD} />} />
         <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
@@ -33,6 +29,7 @@ const Router = () => (
         <Route path={ROUTES.SIMULATION} element={<SimulationPage />} />
         <Route path={ROUTES.RECOMMENDATIONS} element={<RecommendationsPage />} />
         <Route path={ROUTES.DATA_SOURCES} element={<DataSourcesPage />} />
+        <Route path={ROUTES.ABOUT} element={<AboutPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
