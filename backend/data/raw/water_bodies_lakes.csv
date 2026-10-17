@@ -1,0 +1,26 @@
+ward_id,lake_name,total_area_ha,storage_capacity_pct,coverage_pct_of_ward,source_id
+W001,Koramangala Valley Tank,14.5,42.0,2.12,DS005
+W002,Domlur Sub-basin,8.0,55.0,1.63,DS005
+W003,Bellandur Lake,365.0,28.0,25.52,DS005
+W004,Sheelavanthakere,22.0,22.0,1.59,DS005
+W005,Kundalahalli Lake,18.5,34.0,1.96,DS005
+W006,Agara Lake,58.0,62.0,7.44,DS005
+W007,Madhavan Park Reservoir,4.2,75.0,0.82,DS005
+W008,Sankey Tank,15.0,82.0,3.53,DS005
+W009,Hebbal Lake,65.0,58.0,7.98,DS005
+W010,Yelahanka Kere,120.0,46.0,10.71,DS005
+W011,High Grounds Catchment,3.5,80.0,1.13,DS005
+W012,Lalbagh Lake,16.0,72.0,4.16,DS005
+W013,Madiwala Lake,114.0,52.0,16.52,DS005
+W014,Challaghatta Basin,12.0,48.0,2.89,DS005
+W015,Kethmaranahalli Tank,7.5,68.0,1.39,DS005
+W016,Kempambudhi Lake,18.0,74.0,4.0,DS005
+W017,Ulsoor Lake North,48.0,71.0,13.33,DS005
+W018,Yediyur Lake,11.2,65.0,1.66,DS005
+W019,Matadahalli Tank,6.8,50.0,1.31,DS005
+W020,Mahadevapura Lake,26.5,30.0,2.25,DS005
+W021,Bommanahalli Kere,19.4,38.0,2.13,DS005
+W022,KR Puram Lake,32.0,35.0,3.02,DS005
+W023,Rachenahalli Lake,44.0,45.0,4.94,DS005
+W024,Doddathoguru Lake,25.0,25.0,2.0,DS005
+W025,Kaikondrahalli Lake,48.0,32.0,3.58,DS005

@@ -1,0 +1,1237 @@
+{
+  "type": "FeatureCollection",
+  "name": "Bengaluru_Wards_Water_Resilience",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "W001",
+      "properties": {
+        "ward_id": "W001",
+        "name": "Koramangala",
+        "district": "Bengaluru Urban",
+        "zone": "South",
+        "population": 52400,
+        "area_sqkm": 6.85,
+        "centroid_lat": 12.9352,
+        "centroid_lon": 77.6245
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.633819,
+              12.9352
+            ],
+            [
+              77.631254,
+              12.946601
+            ],
+            [
+              77.619841,
+              12.943066
+            ],
+            [
+              77.610993,
+              12.9352
+            ],
+            [
+              77.619841,
+              12.927334
+            ],
+            [
+              77.631254,
+              12.923799
+            ],
+            [
+              77.633819,
+              12.9352
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W002",
+      "properties": {
+        "ward_id": "W002",
+        "name": "Indiranagar",
+        "district": "Bengaluru Urban",
+        "zone": "East",
+        "population": 46800,
+        "area_sqkm": 4.92,
+        "centroid_lat": 12.9784,
+        "centroid_lon": 77.6408
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.647641,
+              12.9784
+            ],
+            [
+              77.647054,
+              12.988955
+            ],
+            [
+              77.63738,
+              12.984173
+            ],
+            [
+              77.628293,
+              12.9784
+            ],
+            [
+              77.63738,
+              12.972627
+            ],
+            [
+              77.647054,
+              12.967845
+            ],
+            [
+              77.647641,
+              12.9784
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W003",
+      "properties": {
+        "ward_id": "W003",
+        "name": "Bellandur",
+        "district": "Bengaluru Urban",
+        "zone": "Mahadevapura",
+        "population": 94500,
+        "area_sqkm": 14.3,
+        "centroid_lat": 12.926,
+        "centroid_lon": 77.6762
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.690133,
+              12.926
+            ],
+            [
+              77.685723,
+              12.942076
+            ],
+            [
+              77.669233,
+              12.937761
+            ],
+            [
+              77.657155,
+              12.926
+            ],
+            [
+              77.669233,
+              12.914239
+            ],
+            [
+              77.685723,
+              12.909924
+            ],
+            [
+              77.690133,
+              12.926
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W004",
+      "properties": {
+        "ward_id": "W004",
+        "name": "Whitefield",
+        "district": "Bengaluru Urban",
+        "zone": "Mahadevapura",
+        "population": 88200,
+        "area_sqkm": 13.8,
+        "centroid_lat": 12.9698,
+        "centroid_lon": 77.7499
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.761648,
+              12.9698
+            ],
+            [
+              77.760227,
+              12.987231
+            ],
+            [
+              77.744026,
+              12.979715
+            ],
+            [
+              77.729246,
+              12.9698
+            ],
+            [
+              77.744026,
+              12.959885
+            ],
+            [
+              77.760227,
+              12.952369
+            ],
+            [
+              77.761648,
+              12.9698
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W005",
+      "properties": {
+        "ward_id": "W005",
+        "name": "Marathahalli",
+        "district": "Bengaluru Urban",
+        "zone": "Mahadevapura",
+        "population": 73600,
+        "area_sqkm": 9.45,
+        "centroid_lat": 12.9563,
+        "centroid_lon": 77.7011
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.711254,
+              12.9563
+            ],
+            [
+              77.709429,
+              12.970359
+            ],
+            [
+              77.696023,
+              12.96487
+            ],
+            [
+              77.684442,
+              12.9563
+            ],
+            [
+              77.696023,
+              12.94773
+            ],
+            [
+              77.709429,
+              12.942241
+            ],
+            [
+              77.711254,
+              12.9563
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W006",
+      "properties": {
+        "ward_id": "W006",
+        "name": "HSR Layout",
+        "district": "Bengaluru Urban",
+        "zone": "Bommanahalli",
+        "population": 65400,
+        "area_sqkm": 7.8,
+        "centroid_lat": 12.9121,
+        "centroid_lon": 77.6446
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.655443,
+              12.9121
+            ],
+            [
+              77.651356,
+              12.923506
+            ],
+            [
+              77.639178,
+              12.921253
+            ],
+            [
+              77.631088,
+              12.9121
+            ],
+            [
+              77.639178,
+              12.902947
+            ],
+            [
+              77.651356,
+              12.900694
+            ],
+            [
+              77.655443,
+              12.9121
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W007",
+      "properties": {
+        "ward_id": "W007",
+        "name": "Jayanagar",
+        "district": "Bengaluru Urban",
+        "zone": "South",
+        "population": 48200,
+        "area_sqkm": 5.1,
+        "centroid_lat": 12.925,
+        "centroid_lon": 77.5838
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.592152,
+              12.925
+            ],
+            [
+              77.589471,
+              12.934574
+            ],
+            [
+              77.579624,
+              12.93205
+            ],
+            [
+              77.572458,
+              12.925
+            ],
+            [
+              77.579624,
+              12.91795
+            ],
+            [
+              77.589471,
+              12.915426
+            ],
+            [
+              77.592152,
+              12.925
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W008",
+      "properties": {
+        "ward_id": "W008",
+        "name": "Malleshwaram",
+        "district": "Bengaluru Urban",
+        "zone": "West",
+        "population": 43500,
+        "area_sqkm": 4.25,
+        "centroid_lat": 12.9962,
+        "centroid_lon": 77.5714
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.577487,
+              12.9962
+            ],
+            [
+              77.577349,
+              13.006239
+            ],
+            [
+              77.568357,
+              13.001336
+            ],
+            [
+              77.559503,
+              12.9962
+            ],
+            [
+              77.568357,
+              12.991064
+            ],
+            [
+              77.577349,
+              12.986161
+            ],
+            [
+              77.577487,
+              12.9962
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W009",
+      "properties": {
+        "ward_id": "W009",
+        "name": "Hebbal",
+        "district": "Bengaluru Urban",
+        "zone": "North",
+        "population": 59100,
+        "area_sqkm": 8.15,
+        "centroid_lat": 13.0358,
+        "centroid_lon": 77.597
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.605059,
+              13.0358
+            ],
+            [
+              77.605424,
+              13.050015
+            ],
+            [
+              77.59297,
+              13.0426
+            ],
+            [
+              77.580151,
+              13.0358
+            ],
+            [
+              77.59297,
+              13.029
+            ],
+            [
+              77.605424,
+              13.021585
+            ],
+            [
+              77.605059,
+              13.0358
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W010",
+      "properties": {
+        "ward_id": "W010",
+        "name": "Yelahanka Satellite Town",
+        "district": "Bengaluru Urban",
+        "zone": "Yelahanka",
+        "population": 71200,
+        "area_sqkm": 11.2,
+        "centroid_lat": 13.1007,
+        "centroid_lon": 77.5963
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.606741,
+              13.1007
+            ],
+            [
+              77.605683,
+              13.116528
+            ],
+            [
+              77.591079,
+              13.109507
+            ],
+            [
+              77.577535,
+              13.1007
+            ],
+            [
+              77.591079,
+              13.091893
+            ],
+            [
+              77.605683,
+              13.084872
+            ],
+            [
+              77.606741,
+              13.1007
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W011",
+      "properties": {
+        "ward_id": "W011",
+        "name": "Vasanth Nagar",
+        "district": "Bengaluru Urban",
+        "zone": "Central",
+        "population": 32800,
+        "area_sqkm": 3.1,
+        "centroid_lat": 12.9902,
+        "centroid_lon": 77.5901
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.595368,
+              12.9902
+            ],
+            [
+              77.595145,
+              12.998715
+            ],
+            [
+              77.587466,
+              12.994645
+            ],
+            [
+              77.580009,
+              12.9902
+            ],
+            [
+              77.587466,
+              12.985755
+            ],
+            [
+              77.595145,
+              12.981685
+            ],
+            [
+              77.595368,
+              12.9902
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W012",
+      "properties": {
+        "ward_id": "W012",
+        "name": "Shanthinagar",
+        "district": "Bengaluru Urban",
+        "zone": "Central",
+        "population": 39400,
+        "area_sqkm": 3.85,
+        "centroid_lat": 12.9605,
+        "centroid_lon": 77.5982
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.604591,
+              12.9605
+            ],
+            [
+              77.603561,
+              12.96955
+            ],
+            [
+              77.595004,
+              12.965894
+            ],
+            [
+              77.587477,
+              12.9605
+            ],
+            [
+              77.595004,
+              12.955106
+            ],
+            [
+              77.603561,
+              12.95145
+            ],
+            [
+              77.604591,
+              12.9605
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W013",
+      "properties": {
+        "ward_id": "W013",
+        "name": "BTM Layout",
+        "district": "Bengaluru Urban",
+        "zone": "South",
+        "population": 68900,
+        "area_sqkm": 6.9,
+        "centroid_lat": 12.9166,
+        "centroid_lon": 77.6101
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.620127,
+              12.9166
+            ],
+            [
+              77.61654,
+              12.927472
+            ],
+            [
+              77.605087,
+              12.925064
+            ],
+            [
+              77.59722,
+              12.9166
+            ],
+            [
+              77.605087,
+              12.908136
+            ],
+            [
+              77.61654,
+              12.905728
+            ],
+            [
+              77.620127,
+              12.9166
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W014",
+      "properties": {
+        "ward_id": "W014",
+        "name": "Domlur",
+        "district": "Bengaluru Urban",
+        "zone": "East",
+        "population": 41200,
+        "area_sqkm": 4.15,
+        "centroid_lat": 12.961,
+        "centroid_lon": 77.6387
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.645325,
+              12.961
+            ],
+            [
+              77.644272,
+              12.970405
+            ],
+            [
+              77.635388,
+              12.966591
+            ],
+            [
+              77.627556,
+              12.961
+            ],
+            [
+              77.635388,
+              12.955409
+            ],
+            [
+              77.644272,
+              12.951595
+            ],
+            [
+              77.645325,
+              12.961
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W015",
+      "properties": {
+        "ward_id": "W015",
+        "name": "Rajajinagar",
+        "district": "Bengaluru Urban",
+        "zone": "West",
+        "population": 54800,
+        "area_sqkm": 5.4,
+        "centroid_lat": 12.9915,
+        "centroid_lon": 77.5532
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.560132,
+              12.9915
+            ],
+            [
+              77.55987,
+              13.002756
+            ],
+            [
+              77.549734,
+              12.99735
+            ],
+            [
+              77.539861,
+              12.9915
+            ],
+            [
+              77.549734,
+              12.98565
+            ],
+            [
+              77.55987,
+              12.980244
+            ],
+            [
+              77.560132,
+              12.9915
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W016",
+      "properties": {
+        "ward_id": "W016",
+        "name": "Basavanagudi",
+        "district": "Bengaluru Urban",
+        "zone": "South",
+        "population": 44300,
+        "area_sqkm": 4.5,
+        "centroid_lat": 12.9421,
+        "centroid_lon": 77.5742
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.581565,
+              12.9421
+            ],
+            [
+              77.579768,
+              12.951499
+            ],
+            [
+              77.570517,
+              12.948316
+            ],
+            [
+              77.563064,
+              12.9421
+            ],
+            [
+              77.570517,
+              12.935884
+            ],
+            [
+              77.579768,
+              12.932701
+            ],
+            [
+              77.581565,
+              12.9421
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W017",
+      "properties": {
+        "ward_id": "W017",
+        "name": "Shivajinagar",
+        "district": "Bengaluru Urban",
+        "zone": "Central",
+        "population": 49100,
+        "area_sqkm": 3.6,
+        "centroid_lat": 12.9863,
+        "centroid_lon": 77.6033
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.609031,
+              12.9863
+            ],
+            [
+              77.60871,
+              12.995431
+            ],
+            [
+              77.600435,
+              12.991136
+            ],
+            [
+              77.59248,
+              12.9863
+            ],
+            [
+              77.600435,
+              12.981464
+            ],
+            [
+              77.60871,
+              12.977169
+            ],
+            [
+              77.609031,
+              12.9863
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W018",
+      "properties": {
+        "ward_id": "W018",
+        "name": "Banashankari",
+        "district": "Bengaluru Urban",
+        "zone": "South",
+        "population": 61200,
+        "area_sqkm": 6.75,
+        "centroid_lat": 12.9155,
+        "centroid_lon": 77.5562
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.566159,
+              12.9155
+            ],
+            [
+              77.562549,
+              12.926219
+            ],
+            [
+              77.551221,
+              12.923906
+            ],
+            [
+              77.543502,
+              12.9155
+            ],
+            [
+              77.551221,
+              12.907094
+            ],
+            [
+              77.562549,
+              12.904781
+            ],
+            [
+              77.566159,
+              12.9155
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W019",
+      "properties": {
+        "ward_id": "W019",
+        "name": "RT Nagar",
+        "district": "Bengaluru Urban",
+        "zone": "North",
+        "population": 53400,
+        "area_sqkm": 5.2,
+        "centroid_lat": 13.0185,
+        "centroid_lon": 77.5945
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.601,
+              13.0185
+            ],
+            [
+              77.601197,
+              13.029801
+            ],
+            [
+              77.59125,
+              13.023985
+            ],
+            [
+              77.581106,
+              13.0185
+            ],
+            [
+              77.59125,
+              13.013015
+            ],
+            [
+              77.601197,
+              13.007199
+            ],
+            [
+              77.601,
+              13.0185
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W020",
+      "properties": {
+        "ward_id": "W020",
+        "name": "Mahadevapura Core",
+        "district": "Bengaluru Urban",
+        "zone": "Mahadevapura",
+        "population": 81200,
+        "area_sqkm": 11.8,
+        "centroid_lat": 12.9882,
+        "centroid_lon": 77.6953
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.705627,
+              12.9882
+            ],
+            [
+              77.705119,
+              13.004772
+            ],
+            [
+              77.690136,
+              12.996915
+            ],
+            [
+              77.675662,
+              12.9882
+            ],
+            [
+              77.690136,
+              12.979485
+            ],
+            [
+              77.705119,
+              12.971628
+            ],
+            [
+              77.705627,
+              12.9882
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W021",
+      "properties": {
+        "ward_id": "W021",
+        "name": "Bommanahalli Core",
+        "district": "Bengaluru Urban",
+        "zone": "Bommanahalli",
+        "population": 76500,
+        "area_sqkm": 9.1,
+        "centroid_lat": 12.8984,
+        "centroid_lon": 77.6212
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.633527,
+              12.8984
+            ],
+            [
+              77.628189,
+              12.9102
+            ],
+            [
+              77.615036,
+              12.908806
+            ],
+            [
+              77.607222,
+              12.8984
+            ],
+            [
+              77.615036,
+              12.887994
+            ],
+            [
+              77.628189,
+              12.8866
+            ],
+            [
+              77.633527,
+              12.8984
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W022",
+      "properties": {
+        "ward_id": "W022",
+        "name": "KR Puram",
+        "district": "Bengaluru Urban",
+        "zone": "Mahadevapura",
+        "population": 78900,
+        "area_sqkm": 10.6,
+        "centroid_lat": 13.0075,
+        "centroid_lon": 77.6961
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.705515,
+              13.0075
+            ],
+            [
+              77.705594,
+              13.023522
+            ],
+            [
+              77.691393,
+              13.015444
+            ],
+            [
+              77.677112,
+              13.0075
+            ],
+            [
+              77.691393,
+              12.999556
+            ],
+            [
+              77.705594,
+              12.991478
+            ],
+            [
+              77.705515,
+              13.0075
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W023",
+      "properties": {
+        "ward_id": "W023",
+        "name": "Thanisandra",
+        "district": "Bengaluru Urban",
+        "zone": "Yelahanka",
+        "population": 62800,
+        "area_sqkm": 8.9,
+        "centroid_lat": 13.0552,
+        "centroid_lon": 77.6324
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.640893,
+              13.0552
+            ],
+            [
+              77.641169,
+              13.069996
+            ],
+            [
+              77.628154,
+              13.062365
+            ],
+            [
+              77.614862,
+              13.0552
+            ],
+            [
+              77.628154,
+              13.048035
+            ],
+            [
+              77.641169,
+              13.040404
+            ],
+            [
+              77.640893,
+              13.0552
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W024",
+      "properties": {
+        "ward_id": "W024",
+        "name": "Electronic City",
+        "district": "Bengaluru Urban",
+        "zone": "South Peripheral",
+        "population": 85000,
+        "area_sqkm": 12.5,
+        "centroid_lat": 12.8452,
+        "centroid_lon": 77.6601
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.677394,
+              12.8452
+            ],
+            [
+              77.666865,
+              12.856624
+            ],
+            [
+              77.651453,
+              12.859802
+            ],
+            [
+              77.64657,
+              12.8452
+            ],
+            [
+              77.651453,
+              12.830598
+            ],
+            [
+              77.666865,
+              12.833776
+            ],
+            [
+              77.677394,
+              12.8452
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W025",
+      "properties": {
+        "ward_id": "W025",
+        "name": "Sarjapur Road Peripheral",
+        "district": "Bengaluru Urban",
+        "zone": "Mahadevapura Peripheral",
+        "population": 91000,
+        "area_sqkm": 13.4,
+        "centroid_lat": 12.908,
+        "centroid_lon": 77.6985
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.712933,
+              12.908
+            ],
+            [
+              77.707244,
+              12.922763
+            ],
+            [
+              77.691284,
+              12.920183
+            ],
+            [
+              77.681011,
+              12.908
+            ],
+            [
+              77.691284,
+              12.895817
+            ],
+            [
+              77.707244,
+              12.893237
+            ],
+            [
+              77.712933,
+              12.908
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

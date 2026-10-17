@@ -1,0 +1,12 @@
+{
+  "run_id": "RUN-a8b79a0c",
+  "duration_seconds": 0.342,
+  "stats": {
+    "sources_registered": 6,
+    "wards_created": 25,
+    "indicators_created": 125,
+    "records_processed": 0,
+    "errors": []
+  },
+  "total_wards": 25
+}
