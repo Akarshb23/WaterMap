@@ -1,0 +1,1060 @@
+/* ---------------------------------------------------------------------------
+ * Interactive City Map page: heading, filter toolbar, map workspace,
+ * empty map canvas overlays and the Ward 12 detail panel
+ * ------------------------------------------------------------------------ */
+
+/* Page heading with a subtle decorative accent on the right */
+.city-map-heading {
+  position: relative;
+  margin-bottom: 1.25rem;
+  padding-inline-end: 7.5rem;
+}
+
+.city-map-heading .page-header {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0;
+}
+
+.city-map-heading .page-header__title {
+  font-size: 1.5rem;
+  color: var(--wm-color-primary-dark);
+}
+
+.city-map-heading__accent {
+  position: absolute;
+  top: -0.85rem;
+  inset-inline-end: 0;
+  width: 6.5rem;
+  height: 5rem;
+  pointer-events: none;
+}
+
+.city-map-heading__bubble {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.city-map-heading__bubble--one {
+  width: 4.4rem;
+  height: 4.4rem;
+  top: -0.4rem;
+  inset-inline-end: -0.6rem;
+  background-color: rgba(7, 93, 76, 0.07);
+}
+
+.city-map-heading__bubble--two {
+  width: 2.2rem;
+  height: 2.2rem;
+  top: 2.9rem;
+  inset-inline-end: 3.6rem;
+  background-color: rgba(37, 137, 233, 0.08);
+}
+
+.city-map-heading__drop {
+  position: absolute;
+  top: 1.4rem;
+  inset-inline-end: 1.8rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50% 50% 50% 0;
+  background-color: rgba(7, 93, 76, 0.14);
+  transform: rotate(-45deg);
+}
+
+/* ---------------------------------------------------------------------------
+ * Filter toolbar
+ * ------------------------------------------------------------------------ */
+
+.city-map-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(11.5rem, 1.3fr);
+  gap: 0.8rem 1rem;
+  align-items: end;
+  padding: 1rem 1.15rem;
+  margin-bottom: 1rem;
+  background-color: var(--wm-color-surface);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-lg);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.city-map-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.city-map-filter__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #3d5764;
+}
+
+.city-map-filter select {
+  width: 100%;
+}
+
+/* Keep the search field the same height as the selects in the row. */
+.city-map-filter__search .search-bar {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.82rem;
+}
+
+.city-map-filter__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.city-map-filter__search-icon {
+  position: absolute;
+  inset-inline-start: 0.8rem;
+  color: #90a2ad;
+  pointer-events: none;
+}
+
+.city-map-filter__search .search-bar {
+  border-radius: var(--wm-radius-sm);
+}
+
+/* ---------------------------------------------------------------------------
+ * Map workspace (map canvas + ward panel)
+ * ------------------------------------------------------------------------ */
+
+.city-map-workspace {
+  display: flex;
+  flex-direction: column;
+  padding: 1.1rem;
+}
+
+.city-map-workspace__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 67fr) minmax(19rem, 33fr);
+  gap: 1.15rem;
+  align-items: stretch;
+}
+
+.city-map-workspace__grid--full {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ---------------------------------------------------------------------------
+ * Empty map canvas (pale, neutral placeholder for the future map)
+ * ------------------------------------------------------------------------ */
+
+.city-map-canvas {
+  position: relative;
+  min-height: 34rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  background-color: #edf3f4;
+  background-image: repeating-linear-gradient(
+      0deg,
+      transparent 0 47px,
+      rgba(20, 46, 59, 0.05) 47px 48px
+    ),
+    repeating-linear-gradient(90deg, transparent 0 47px, rgba(20, 46, 59, 0.05) 47px 48px);
+  overflow: hidden;
+}
+
+.city-map-canvas__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  color: #9db1ba;
+  text-align: center;
+  pointer-events: none;
+}
+
+.city-map-canvas__placeholder-title {
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7d919c;
+}
+
+.city-map-canvas__placeholder-text {
+  font-size: 0.78rem;
+}
+
+/* Zoom cluster sits top-left on this map (map.css defaults to top-right). */
+.city-map-canvas .map-controls {
+  inset-inline-start: 0.85rem;
+  inset-inline-end: auto;
+}
+
+.city-map-zoom-level {
+  position: absolute;
+  top: 0.85rem;
+  inset-inline-start: 3.35rem;
+  z-index: 7;
+  padding: 0.35rem 0.55rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-sm);
+  box-shadow: var(--wm-shadow-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #3d5764;
+}
+
+/* Current-view readout (top-right) reflecting the toolbar filters */
+.city-map-view-card {
+  position: absolute;
+  top: 0.85rem;
+  inset-inline-end: 0.85rem;
+  z-index: 7;
+  width: 11.5rem;
+  padding: 0.6rem 0.75rem 0.7rem;
+  background-color: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.city-map-view-card__title {
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--wm-color-muted);
+}
+
+.city-map-view-card__value {
+  margin-top: 0.3rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.city-map-view-card__meta {
+  font-size: 0.72rem;
+  color: var(--wm-color-muted);
+}
+
+.city-map-view-card__wards {
+  margin-top: 0.5rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--wm-color-border);
+}
+
+.city-map-view-card__count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #3d5764;
+}
+
+.city-map-view-card__list {
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  color: var(--wm-color-muted);
+}
+
+.city-map-view-card__list li + li {
+  margin-top: 0.1rem;
+}
+
+.city-map-view-card__empty {
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  color: #90a2ad;
+}
+
+/* Selected-ward marker placeholder (restores the details panel) */
+.city-map-ward-marker {
+  position: absolute;
+  top: 33%;
+  inset-inline-start: 46%;
+  z-index: 8;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem 0.45rem 0.65rem;
+  background-color: var(--wm-color-surface);
+  border: 1px solid #f4c7c7;
+  border-radius: 999px;
+  box-shadow: var(--wm-shadow);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #c62828;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.city-map-ward-marker:hover {
+  background-color: #fff7f7;
+  box-shadow: var(--wm-shadow-lg);
+}
+
+.city-map-ward-marker__pin {
+  flex-shrink: 0;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50% 50% 50% 0;
+  background-color: var(--wm-color-danger);
+  transform: rotate(-45deg);
+}
+
+/* Layer switches inside the legend card */
+.city-map-legend__switches {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--wm-color-border);
+}
+
+/* Toggle switch (shared component) */
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.toggle__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #3d5764;
+}
+
+.toggle__switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.05rem;
+  height: 1.15rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background-color: #d5e0e4;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.toggle__switch[aria-checked='true'] {
+  background-color: var(--wm-color-positive);
+}
+
+.toggle__thumb {
+  position: absolute;
+  top: 2px;
+  inset-inline-start: 2px;
+  width: calc(1.15rem - 4px);
+  height: calc(1.15rem - 4px);
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(20, 46, 59, 0.25);
+  transition: transform 0.15s ease;
+}
+
+.toggle__switch[aria-checked='true'] .toggle__thumb {
+  transform: translateX(0.9rem);
+}
+
+/* Visual scale (0 – 10 km) */
+.city-map-scale {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 50%;
+  z-index: 6;
+  padding: 0.3rem 0.5rem 0.25rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: var(--wm-radius-sm);
+  transform: translateX(-50%);
+}
+
+.city-map-scale__bar {
+  display: flex;
+  width: 8.5rem;
+  height: 0.38rem;
+  border: 1px solid #7d919c;
+  overflow: hidden;
+}
+
+.city-map-scale__segment {
+  flex: 1;
+  background-color: #ffffff;
+}
+
+.city-map-scale__segment--alt {
+  background-color: #5b707c;
+}
+
+.city-map-scale__labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.15rem;
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: #5b707c;
+}
+
+/* ---------------------------------------------------------------------------
+ * Ward 12 detail panel
+ * ------------------------------------------------------------------------ */
+
+.ward-detail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-inline-start: 1.15rem;
+  border-inline-start: 1px solid var(--wm-color-border);
+}
+
+.ward-detail__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ward-detail__name {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.ward-detail__zone {
+  margin-top: 0.1rem;
+  font-size: 0.8rem;
+  color: var(--wm-color-muted);
+}
+
+.ward-detail__badge {
+  margin-top: 0.45rem;
+}
+
+.ward-detail__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: 50%;
+  background-color: var(--wm-color-surface);
+  color: var(--wm-color-muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.ward-detail__close:hover {
+  background-color: #f1f8f9;
+  color: var(--wm-color-text);
+}
+
+.ward-detail__notice {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  padding: 0.55rem 0.7rem;
+  background-color: #e5f0fd;
+  border: 1px solid #cfe4fa;
+  border-radius: var(--wm-radius-sm);
+  font-size: 0.76rem;
+  color: #1668b8;
+}
+
+.ward-detail__notice-dismiss {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ward-detail__body {
+  margin-top: 0.95rem;
+}
+
+.ward-tab-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.ward-tab-panel__intro {
+  margin-bottom: 0.7rem;
+  font-size: 0.78rem;
+  color: var(--wm-color-muted);
+}
+
+.ward-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
+}
+
+.ward-detail__actions .btn {
+  flex: 1 1 auto;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8rem;
+}
+
+.ward-detail__disclaimer {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.9rem;
+  font-size: 0.7rem;
+  color: #90a2ad;
+}
+
+/* Overview: compact metric grid */
+.ward-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.ward-metric-card {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  background-color: var(--wm-color-surface);
+}
+
+.ward-metric-card__body {
+  min-width: 0;
+}
+
+.ward-metric-card__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--wm-color-muted);
+}
+
+.ward-metric-card__value {
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.ward-metric-card__unit {
+  margin-inline-start: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--wm-color-muted);
+}
+
+.ward-metric-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.ward-metric-card__icon--blue {
+  background-color: #e5f0fd;
+  color: var(--wm-chart-blue);
+}
+
+.ward-metric-card__icon--green {
+  background-color: var(--wm-color-low-soft);
+  color: var(--wm-color-positive);
+}
+
+.ward-metric-card__icon--red {
+  background-color: var(--wm-color-danger-soft);
+  color: var(--wm-color-danger);
+}
+
+.ward-metric-card__ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.ward-metric-card__ring svg {
+  transform: rotate(-90deg);
+}
+
+.ward-metric-card__ring-track {
+  fill: none;
+  stroke: #fbdede;
+  stroke-width: 4.5;
+}
+
+.ward-metric-card__ring-value {
+  fill: none;
+  stroke: var(--wm-color-danger);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease;
+}
+
+.ward-metric-card__ring-text {
+  position: absolute;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #c62828;
+}
+
+/* Section titles + trend chart */
+.ward-section-title {
+  margin-top: 1.15rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+}
+
+.ward-trend {
+  margin-top: 1.15rem;
+}
+
+.ward-trend__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.ward-trend__title {
+  margin-top: 0;
+}
+
+.ward-trend__chart {
+  height: 11rem;
+  margin-top: 0.5rem;
+}
+
+/* Key insights */
+.insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.6rem;
+}
+
+.insight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.insight-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: var(--wm-radius-sm);
+}
+
+.insight-item__icon--danger {
+  background-color: var(--wm-color-danger-soft);
+  color: var(--wm-color-danger);
+}
+
+.insight-item__icon--info {
+  background-color: #e5f0fd;
+  color: var(--wm-chart-blue);
+}
+
+.insight-item__icon--warning {
+  background-color: var(--wm-color-orange-soft);
+  color: #d97706;
+}
+
+.insight-item__icon--moderate {
+  background-color: var(--wm-color-warning-soft);
+  color: #9a6b00;
+}
+
+.insight-item__icon--low {
+  background-color: var(--wm-color-low-soft);
+  color: var(--wm-color-positive);
+}
+
+.insight-item__text {
+  font-size: 0.78rem;
+  color: #3d5764;
+}
+
+/* Risk factors tab */
+.factor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.factor-item {
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  background-color: var(--wm-color-surface);
+}
+
+.factor-item__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.factor-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: var(--wm-radius-sm);
+  background-color: #e5f0fd;
+  color: var(--wm-chart-blue);
+}
+
+.factor-item__icon--danger {
+  background-color: var(--wm-color-danger-soft);
+  color: var(--wm-color-danger);
+}
+
+.factor-item__icon--info {
+  background-color: #e5f0fd;
+  color: var(--wm-chart-blue);
+}
+
+.factor-item__icon--warning {
+  background-color: var(--wm-color-orange-soft);
+  color: #d97706;
+}
+
+.factor-item__icon--moderate {
+  background-color: var(--wm-color-warning-soft);
+  color: #9a6b00;
+}
+
+.factor-item__icon--low {
+  background-color: var(--wm-color-low-soft);
+  color: var(--wm-color-positive);
+}
+
+.factor-item__titles {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.factor-item__title {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.factor-item__description {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--wm-color-muted);
+}
+
+.factor-item__contribution {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.5rem;
+}
+
+.factor-item__contribution-label {
+  font-size: 0.7rem;
+  color: var(--wm-color-muted);
+}
+
+.factor-item__contribution-bar {
+  flex: 1;
+  height: 0.35rem;
+  border-radius: 999px;
+  background-color: #f0f5f7;
+  overflow: hidden;
+}
+
+.factor-item__contribution-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.factor-item__contribution-fill--danger {
+  background-color: var(--wm-color-danger);
+}
+
+.factor-item__contribution-fill--moderate {
+  background-color: var(--wm-color-orange);
+}
+
+.factor-item__contribution-value {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #3d5764;
+}
+
+/* Trends tab */
+.trend-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trend-summary__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  background-color: var(--wm-color-surface);
+}
+
+.trend-summary__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.trend-summary__label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--wm-color-muted);
+}
+
+.trend-summary__value {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.ward-history-chart {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.1rem;
+}
+
+.ward-history-chart__legend {
+  display: flex;
+  gap: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.ward-history-chart__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: var(--wm-color-muted);
+}
+
+.ward-history-chart__swatch {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 2px;
+}
+
+.ward-history-chart__swatch--wsi {
+  background-color: #ef4444;
+}
+
+.ward-history-chart__swatch--rain {
+  background-color: rgba(37, 137, 233, 0.5);
+}
+
+.ward-history-chart__plot {
+  height: 11rem;
+}
+
+.chart-tooltip__value--blue {
+  color: var(--wm-chart-blue);
+}
+
+/* Recommendations tab */
+.recommendation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.recommendation-card {
+  display: flex;
+  gap: 0.65rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  background-color: var(--wm-color-surface);
+}
+
+.recommendation-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: var(--wm-radius-sm);
+}
+
+.recommendation-card__icon--low {
+  background-color: var(--wm-color-low-soft);
+  color: var(--wm-color-positive);
+}
+
+.recommendation-card__icon--info {
+  background-color: #e5f0fd;
+  color: var(--wm-chart-blue);
+}
+
+.recommendation-card__icon--warning {
+  background-color: var(--wm-color-orange-soft);
+  color: #d97706;
+}
+
+.recommendation-card__icon--moderate {
+  background-color: var(--wm-color-warning-soft);
+  color: #9a6b00;
+}
+
+.recommendation-card__body {
+  min-width: 0;
+}
+
+.recommendation-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.recommendation-card__title {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.recommendation-card__description {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--wm-color-muted);
+}
+
+/* Smaller select used beside the compact panel charts */
+.native-select--compact {
+  padding: 0.35rem 1.6rem 0.35rem 0.7rem;
+  font-size: 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Responsive
+ * ------------------------------------------------------------------------ */
+
+/* Keep the ward panel usable before the columns stack */
+@media (max-width: 1320px) {
+  .city-map-workspace__grid {
+    grid-template-columns: minmax(0, 62fr) minmax(18rem, 38fr);
+  }
+}
+
+/* Stack map above the ward panel */
+@media (max-width: 1120px) {
+  .city-map-workspace__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ward-detail {
+    padding-inline-start: 0;
+    padding-top: 1rem;
+    border-inline-start: 0;
+    border-top: 1px solid var(--wm-color-border);
+  }
+
+  .city-map-canvas {
+    min-height: 26rem;
+  }
+}
+
+/* Filter toolbar wraps to two rows, then one */
+@media (max-width: 1000px) {
+  .city-map-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .city-map-heading {
+    padding-inline-end: 0;
+  }
+
+  .city-map-heading__accent {
+    display: none;
+  }
+
+  .city-map-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .city-map-canvas {
+    min-height: 22rem;
+  }
+
+  .city-map-view-card {
+    width: 10.25rem;
+    padding: 0.5rem 0.65rem 0.6rem;
+  }
+
+  .city-map-scale {
+    bottom: 0.6rem;
+  }
+
+  .ward-detail__actions .btn {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .city-map-canvas {
+    min-height: 19rem;
+  }
+
+  .city-map-zoom-level {
+    display: none;
+  }
+
+  .city-map-view-card {
+    top: 0.6rem;
+    inset-inline-end: 0.6rem;
+  }
+
+  .city-map-view-card__list {
+    display: none;
+  }
+
+  .city-map-ward-marker {
+    top: 30%;
+    inset-inline-start: 50%;
+  }
+}

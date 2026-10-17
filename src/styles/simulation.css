@@ -1,0 +1,704 @@
+/* ---------------------------------------------------------------------------
+ * Scenario Simulation page
+ * ------------------------------------------------------------------------ */
+
+/* --- Controls bar --------------------------------------------------------- */
+
+.sim-controls {
+  padding: 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.sim-controls__row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  gap: 0.9rem;
+  align-items: end;
+}
+
+.sim-controls__field {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.sim-controls__field select {
+  width: 100%;
+}
+
+.sim-controls__run {
+  white-space: nowrap;
+  align-self: end;
+}
+
+.sim-controls__note {
+  margin-top: 0.8rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--wm-color-border);
+  font-size: 0.68rem !important;
+  line-height: 1.45;
+  color: var(--wm-color-muted);
+}
+
+/* --- Main three-level grid ------------------------------------------------ */
+/* Rows: [map | impact | summary], [map | citywide | takeaways],
+   [forecast | effect | options] — columns ~43% / ~33% / ~24%. */
+
+.sim-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 43fr) minmax(0, 33fr) minmax(0, 24fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    'map impact summary'
+    'map citywide takeaways'
+    'forecast effect options';
+  gap: 1rem;
+}
+
+.sim-grid__map {
+  grid-area: map;
+  display: flex;
+  min-width: 0;
+}
+
+.sim-grid__map > .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-grid__impact {
+  grid-area: impact;
+  min-width: 0;
+}
+
+.sim-grid__summary {
+  grid-area: summary;
+  min-width: 0;
+}
+
+.sim-grid__citywide {
+  grid-area: citywide;
+  min-width: 0;
+}
+
+.sim-grid__takeaways {
+  grid-area: takeaways;
+  min-width: 0;
+}
+
+.sim-grid__forecast {
+  grid-area: forecast;
+  min-width: 0;
+}
+
+.sim-grid__effect {
+  grid-area: effect;
+  min-width: 0;
+}
+
+.sim-grid__options {
+  grid-area: options;
+  min-width: 0;
+}
+
+/* Cards stretch inside a grid cell so rows stay visually aligned. */
+.sim-grid > [class^='sim-grid__'] > .card {
+  height: 100%;
+}
+
+/* --- Simulated map -------------------------------------------------------- */
+
+.sim-map {
+  padding: 1.15rem;
+  width: 100%;
+}
+
+.sim-map__toggle {
+  display: inline-flex;
+  padding: 0.2rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: 999px;
+  background-color: #f1f7f9;
+  gap: 0.15rem;
+}
+
+.sim-map__toggle-btn {
+  padding: 0.35rem 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--wm-color-muted);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sim-map__toggle-btn:hover {
+  color: var(--wm-color-text);
+}
+
+.sim-map__toggle-btn--active,
+.sim-map__toggle-btn--active:hover {
+  background-color: var(--wm-color-primary);
+  color: #ffffff;
+}
+
+.sim-map-canvas {
+  position: relative;
+  flex: 1;
+  margin-top: 0.9rem;
+  min-height: 21rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius);
+  background-color: #eaf3f5;
+  overflow: hidden;
+}
+
+/* Controls sit top-left on this map (per the reference layout). */
+.sim-map-canvas .map-controls {
+  inset-inline-start: 0.85rem;
+  inset-inline-end: auto;
+}
+
+.sim-map-canvas__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.3rem;
+  padding: 1.25rem;
+  text-align: center;
+  color: #7d939e;
+}
+
+.sim-map-canvas__placeholder-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.sim-map-canvas__placeholder-text {
+  font-size: 0.72rem;
+  max-width: 18rem;
+}
+
+.sim-map-marker {
+  position: absolute;
+  top: 46%;
+  left: 53%;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--wm-shadow-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--wm-color-text);
+  cursor: help;
+}
+
+.sim-map-marker__pin {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background-color: var(--wm-color-danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.sim-map-marker__value {
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background-color: var(--wm-color-danger-soft);
+  color: #c62828;
+}
+
+.sim-map-zoom {
+  position: absolute;
+  top: 0.85rem;
+  inset-inline-start: 3.35rem;
+  z-index: 6;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-sm);
+  background-color: rgba(255, 255, 255, 0.95);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--wm-color-muted);
+}
+
+.sim-map-scale {
+  position: absolute;
+  right: 0.85rem;
+  bottom: 0.85rem;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-sm);
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--wm-shadow-sm);
+}
+
+.sim-map-scale__bar {
+  display: flex;
+  width: 6rem;
+  height: 6px;
+  border: 1px solid #9fb4bd;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.sim-map-scale__bar span {
+  flex: 1;
+}
+
+.sim-map-scale__bar span:first-child {
+  background-color: #3d5764;
+}
+
+.sim-map-scale__bar span:last-child {
+  background-color: #ffffff;
+}
+
+.sim-map-scale__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  color: var(--wm-color-muted);
+}
+
+/* --- Charts (shared tooltip + info icon) ---------------------------------- */
+
+.chart-info {
+  margin-left: 0.35rem;
+  color: var(--wm-color-muted);
+  cursor: help;
+}
+
+.impact-tooltip {
+  padding: 0.5rem 0.65rem;
+  font-size: 0.72rem;
+}
+
+.impact-tooltip p {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.impact-tooltip__title {
+  font-weight: 700;
+  font-size: 0.74rem !important;
+}
+
+.impact-tooltip__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  flex: none;
+}
+
+.impact-chart,
+.citywide-comparison,
+.water-stress-forecast {
+  padding: 1.15rem;
+  height: 100%;
+}
+
+.impact-chart__legend {
+  justify-content: flex-end;
+  margin-top: 0;
+}
+
+.impact-chart__canvas,
+.citywide-comparison__chart {
+  margin-top: 0.5rem;
+}
+
+.citywide-comparison__select select {
+  max-width: 11.5rem;
+}
+
+/* --- Impact summary card -------------------------------------------------- */
+
+.sim-summary {
+  padding: 1.15rem;
+  height: 100%;
+}
+
+.sim-summary__list {
+  margin-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+}
+
+.sim-summary__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.sim-summary__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: var(--wm-radius-sm);
+}
+
+.sim-summary__icon--green {
+  background-color: var(--wm-color-low-soft);
+  color: var(--wm-color-positive);
+}
+
+.sim-summary__icon--blue {
+  background-color: #e5f0fd;
+  color: var(--wm-chart-blue);
+}
+
+.sim-summary__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sim-summary__value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--wm-color-text);
+}
+
+.sim-summary__label {
+  font-size: 0.72rem;
+  color: var(--wm-color-muted);
+}
+
+.sim-summary__note {
+  margin-top: 0.9rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--wm-color-border);
+  font-size: 0.66rem !important;
+  line-height: 1.45;
+  color: var(--wm-color-muted);
+}
+
+/* --- Key takeaways -------------------------------------------------------- */
+
+.key-takeaways {
+  padding: 1.15rem;
+  height: 100%;
+}
+
+.key-takeaways__list {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  list-style: none;
+}
+
+.key-takeaways__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.key-takeaways__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+}
+
+.key-takeaways__icon--green {
+  background-color: var(--wm-color-low-soft);
+  color: var(--wm-color-positive);
+}
+
+.key-takeaways__icon--blue {
+  background-color: #e5f0fd;
+  color: var(--wm-chart-blue);
+}
+
+.key-takeaways__icon--teal {
+  background-color: #e2f6f7;
+  color: #0e93a3;
+}
+
+.key-takeaways__icon--orange {
+  background-color: var(--wm-color-orange-soft);
+  color: var(--wm-color-orange);
+}
+
+.key-takeaways__text {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--wm-color-text);
+}
+
+.key-takeaways__note {
+  margin-top: 0.8rem;
+  font-size: 0.66rem !important;
+  color: var(--wm-color-muted);
+}
+
+/* --- Intervention effectiveness ------------------------------------------- */
+
+.effectiveness {
+  padding: 1.15rem;
+  height: 100%;
+}
+
+.effectiveness__list {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  list-style: none;
+}
+
+.effectiveness__row {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, auto) minmax(0, 1fr) 3rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: var(--wm-radius-sm);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.effectiveness__row--active {
+  background-color: #f0faf6;
+  border-color: #cfe9dd;
+}
+
+.effectiveness__row--active .effectiveness__label {
+  font-weight: 700;
+  color: var(--wm-color-primary);
+}
+
+.effectiveness__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--wm-color-text);
+}
+
+.effectiveness__track {
+  height: 0.55rem;
+  border-radius: 999px;
+  background-color: #eef4f6;
+  overflow: hidden;
+}
+
+.effectiveness__fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.25s ease;
+}
+
+.effectiveness__value {
+  justify-self: end;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--wm-color-text);
+}
+
+.effectiveness__note {
+  margin-top: 0.85rem;
+  font-size: 0.66rem !important;
+  line-height: 1.45;
+  color: var(--wm-color-muted);
+}
+
+/* --- Try different scenarios ---------------------------------------------- */
+
+.scenario-options {
+  padding: 1.15rem;
+  height: 100%;
+}
+
+.scenario-options__list {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.scenario-options__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--wm-color-border);
+  border-radius: var(--wm-radius-sm);
+  background-color: var(--wm-color-surface);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.scenario-options__item:hover {
+  border-color: #bcd8dd;
+  background-color: #f7fbfc;
+}
+
+.scenario-options__item--active {
+  border-color: var(--wm-color-primary);
+  background-color: var(--wm-color-primary-soft);
+}
+
+.scenario-options__radio {
+  margin: 0.15rem 0 0;
+  accent-color: var(--wm-color-primary);
+  flex: none;
+}
+
+.scenario-options__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: var(--wm-radius-sm);
+}
+
+.scenario-options__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.scenario-options__label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--wm-color-text);
+}
+
+.scenario-options__item--active .scenario-options__label {
+  color: var(--wm-color-primary);
+}
+
+.scenario-options__description {
+  font-size: 0.67rem;
+  line-height: 1.4;
+  color: var(--wm-color-muted);
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+
+/* Tablet: controls wrap; main grid collapses to two columns. */
+@media (max-width: 1199px) {
+  .sim-controls__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sim-controls__run {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+
+  .sim-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'map map'
+      'impact summary'
+      'citywide takeaways'
+      'forecast effect'
+      'options options';
+  }
+
+  .sim-map-canvas {
+    min-height: 20rem;
+  }
+}
+
+/* Mobile: single stacked column; every control usable without overflow. */
+@media (max-width: 760px) {
+  .sim-controls__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sim-controls__run {
+    grid-column: auto;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .sim-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'map'
+      'impact'
+      'summary'
+      'citywide'
+      'takeaways'
+      'forecast'
+      'effect'
+      'options';
+  }
+
+  .impact-chart__legend {
+    justify-content: flex-start;
+    margin-top: 0.6rem;
+  }
+
+  .citywide-comparison__select select {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .sim-map__toggle {
+    margin-top: 0.5rem;
+  }
+
+  .sim-map .card__header {
+    flex-wrap: wrap;
+  }
+
+  .sim-map-canvas {
+    min-height: 15rem;
+  }
+
+  .sim-map-marker {
+    top: 34%;
+  }
+
+  .effectiveness__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0.3rem;
+  }
+
+  .effectiveness__track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .effectiveness__value {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}

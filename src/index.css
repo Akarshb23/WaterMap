@@ -1,0 +1,21 @@
+/*
+ * Entry stylesheet imported by `src/main.jsx`.
+ * Aggregates the WaterMap global layers in dependency order; each layer is
+ * imported exactly once here, so individual pages/components should not
+ * re-import them.
+ */
+@import './styles/variables.css';
+@import './styles/reset.css';
+@import './styles/global.css';
+@import './styles/typography.css';
+@import './styles/utilities.css';
+@import './styles/animations.css';
+@import './styles/accessibility.css';
+@import './styles/layout.css';
+@import './styles/dashboard.css';
+@import './styles/map.css';
+@import './styles/city-map.css';
+@import './styles/ward-details.css';
+@import './styles/predictions.css';
+@import './styles/simulation.css';
+@import './styles/responsive.css';
