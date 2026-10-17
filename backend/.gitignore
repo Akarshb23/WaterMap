@@ -11,7 +11,7 @@ __pycache__/
 venv/
 ENV/
 
-# Local database files (in backend/)
+# Local database files
 *.db
 *.sqlite
 *.sqlite3

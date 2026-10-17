@@ -1,6 +1,0 @@
-ward_id,date,registered_tanker_trips,avg_tanker_price_inr,scarcity_complaints,trips_per_thousand_residents,source_id
-W001,2024-09-30,110,950,38,2.1,DS004
-W002,2024-09-30,45,900,18,0.96,DS004
-W003,2024-09-30,485,1450,164,5.13,DS004
-W004,2024-09-30,520,1500,182,5.9,DS004
-W005,2024-09-30,340,1350,115,4.62,DS004
