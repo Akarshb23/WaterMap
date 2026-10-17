@@ -119,13 +119,14 @@ Run the complete test suite with `uv run pytest`:
 uv run pytest -v
 ```
 
-All 23 test suites cover:
+All 25 automated tests cover:
 - Health & system diagnostics
 - Dashboard summary statistics
 - Ward filtering, pagination, and indicator timeseries
 - Map layers, GeoJSON exports, and reverse-geocoding coordinates
 - Data source CRUD and provenance tracking
 - Data cleaning, Pydantic schema validation, and normalization
+- Database connection URL normalization and engine creation
 - Part 2 501 Not Implemented API contracts
 
 ---

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -24,7 +25,7 @@ def create_app() -> FastAPI:
     app.include_router(api_router, prefix="/api/v1")
 
     register_exception_handlers(app)
-    register_middleware(app)
+    register_middleware(app, settings)
 
     return app
 
@@ -45,7 +46,18 @@ def register_exception_handlers(app: FastAPI) -> None:
         )
 
 
-def register_middleware(app: FastAPI) -> None:
+def register_middleware(app: FastAPI, settings=None) -> None:
+    if settings is None:
+        settings = get_settings()
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
     class RequestIDMiddleware(BaseHTTPMiddleware):
         async def dispatch(self, request: Request, call_next):
             response = await call_next(request)

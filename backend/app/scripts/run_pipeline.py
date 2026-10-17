@@ -19,10 +19,7 @@ def run_pipeline(database_url: str | None = None, source_id: str | None = None, 
     url = database_url or connection.get_database_url()
     logger.info("Connecting to database: %s", url)
 
-    if url.startswith("sqlite"):
-        engine = create_engine(url, connect_args={"check_same_thread": False})
-    else:
-        engine = create_engine(url)
+    engine = connection.create_engine_for_url(url)
 
     database_base.Base.metadata.create_all(bind=engine)
     SessionLocal = sessionmaker(bind=engine)

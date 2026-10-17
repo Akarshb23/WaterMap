@@ -16,10 +16,8 @@ def init_db(database_url: str | None = None, seed_sample: bool = True) -> dict:
     url = database_url or connection.get_database_url()
     logger.info("Initializing database with URL: %s", url)
 
-    if url.startswith("sqlite"):
-        engine = create_engine(url, connect_args={"check_same_thread": False})
-    else:
-        engine = create_engine(url)
+    engine = connection.create_engine_for_url(url)
+    if not url.startswith("sqlite"):
         # Try enabling PostGIS if PostgreSQL
         try:
             with engine.connect() as conn:
