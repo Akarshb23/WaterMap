@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from .core.config import get_settings
@@ -18,7 +19,9 @@ def create_app() -> FastAPI:
         redoc_url=settings.redoc_url,
     )
 
+    # Mount routes at root and with /api/v1 prefix
     app.include_router(api_router)
+    app.include_router(api_router, prefix="/api/v1")
 
     register_exception_handlers(app)
     register_middleware(app)
@@ -27,6 +30,13 @@ def create_app() -> FastAPI:
 
 
 def register_exception_handlers(app: FastAPI) -> None:
+    @app.exception_handler(StarletteHTTPException)
+    async def http_exception_handler(request: Request, exc: StarletteHTTPException) -> JSONResponse:
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"detail": exc.detail},
+        )
+
     @app.exception_handler(Exception)
     async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(
@@ -42,3 +52,8 @@ def register_middleware(app: FastAPI) -> None:
             return response
 
     app.add_middleware(RequestIDMiddleware)
+
+
+# Module-level app instance for uvicorn app.main:app
+app = create_app()
+

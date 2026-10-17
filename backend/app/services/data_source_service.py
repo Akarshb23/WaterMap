@@ -1,28 +1,9 @@
-from typing import Any
-
-from pydantic import BaseModel
+from typing import Any, List, Optional
 from sqlalchemy.orm import Session
 
 from ..database import queries
+from ..schemas.data_source import DataSourceOut, DataSourceCreate
 
-
-class DataSourceOut(BaseModel):
-    source_id: str
-    name: str
-    type: str
-    url: str | None
-    description: str | None
-    refresh_interval_hours: int
-    is_active: bool
-
-
-class DataSourceCreate(BaseModel):
-    name: str
-    type: str
-    url: str | None
-    description: str | None
-    refresh_interval_hours: int
-    is_active: bool = True
 
 
 class DataSourceService:

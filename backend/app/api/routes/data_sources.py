@@ -1,7 +1,9 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from ...core.dependencies import get_data_source_service_dependency
-from ...services.data_source_service import DataSourceOut, DataSourceCreate
+from ...schemas.data_source import DataSourceOut, DataSourceCreate
+from ...services.data_source_service import DataSourceService
 
 router = APIRouter(
     prefix="/data-sources",
@@ -11,11 +13,11 @@ router = APIRouter(
 
 @router.get(
     "",
-    response_model=list[DataSourceOut],
+    response_model=List[DataSourceOut],
 )
 def list_data_sources(
-    service = Depends(get_data_source_service_dependency),
-) -> list[DataSourceOut]:
+    service: DataSourceService = Depends(get_data_source_service_dependency),
+) -> List[DataSourceOut]:
     return service.list_data_sources()
 
 
@@ -26,7 +28,7 @@ def list_data_sources(
 )
 def create_data_source(
     payload: DataSourceCreate,
-    service = Depends(get_data_source_service_dependency),
+    service: DataSourceService = Depends(get_data_source_service_dependency),
 ) -> DataSourceOut:
     source = service.create_data_source(
         name=payload.name,
@@ -36,15 +38,7 @@ def create_data_source(
         refresh_interval_hours=payload.refresh_interval_hours,
         is_active=payload.is_active,
     )
-    return DataSourceOut(
-        source_id=source["source_id"],
-        name=source["name"],
-        type=source["type"],
-        url=source["url"],
-        description=source["description"],
-        refresh_interval_hours=source["refresh_interval_hours"],
-        is_active=source["is_active"],
-    )
+    return source
 
 
 @router.get(
@@ -53,20 +47,13 @@ def create_data_source(
 )
 def get_data_source(
     source_id: str,
-    service = Depends(get_data_source_service_dependency),
+    service: DataSourceService = Depends(get_data_source_service_dependency),
 ) -> DataSourceOut:
     source = service.get_data_source(source_id)
     if source is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Data source not found",
+            detail=f"Data source '{source_id}' not found",
         )
-    return DataSourceOut(
-        source_id=source["source_id"],
-        name=source["name"],
-        type=source["type"],
-        url=source["url"],
-        description=source["description"],
-        refresh_interval_hours=source["refresh_interval_hours"],
-        is_active=source["is_active"],
-    )
+    return source
+

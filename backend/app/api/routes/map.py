@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from typing import Any, Dict, Optional
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from ...core.dependencies import get_map_service_dependency
-from ...services.map_service import MapGeometry, MapLayer, MapSummary
+from ...schemas.map import MapGeometry, MapLayer, MapSummary, PointLookupOut, GeoJSONFeatureCollection
+from ...services.map_service import MapService
 
 router = APIRouter(
     prefix="/map",
@@ -14,7 +16,7 @@ router = APIRouter(
     response_model=MapSummary,
 )
 def list_map_layers(
-    service = Depends(get_map_service_dependency),
+    service: MapService = Depends(get_map_service_dependency),
 ) -> MapSummary:
     layers = service.list_layers()
     return MapSummary(
@@ -22,7 +24,11 @@ def list_map_layers(
             MapLayer(
                 layer_id=l["layer_id"],
                 layer_name=l["layer_name"],
-                geometry=l["geometry"],
+                geometry=MapGeometry(
+                    type=l["geometry"].get("type", "Polygon"),
+                    coordinates=l["geometry"].get("coordinates", []),
+                ),
+                description=l.get("description"),
             )
             for l in layers
         ],
@@ -32,12 +38,24 @@ def list_map_layers(
 
 
 @router.get(
+    "/geojson",
+    response_model=GeoJSONFeatureCollection,
+)
+def get_map_geojson(
+    layer: str = Query("ward_boundaries", description="Map layer to render"),
+    service: MapService = Depends(get_map_service_dependency),
+) -> GeoJSONFeatureCollection:
+    data = service.get_geojson(layer=layer)
+    return GeoJSONFeatureCollection(**data)
+
+
+@router.get(
     "/wards/{ward_id}",
     response_model=MapGeometry,
 )
 def get_ward_geometry(
     ward_id: str,
-    service = Depends(get_map_service_dependency),
+    service: MapService = Depends(get_map_service_dependency),
 ) -> MapGeometry:
     geometry = service.ward_geometry(ward_id)
     if geometry is None:
@@ -46,3 +64,16 @@ def get_ward_geometry(
             detail="Ward geometry not found",
         )
     return geometry
+
+
+@router.get(
+    "/lookup",
+    response_model=PointLookupOut,
+)
+def lookup_ward_by_coordinates(
+    lat: float = Query(..., ge=-90.0, le=90.0, description="Latitude"),
+    lon: float = Query(..., ge=-180.0, le=180.0, description="Longitude"),
+    service: MapService = Depends(get_map_service_dependency),
+) -> PointLookupOut:
+    return service.lookup_point(lat=lat, lon=lon)
+

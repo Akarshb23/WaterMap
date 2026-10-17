@@ -1,39 +1,47 @@
 from functools import lru_cache
+from typing import Optional
 
 from sqlalchemy import create_engine
-from sqlalchemy.engine.url import URL
+from sqlalchemy.engine import Engine
+
+from ..core.config import get_settings
+
+# Module-level engine that can be overridden for testing
+engine: Optional[Engine] = None
 
 
 def get_database_url() -> str:
-    return (
-        "postgresql+psycopg2://water_map:password@localhost:5432/water_map"
-    )
+    return get_settings().database_url
 
 
-@lru_cache
-def build_database_url() -> URL:
-    return URL.create(
-        "postgresql+psycopg2",
-        username="water_map",
-        password="password",
-        host="localhost",
-        port=5432,
-        database="water_map",
-    )
+def build_database_url() -> str:
+    return get_database_url()
 
 
-# Module-level engine that can be overridden for testing
-engine = None
 
-
-def set_test_engine(test_engine):
-    """Set the engine for testing - replaces the real PostgreSQL engine."""
+def set_test_engine(test_engine: Optional[Engine]) -> None:
+    """Set the engine for testing - replaces the default engine."""
     global engine
     engine = test_engine
 
 
-def get_engine():
-    """Return the configured engine (test or production)."""
-    if engine is None:
-        return create_engine(str(build_database_url()), pool_pre_ping=True, pool_recycle=3600)
-    return engine
+def get_engine() -> Engine:
+    """Return the configured engine (test, sqlite, or production PostgreSQL)."""
+    global engine
+    if engine is not None:
+        return engine
+
+    db_url = get_database_url()
+    if db_url.startswith("sqlite"):
+        return create_engine(
+            db_url,
+            connect_args={"check_same_thread": False},
+            echo=get_settings().database_echo,
+        )
+    return create_engine(
+        db_url,
+        pool_pre_ping=True,
+        pool_recycle=3600,
+        echo=get_settings().database_echo,
+    )
+

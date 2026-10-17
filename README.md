@@ -445,19 +445,23 @@ Additional technical documentation is available in `docs/`.
 
 ## 📈 Project Status
 
-**Current stage:** Backend infrastructure implementation and integration.
+**Current stage:** Part 1 Backend & Data Infrastructure Complete. Ready for Part 2 Intelligence Layer.
 
-| Component | Status |
-|---|---|
-| FastAPI foundation | Implemented; health check verified |
-| API route registration | Reported as verified |
-| Database integration | Requires testing with PostgreSQL |
-| Data pipeline | Implementation requires dataset-level validation |
-| Geospatial integration | Requires testing with real boundary data |
-| Water Stress Index | Reserved for Part 2 |
-| Forecasting | Reserved for Part 2 |
-| Scenario simulation | Reserved for Part 2 |
-| Recommendations | Reserved for Part 2 |
+| Component | Status | Details |
+|---|---|---|
+| **Public Datasets** | ✅ Complete | 25 Bengaluru wards GeoJSON, CGWB groundwater, BWSSB piped supply, IMD rainfall, tanker trips, lake spread |
+| **FastAPI Foundation** | ✅ Complete | Dual routing (`/` & `/api/v1`), global error handlers, CORS, Swagger UI, health checks |
+| **Database & PostGIS Layer** | ✅ Complete | SQLAlchemy models (`Ward`, `Indicator`, `DataSource`, `WardDataSource`, `PipelineRun`), SQLite & PostgreSQL/PostGIS support |
+| **Data Cleaning & Validation** | ✅ Complete | Canonical ward IDs (`w1` → `W001`), domain outlier clamping, Pydantic schemas (`WardValidationSchema`, etc.) |
+| **Normalization & Aggregation** | ✅ Complete | Domain-calibrated normalization (CPHEEO 135 LPCD, CGWB 45m, IMD deficit), composite WSI calculation |
+| **Geospatial Processing** | ✅ Complete | Point-in-polygon ray casting, bounding box spatial filtering, FeatureCollection assembly |
+| **Ward-Level Indicators** | ✅ Complete | Filtering by district, zone, risk category, stress score; indicator timeseries and metrics |
+| **Technical Documentation** | ✅ Complete | Full documentation in `docs/`: `architecture.md`, `data_dictionary.md`, `api_contracts.md`, `methodology.md` |
+| **Automated Test Suite** | ✅ Complete | 23/23 passing automated tests (`uv run pytest`) across routes, models, pipeline, and geospatial engine |
+| **Water Stress Index Modeling** | ⏳ Reserved for Part 2 | Detailed scoring, explainability decomposition, temporal tracking |
+| **Forecasting Engine** | ⏳ Reserved for Part 2 | 30/60/90-day predictive stress models and baseline comparisons (HTTP 501 stubs ready) |
+| **Scenario Simulation** | ⏳ Reserved for Part 2 | What-if simulation for demand interventions and climate shocks (HTTP 501 stubs ready) |
+| **Recommendations Engine** | ⏳ Reserved for Part 2 | Automated policy and infrastructure action prioritization (HTTP 501 stubs ready) |
 
 ---
 
