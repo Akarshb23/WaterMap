@@ -434,3 +434,25 @@
   font-size: 0.82rem;
   color: var(--wm-color-muted);
 }
+/* Match the spacious, cool-white WaterMap application frame in the supplied screens. */
+.app-layout{background:linear-gradient(135deg,#f5fbfb 0%,#f0faf8 100%)}
+.app-layout__main{background:transparent}
+.app-layout__content{max-width:none;padding:1.1rem 1.05rem 1.5rem}
+.sidebar{width:var(--wm-sidebar-width);padding:1rem .75rem .85rem;background:rgba(255,255,255,.96)}
+.sidebar__brand{padding:.15rem .7rem 1.35rem}
+.sidebar__logo{background:linear-gradient(150deg,#13c6a0,#2489f6);border-radius:0 60% 60% 60%;transform:rotate(-8deg)}
+.sidebar__name{font-size:1.25rem}
+.sidebar__list{gap:.22rem}
+.sidebar__link{padding:.68rem .8rem;border-radius:9px;font-size:.84rem}
+.sidebar__promo{min-height:310px;margin: auto -0.75rem 0;padding:1rem .95rem 1.2rem;border-radius:0;background:linear-gradient(180deg,#dff6f6 0%,#c3e9df 54%,#effbf7 100%);display:flex;align-items:flex-end}
+.sidebar__illustration-placeholder{background:radial-gradient(ellipse at 50% 100%,#1c8a8b 0 10%,transparent 11%),linear-gradient(180deg,#e8f8ff 0%,#c5ebf1 38%,#80cbd2 65%,#d8f3e7 100%)}
+.sidebar__illustration-placeholder:before{content:"";position:absolute;left:-12%;right:-12%;bottom:25%;height:50%;background:linear-gradient(90deg,#0b638e,#57b4d0);clip-path:polygon(0 100%,0 35%,10% 35%,10% 0,20% 0,20% 42%,30% 42%,30% 12%,38% 12%,38% 50%,49% 50%,49% 22%,60% 22%,60% 0,69% 0,69% 46%,81% 46%,81% 15%,90% 15%,90% 58%,100% 58%,100% 100%)}
+.sidebar__illustration-placeholder:after{content:"";position:absolute;left:-10%;right:-10%;bottom:-4%;height:34%;background:linear-gradient(180deg,#6ed4df,#d4f1e9);clip-path:polygon(0 0,30% 35%,52% 8%,76% 44%,100% 10%,100% 100%,0 100%)}
+.sidebar__promo p{font-weight:600;color:#0b3447}
+.topbar{height:var(--wm-topbar-height);padding:0 1.2rem;background:rgba(255,255,255,.95);border-bottom-color:#e8f1f1;gap:1rem}
+.topbar__city .native-select{min-width:12rem;border-radius:10px;background-color:#fff}
+.topbar__search{max-width:42rem}
+.topbar__search .search-bar{border-radius:999px;background:#f4f8fb;border-color:transparent}
+.card{border-radius:12px;border-color:#e5efef;box-shadow:0 3px 12px rgba(26,86,91,.035)}
+.page-header__title{letter-spacing:-.04em}
+@media(max-width:900px){.app-layout__content{padding:1rem .8rem 1.4rem}.sidebar__promo{min-height:230px}}

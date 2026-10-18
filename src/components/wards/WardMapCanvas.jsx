@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Layers, MapPinned, Minus, Plus } from 'lucide-react'
+import { Layers, Minus, Plus } from 'lucide-react'
 import MapLegend from '../map/MapLegend.jsx'
+import WardRiskIllustration from '../map/WardRiskIllustration.jsx'
 
 const WARD_LEGEND_ITEMS = [
   { label: 'High Risk', color: '#EF4444' },
@@ -47,13 +48,7 @@ const WardMapCanvas = ({ wardName = 'Ward 12' }) => {
         role="group"
         aria-label={`${wardName} map (map area placeholder)`}
       >
-        <div className="ward-map-canvas__placeholder" aria-hidden="true">
-          <MapPinned size={26} strokeWidth={1.6} />
-          <p className="ward-map-canvas__placeholder-title">Map area</p>
-          <p className="ward-map-canvas__placeholder-text">
-            Interactive ward map will be integrated here.
-          </p>
-        </div>
+        <WardRiskIllustration satellite={layersOn} />
 
         {/* Placeholder controls — UI only, they do not move a real map. */}
         <div className="ward-map-controls">

@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AppLayout from '../components/layout/AppLayout.jsx'
 import { ROUTES } from '../constants/routes.js'
 import AboutPage from '../pages/AboutPage.jsx'
@@ -6,6 +6,7 @@ import CityMapPage from '../pages/CityMapPage.jsx'
 import DashboardPage from '../pages/DashboardPage.jsx'
 import DataSourcesPage from '../pages/DataSourcesPage.jsx'
 import NotFoundPage from '../pages/NotFoundPage.jsx'
+import LandingPage from '../pages/LandingPage.jsx'
 import PredictionsPage from '../pages/PredictionsPage.jsx'
 import RecommendationsPage from '../pages/RecommendationsPage.jsx'
 import SimulationPage from '../pages/SimulationPage.jsx'
@@ -20,8 +21,8 @@ import WardDetailsPage from '../pages/WardDetailsPage.jsx'
 const Router = () => (
   <BrowserRouter>
     <Routes>
+      <Route path={ROUTES.HOME} element={<LandingPage />} />
       <Route element={<AppLayout />}>
-        <Route path={ROUTES.HOME} element={<Navigate replace to={ROUTES.DASHBOARD} />} />
         <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
         <Route path={ROUTES.CITY_MAP} element={<CityMapPage />} />
         <Route path={ROUTES.WARD_DETAILS} element={<WardDetailsPage />} />

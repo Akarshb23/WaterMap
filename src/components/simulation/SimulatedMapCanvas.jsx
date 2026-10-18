@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { MapPinned } from 'lucide-react'
 import MapControls from '../map/MapControls.jsx'
 import MapLegend from '../map/MapLegend.jsx'
+import WardRiskIllustration from '../map/WardRiskIllustration.jsx'
 import { RISK_LEVELS } from '../../constants/riskLevels.js'
 
 const MAP_LEGEND_ITEMS = [
@@ -70,14 +70,7 @@ const SimulatedMapCanvas = ({ areaLabel = 'Ward 12', currentWsi, simulatedWsi })
         role="group"
         aria-label={`Simulated water stress map (map area placeholder, ${mode} view)`}
       >
-        {/* Empty placeholder — the real geographical map is integrated later. */}
-        <div className="sim-map-canvas__placeholder" aria-hidden="true">
-          <MapPinned size={26} strokeWidth={1.6} />
-          <p className="sim-map-canvas__placeholder-title">Reserved map area</p>
-          <p className="sim-map-canvas__placeholder-text">
-            The interactive scenario map will be integrated here.
-          </p>
-        </div>
+        <WardRiskIllustration />
 
         {/* Placeholder controls (top-left) — UI only, no real map. */}
         <MapControls

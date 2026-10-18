@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { MapPin } from 'lucide-react'
 import {
   CITY_MAP_LEGEND_ITEMS,
   CITY_MAP_PERIOD_OPTIONS,
@@ -9,6 +8,7 @@ import {
 import MapControls from '../map/MapControls.jsx'
 import MapLegend from '../map/MapLegend.jsx'
 import ToggleSwitch from '../common/ToggleSwitch.jsx'
+import WardRiskIllustration from '../map/WardRiskIllustration.jsx'
 
 const ZOOM_MIN = 1
 const ZOOM_MAX = 4
@@ -68,13 +68,7 @@ const CityMapCanvas = ({ filters, matchedWards = [], isPanelOpen = true, onResto
       role="group"
       aria-label="Interactive city map of New Delhi (map area placeholder)"
     >
-      <div className="city-map-canvas__placeholder" aria-hidden="true">
-        <MapPin size={26} strokeWidth={1.6} />
-        <p className="city-map-canvas__placeholder-title">Map area</p>
-        <p className="city-map-canvas__placeholder-text">
-          Interactive ward map will be integrated here.
-        </p>
-      </div>
+      <WardRiskIllustration satellite={satelliteView} />
 
       <MapControls
         onZoomIn={handleZoomIn}

@@ -701,4 +701,5 @@
     grid-column: 2;
     grid-row: 1;
   }
-}
+}.sim-map-canvas>.ward-risk-illustration{position:absolute;inset:0;border-radius:inherit;overflow:hidden}
+.sim-map-canvas__placeholder{display:none!important}

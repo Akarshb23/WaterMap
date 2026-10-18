@@ -767,3 +767,6 @@
     display: none;
   }
 }
+.ward-map-canvas>.ward-risk-illustration{position:absolute;inset:0;border-radius:inherit;overflow:hidden}
+.ward-map-canvas__placeholder{display:none!important}
+.ward-risk-illustration--satellite svg{filter:saturate(.8) contrast(1.03)}
