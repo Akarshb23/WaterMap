@@ -1,0 +1,5 @@
+- [Fixed district boundaries visibility](src/components/map/districtMap.js) — Changed stroke color to dark green and increased weight for better visibility.
+- [Fixed district details panel](src/components/map/DistrictChoropleth.jsx) — Updated to show independently available metadata (risk classification, data coverage, observation date, data source) even when overall Water Stress Index is unavailable.
+- [Fixed location context](src/components/layout/Topbar.jsx) — Corrected to show "Karnataka" for district-level views and removed typo.
+- [Verified backend functionality](backend/) — All 54 tests pass, confirming API endpoints work correctly.
+- [Prepared for missing frontend work] — Predictions and Data Sources pages require frontend implementation to modernize with district-level views using same boundary styling and selection behavior as district map.

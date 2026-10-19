@@ -1,0 +1,6 @@
+ward_id,station_id,date,water_level_mbgl,pre_monsoon_mbgl,post_monsoon_mbgl,status,source_id
+W001,CGWB-BLR-W001,2024-09-30,28.5,31.7,26.7,critical,DS001
+W002,CGWB-BLR-W002,2024-09-30,24.2,27.4,22.4,semi_critical,DS001
+W003,CGWB-BLR-W003,2024-09-30,68.4,71.6,66.6,over_exploited,DS001
+W004,CGWB-BLR-W004,2024-09-30,72.5,75.7,70.7,over_exploited,DS001
+W005,CGWB-BLR-W005,2024-09-30,58.2,61.4,56.4,over_exploited,DS001

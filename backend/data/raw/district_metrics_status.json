@@ -1,0 +1,24 @@
+{
+  "status": "district_metrics_available_with_model_estimates",
+  "generated_on": "2026-10-19",
+  "district_count": 31,
+  "metric_rows": 155,
+  "metric_families": [
+    "groundwater",
+    "rainfall",
+    "piped_supply",
+    "tanker_reliance",
+    "water_bodies"
+  ],
+  "rows_per_district": 5,
+  "source_backed_metric_rows": 60,
+  "estimated_metric_rows": 95,
+  "all_district_scores_are_estimated": true,
+  "reason": "Every combined score includes estimated piped_supply, tanker_reliance, and water_bodies inputs; Bengaluru South also uses Ramanagara proxy inputs.",
+  "groundwater_source": "CGWB/Ground Water Directorate, Dynamic Ground Water Resources of Karnataka 2024, Annexure V, printed pages 75–76",
+  "groundwater_url": "https://cgwb.gov.in/cgwbpnm/public/uploads/documents/17482455401275100516file.pdf",
+  "rainfall_source": "KSNDMC annual district rainfall 2024, distributed through OpenCity",
+  "rainfall_url": "https://data.opencity.in/dataset/karnataka-annual-rainfall-districts-taluks-and-hoblis/resource/ab0fe5b4-254a-456e-9e23-544161d5fad6",
+  "methodology_file": "DISTRICT_METRICS_METHODOLOGY.md",
+  "warning": "Provisional demonstration index only. Do not represent model estimates or composite risk bands as verified observations or official classifications."
+}

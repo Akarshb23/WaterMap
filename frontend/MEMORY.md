@@ -1,0 +1,1 @@
+- [Fixed district boundaries visibility](src/components/map/districtMap.js) — Changed stroke color to dark green and increased weight for better visibility.

@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "data_classification": "SYNTHETIC_DEMO",
+  "datasets": {
+    "groundwater_levels.csv": {
+      "status": "passed",
+      "rows": 25,
+      "unique_ward_ids": 25,
+      "errors": []
+    },
+    "rainfall_precipitation.csv": {
+      "status": "passed",
+      "rows": 25,
+      "unique_ward_ids": 25,
+      "errors": []
+    },
+    "piped_water_supply.csv": {
+      "status": "passed",
+      "rows": 25,
+      "unique_ward_ids": 25,
+      "errors": []
+    },
+    "tanker_water_demand.csv": {
+      "status": "passed",
+      "rows": 25,
+      "unique_ward_ids": 25,
+      "errors": []
+    },
+    "water_bodies_lakes.csv": {
+      "status": "passed",
+      "rows": 25,
+      "unique_ward_ids": 25,
+      "errors": []
+    }
+  },
+  "warnings": [
+    "W001-W025 are synthetic IDs and are not mapped to official BBMP-### ward polygons.",
+    "Passing these checks confirms CSV shape and basic numeric validity only, not official provenance or real-world accuracy."
+  ]
+}

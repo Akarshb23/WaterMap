@@ -1,0 +1,159 @@
+/* ---------------------------------------------------------------------------
+ * Responsive breakpoints for the WaterMap app shell + dashboard
+ * ------------------------------------------------------------------------ */
+
+/* Tablet: two KPI cards per row, compact map filters */
+@media (max-width: 1199px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .map-panel__filters select {
+    padding: 0.4rem 1.6rem 0.4rem 0.65rem;
+    font-size: 0.74rem;
+  }
+
+  .app-layout__content {
+    padding: 1.25rem 1.25rem 1.75rem;
+  }
+}
+
+/* Stack the map and its side panels when the columns get tight */
+@media (max-width: 980px) {
+  .map-panel__grid,
+  .dashboard-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .map-canvas {
+    min-height: 22rem;
+  }
+
+  .ward-panel__action .btn {
+    width: auto;
+  }
+}
+
+/* Mobile: collapsible sidebar drawer, single-column content */
+@media (max-width: 900px) {
+  .app-layout__main {
+    margin-inline-start: 0;
+  }
+
+  .sidebar {
+    width: 16.5rem;
+    visibility: hidden;
+    transform: translateX(-105%);
+    transition: transform 0.25s ease, visibility 0.25s ease;
+    box-shadow: var(--wm-shadow-lg);
+  }
+
+  .sidebar--open {
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .sidebar__close {
+    display: inline-flex;
+  }
+
+  .sidebar__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background-color: rgba(20, 46, 59, 0.45);
+    border: 0;
+    animation: wm-fade-in 0.2s ease-out;
+  }
+
+  .topbar__menu {
+    display: inline-flex;
+  }
+
+  .topbar {
+    padding: 0 1rem;
+  }
+}
+
+/* Small screens: stack KPI cards, wrap top bar, scroll tables */
+@media (max-width: 700px) {
+  .app-layout__content {
+    padding: 1rem 0.9rem 1.5rem;
+  }
+
+  .dashboard-heading {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .dashboard-heading .field-with-icon {
+    align-self: flex-start;
+  }
+
+  .map-panel {
+    padding: 1rem;
+  }
+
+  .map-panel__header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .dashboard-card {
+    padding: 1rem;
+  }
+
+  .map-legend {
+    padding: 0.5rem 0.65rem;
+  }
+
+  .map-disclaimer {
+    display: none;
+  }
+
+  .topbar__profile-name,
+  .topbar__profile-chevron {
+    display: none;
+  }
+
+  .topbar__search {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .kpi-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.65rem 0.9rem;
+    row-gap: 0.55rem;
+  }
+
+  .topbar__search {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .topbar__actions {
+    margin-inline-start: auto;
+  }
+
+  .map-canvas {
+    min-height: 18rem;
+  }
+
+  .map-popup-anchor {
+    margin-top: -1rem;
+  }
+
+  .ward-popup {
+    width: 11.5rem;
+  }
+}

@@ -1,0 +1,101 @@
+[
+  {
+    "source_id": "DS001",
+    "name": "UNVERIFIED REFERENCE ONLY — Central Ground Water Board (CGWB) NWIC",
+    "source_type": "government",
+    "url": "https://nwic.gov.in/groundwater-monitoring",
+    "description": "Potential public reference only. The legacy ward CSV rows in this repository are synthetic/demo records and are not verified as downloaded from or attributable to this source. Do not use this entry as provenance for district_metrics.csv.",
+    "citation": "Central Ground Water Board, Ministry of Jal Shakti, Government of India (2024). Dynamic Ground Water Resources Assessment.",
+    "license": "Not verified for these repository rows; not used as district metric provenance",
+    "refresh_interval_hours": 24,
+    "is_active": false
+  },
+  {
+    "source_id": "DS002",
+    "name": "UNVERIFIED REFERENCE ONLY — India Meteorological Department (IMD) Precipitation Grid",
+    "source_type": "weather",
+    "url": "https://mausam.imd.gov.in/bengaluru/rainfall",
+    "description": "Potential public reference only. The legacy ward CSV rows in this repository are synthetic/demo records and are not verified as downloaded from or attributable to this source. Do not use this entry as provenance for district_metrics.csv.",
+    "citation": "India Meteorological Department, Ministry of Earth Sciences (2024). Urban Precipitation Telemetry.",
+    "license": "Not verified for these repository rows; not used as district metric provenance",
+    "refresh_interval_hours": 12,
+    "is_active": false
+  },
+  {
+    "source_id": "DS003",
+    "name": "UNVERIFIED REFERENCE ONLY — Bangalore Water Supply and Sewerage Board (BWSSB)",
+    "source_type": "municipal",
+    "url": "https://bwssb.karnataka.gov.in/telemetry",
+    "description": "Potential public reference only. The legacy ward CSV rows in this repository are synthetic/demo records and are not verified as downloaded from or attributable to this source. Do not use this entry as provenance for district_metrics.csv.",
+    "citation": "BWSSB Department of Water Supply (2024). Bulk Water Distribution and Per Capita Supply Ledger.",
+    "license": "Not verified for these repository rows; not used as district metric provenance",
+    "refresh_interval_hours": 24,
+    "is_active": false
+  },
+  {
+    "source_id": "DS004",
+    "name": "UNVERIFIED REFERENCE ONLY — BBMP Sahaaya 2.0 Grievance Redressal",
+    "source_type": "municipal",
+    "url": "https://sahaaya.bbmp.gov.in/water-scarcity-complaints",
+    "description": "Potential public reference only. The legacy ward CSV rows in this repository are synthetic/demo records and are not verified as downloaded from or attributable to this source. Do not use this entry as provenance for district_metrics.csv.",
+    "citation": "Bruhat Bengaluru Mahanagara Palike (2024). Urban Grievance Redressal and Citizen Telemetry.",
+    "license": "Not verified for these repository rows; not used as district metric provenance",
+    "refresh_interval_hours": 6,
+    "is_active": false
+  },
+  {
+    "source_id": "DS005",
+    "name": "UNVERIFIED REFERENCE ONLY — Karnataka State Remote Sensing Applications Centre (KSRSAC)",
+    "source_type": "satellite",
+    "url": "https://ksrsac.karnataka.gov.in/lake-atlas",
+    "description": "Potential public reference only. The legacy ward CSV rows in this repository are synthetic/demo records and are not verified as downloaded from or attributable to this source. Do not use this entry as provenance for district_metrics.csv.",
+    "citation": "KSRSAC Urban Lake Information System (2024). Satellite-based Urban Hydrological Atlas.",
+    "license": "Not verified for these repository rows; not used as district metric provenance",
+    "refresh_interval_hours": 72,
+    "is_active": false
+  },
+  {
+    "source_id": "DS006",
+    "name": "UNVERIFIED REFERENCE ONLY — Open Government Data (OGD) Platform India",
+    "source_type": "open_data",
+    "url": "https://data.gov.in/resource/urban-demographics-wards",
+    "description": "Potential public reference only. The legacy ward CSV rows in this repository are synthetic/demo records and are not verified as downloaded from or attributable to this source. Do not use this entry as provenance for district_metrics.csv.",
+    "citation": "Office of the Registrar General & Census Commissioner, India (2021 Projections).",
+    "license": "Not verified for these repository rows; not used as district metric provenance",
+    "refresh_interval_hours": 168,
+    "is_active": false
+  },
+  {
+    "source_id": "CGWB_GWRA_2024",
+    "name": "Central Ground Water Board and Karnataka Ground Water Directorate — Dynamic Ground Water Resources of Karnataka 2024",
+    "source_type": "government_report",
+    "url": "https://cgwb.gov.in/cgwbpnm/public/uploads/documents/17482455401275100516file.pdf",
+    "description": "Annexure V reports district-wise groundwater recharge, extractable resource, extraction and stage of groundwater extraction for assessment year 2024. WaterMap normalizes the reported stage using min(1, stage percent / 150).",
+    "citation": "Central Ground Water Board and Ground Water Directorate, Government of Karnataka, Dynamic Ground Water Resources of Karnataka 2024, Annexure V, printed pages 75–76.",
+    "license": "Government publication; verify reuse terms for redistribution",
+    "refresh_interval_hours": 8760,
+    "is_active": true
+  },
+  {
+    "source_id": "KSNDMC_RAINFALL_2024",
+    "name": "KSNDMC annual district rainfall 2024 (via OpenCity)",
+    "source_type": "government_open_data",
+    "url": "https://data.opencity.in/dataset/karnataka-annual-rainfall-districts-taluks-and-hoblis/resource/ab0fe5b4-254a-456e-9e23-544161d5fad6",
+    "description": "District annual rainfall totals, normal rainfall and percentage departure for 2024. WaterMap normalizes deficit as max(0, min(1, -total departure percent / 50)).",
+    "citation": "Karnataka State Natural Disaster Monitoring Centre (KSNDMC), annual rainfall district dataset for 2024, distributed by OpenCity.",
+    "license": "Dataset metadata describes public-domain data; retain attribution and recheck source terms",
+    "refresh_interval_hours": 8760,
+    "is_active": true
+  },
+  {
+    "source_id": "WATERMAP_ESTIMATE_V1",
+    "name": "WaterMap district proxy estimates v1 (not observed data)",
+    "source_type": "model_estimate",
+    "url": "https://cgwb.gov.in/cgwbpnm/public/uploads/documents/17482455401275100516file.pdf",
+    "description": "Explicitly estimated piped-supply stress, tanker reliance, and water-body stress proxies derived from source-backed groundwater extraction stage, rainfall deficit, and documented district archetype assumptions. These are not official measurements and must be labelled estimated in the UI.",
+    "citation": "WaterMap model estimate v1; formulas and assumptions are documented in backend/data/raw/DISTRICT_METRICS_METHODOLOGY.md. Underlying source inputs: CGWB/GWD GWRA 2024 and KSNDMC 2024 rainfall.",
+    "license": "Project-generated estimates; not an official dataset",
+    "refresh_interval_hours": 8760,
+    "is_active": true
+  }
+]

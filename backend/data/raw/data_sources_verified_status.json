@@ -1,0 +1,36 @@
+{
+  "status": "synthetic_demo_only",
+  "row_count_per_csv": 25,
+  "date": "2024-09-30 (illustrative; not an observation date)",
+  "source_id": "SYNTHETIC_DEMO",
+  "files": {
+    "groundwater_levels.csv": {
+      "status": "synthetic_demo_only",
+      "agency_attribution": null
+    },
+    "rainfall_precipitation.csv": {
+      "status": "synthetic_demo_only",
+      "agency_attribution": null
+    },
+    "piped_water_supply.csv": {
+      "status": "synthetic_demo_only",
+      "agency_attribution": null
+    },
+    "tanker_water_demand.csv": {
+      "status": "synthetic_demo_only",
+      "agency_attribution": null
+    },
+    "water_bodies_lakes.csv": {
+      "status": "synthetic_demo_only",
+      "agency_attribution": null
+    }
+  },
+  "warning": "Do not use as measured data, calculate real risk scores, or join W001-W025 to official wards without a verified crosswalk.",
+  "public_source_references": {
+    "groundwater": "https://nwdp.nwic.gov.in/dataset/gwl-manual-quarterly-central-ground-water-board-department",
+    "rainfall": "https://nwdp.nwic.gov.in/en/dataset/rainfall-daily-imd",
+    "piped_supply": "https://up.data.gov.in/catalog/water-consumption-data-2026",
+    "lakes": "https://www.data.opencity.in/dataset/bengaluru-lakes-data-and-reports",
+    "lake_monitoring": "https://lms.bbmp.gov.in/lake"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "dataset_name": "Karnataka district boundaries (31 districts)",
+  "authoritative_source": {
+    "provider": "Esri India ArcGIS Living Atlas of India",
+    "service": "IAB2024 / IAB_District_2024 (District Boundary)",
+    "service_item_id": "d2d6c22d2e5c4c3baff3d1330d4556e0",
+    "source_url": "https://livingatlas.esri.in/server/rest/services/IAB2024/IAB_District_2024/MapServer/0",
+    "query": "where=upper(state)='KARNATAKA', outFields=*, returnGeometry=true, outSR=4326, f=geojson",
+    "service_spatial_reference": "EPSG:102100 (Web Mercator); geometry requested as EPSG:4326 via outSR",
+    "official_attributes_carried": [
+      "lgd_districtcode (Government of India Local Government Directory code)",
+      "lgd_districtname",
+      "lgd_statecode",
+      "censusname",
+      "censuscode2011",
+      "dist_locallang",
+      "level_2011 ('District')"
+    ]
+  },
+  "retrieval_date": "2026-10-19",
+  "raw_download": "iab2024_karnataka_epsg4326_raw.geojson",
+  "publication_window": "2024 boundaries (vintage reflects LGD status including Vijayanagara, created 2021, and the 2023 renaming of Ramanagara to Bengaluru South)",
+  "licence": {
+    "status": "not explicitly published on the service or item metadata",
+    "note": "Only ArcGIS platform access terms apply. Before any redistribution, confirm terms with Esri India / the publisher. Survey of India Administrative Boundary Database (the primary official source) requires portal registration and could not be programmatically accessed."
+  },
+  "derived_file": {
+    "path": "karnataka_districts.geojson",
+    "declared_crs": "EPSG:7755 (WGS 84 / India NSF LCC, metres, easting/northing)",
+    "transform": "EPSG:4326 -> EPSG:7755, PyProj Transformer.with always_xy=True, round-trip validated in scripts/build_karnataka_districts.py",
+    "api_output_crs": "EPSG:4326 (longitude first, latitude second), produced by the backend with PyProj always_xy=True",
+    "attribute_policy": "All source attributes preserved unchanged; no synthetic or estimated values added."
+  },
+  "validation_summary": {
+    "district_count": 31,
+    "unique_lgd_codes": true,
+    "unique_names": true,
+    "invalid_geometries": 0,
+    "empty_geometries": 0,
+    "bbox_wgs84": [74.0547, 11.5945, 78.5877, 18.4778],
+    "cross_check_vs_legacy_nwic": {
+      "matched_lgd_codes": 30,
+      "median_centroid_delta_km": null,
+      "notes": "Vijayanagara (738) exists only in the new source. Legacy Ballari spans ~2x the new Ballari area because Vijayanagara was carved from it. Bengaluru South (IAB2024) overlaps legacy Ramanagara by 99.5% (official 2023 rename). Davanagere shows a small northern sliver difference between sources."
+    }
+  },
+  "prior_source_archive": {
+    "file": "karnataka_districts_legacy_nwic_733india_epsg7755.geojson",
+    "description": "NWIC 'District Boundary' (733 India districts), legacy 30-district Karnataka subset, kept for traceability."
+  },
+  "verification_limits": [
+    "No polygon-level overlay against an authoritative Survey of India shapefile was performed (SOI portal requires registration).",
+    "Esri India Living Atlas service metadata does not publish a licence or upstream boundary producer statement; LGD/Census code attributes are the official-attribution evidence."
+  ]
+}
