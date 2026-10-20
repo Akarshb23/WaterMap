@@ -1,0 +1,230 @@
+/* Dashboard map: render district polygons on a plain canvas, without world-map tiles. */
+.overview-map-layout {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.overview-map-container--polygons-only {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 390px;
+  overflow: hidden;
+  border: 1px solid #dcebe7;
+  border-radius: 14px;
+  background: #edf5f2;
+  isolation: isolate;
+}
+
+.overview-leaflet-map--polygons-only {
+  width: 100%;
+  height: 100%;
+  background: #edf5f2;
+  outline: none;
+}
+
+/* Leaflet's canvas stays plain because no TileLayer is mounted. */
+.overview-leaflet-map--polygons-only .leaflet-pane,
+.overview-leaflet-map--polygons-only .leaflet-overlay-pane,
+.overview-leaflet-map--polygons-only .leaflet-map-pane {
+  background: transparent;
+}
+
+.overview-leaflet-map--polygons-only .leaflet-control-zoom {
+  border: 1px solid #d7e7e2;
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(23, 60, 58, 0.08);
+}
+
+.overview-leaflet-map--polygons-only .leaflet-control-zoom a {
+  color: #087b68;
+}
+
+.overview-leaflet-map--polygons-only .leaflet-tooltip {
+  padding: 5px 8px;
+  border: 1px solid #d8e8e4;
+  border-radius: 7px;
+  color: #173c3a;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 3px 12px rgba(23, 60, 58, 0.1);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.overview-map-legend {
+  position: absolute;
+  z-index: 500;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  max-width: calc(100% - 24px);
+  padding: 9px 12px;
+  border: 1px solid rgba(220, 235, 231, 0.9);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 3px 14px rgba(23, 60, 58, 0.08);
+  color: #58727d;
+  font-size: 10px;
+}
+
+.overview-map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.overview-map-legend i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+}
+
+.overview-map-empty {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  min-height: 300px;
+  padding: 28px 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px dashed #d8e8e6;
+  border-radius: 14px;
+  background: #fbfdfd;
+  color: #087b68;
+  text-align: center;
+}
+
+.overview-map-empty strong {
+  color: #173c3a;
+  font-size: 15px;
+}
+
+.overview-map-empty p {
+  max-width: 520px;
+  margin: 0;
+  color: #6d8797;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Trend chart: compact, readable line graph with an explicit demo-data label. */
+.overview-trend-chart {
+  position: relative;
+  min-width: 0;
+  min-height: 280px;
+  padding-top: 22px;
+}
+
+.overview-demo-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 5px 9px;
+  border: 1px solid #d9ece7;
+  border-radius: 999px;
+  color: #39766b;
+  background: #f0f8f5;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.overview-trend-chart .recharts-responsive-container {
+  min-height: 230px;
+}
+
+/* Keep sample alerts visually consistent with the existing WaterMap cards. */
+.overview-alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.overview-alert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 2px;
+  border-bottom: 1px solid #edf3f2;
+}
+
+.overview-alert-item:last-child {
+  border-bottom: 0;
+}
+
+.overview-alert-item > div:last-child {
+  min-width: 0;
+  flex: 1;
+}
+
+.overview-alert-item strong {
+  display: block;
+  color: #173c3a;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.overview-alert-item p {
+  margin: 4px 0;
+  color: #6d8797;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.overview-alert-item small {
+  color: #899eaa;
+  font-size: 10px;
+}
+
+.overview-alert-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border-radius: 11px;
+  color: #b96a18;
+  background: #fff4df;
+}
+
+.overview-alert-item:has(.overview-alert-icon svg) .overview-alert-icon {
+  border: 1px solid #f5e6c8;
+}
+
+@media (max-width: 700px) {
+  .overview-map-container--polygons-only {
+    height: 310px;
+  }
+
+  .overview-map-legend {
+    right: 8px;
+    bottom: 8px;
+    gap: 7px 9px;
+    padding: 7px 9px;
+    font-size: 9px;
+  }
+
+  .overview-map-empty {
+    min-height: 240px;
+  }
+
+  .overview-trend-chart {
+    min-height: 250px;
+    padding-top: 16px;
+  }
+
+  .overview-trend-chart .recharts-responsive-container {
+    min-height: 205px;
+  }
+}
