@@ -242,7 +242,7 @@
 .overview-section-heading h2 {
   margin-bottom: 0.25rem;
   font-size: 1.02rem;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
@@ -397,7 +397,7 @@
 .overview-selected-ward-head > div > span {
   color: var(--overview-teal);
   font-size: 0.65rem;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.1em;
 }
 
@@ -422,7 +422,7 @@
   background: #eef2f4;
   color: #52636b;
   font-size: 0.68rem;
-  font-weight: 750;
+  font-weight: 500;
   text-transform: capitalize;
   white-space: nowrap;
 }
@@ -511,7 +511,7 @@
   background: var(--overview-mint);
   color: var(--overview-teal);
   font-size: 0.8rem;
-  font-weight: 750;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -630,7 +630,7 @@
 }
 
 .overview-risk-row > strong {
-  font-weight: 750;
+  font-weight: 500;
 }
 
 .overview-risk-row > small {
@@ -689,7 +689,7 @@
   background: #f5faf8;
   color: var(--overview-muted);
   font-size: 0.67rem;
-  font-weight: 750;
+  font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -724,7 +724,7 @@
   border-radius: 0.4rem;
   background: #fff0ec;
   color: #d45239;
-  font-weight: 750;
+  font-weight: 500;
 }
 
 /* Recent alerts */

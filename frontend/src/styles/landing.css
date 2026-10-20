@@ -101,7 +101,7 @@
 
   font-size: 1.2rem;
 
-  font-weight: 800;
+  font-weight: 700;
 
   letter-spacing: -.035em;
 
@@ -167,7 +167,7 @@
 
 .landing-page .landing-nav > nav a.is-current { color: #00795f; }
 
-.landing-page .landing-nav > nav a.is-current { font-weight: 700; }
+.landing-page .landing-nav > nav a.is-current { font-weight: 600; }
 
 
 
@@ -367,7 +367,7 @@
 
   font-size: .65rem;
 
-  font-weight: 800;
+  font-weight: 600;
 
   letter-spacing: .065em;
 
@@ -403,7 +403,7 @@
 
   font-size: clamp(3rem, 4.45vw, 4.25rem);
 
-  font-weight: 800;
+  font-weight: 700;
 
   line-height: 1.04;
 
@@ -534,7 +534,7 @@
 
 .landing-page .landing-stat-icon svg { width: 20px; height: 20px; stroke-width: 2; }
 
-.landing-page .landing-stats strong { color: #10303b; font-size: 1rem; font-weight: 800; line-height: 1.25; }
+.landing-page .landing-stats strong { color: #10303b; font-size: 1rem; font-weight: 700; line-height: 1.25; }
 
 .landing-page .landing-stats small { margin-top: .1rem; color: #597284; font-size: .66rem; line-height: 1.4; white-space: nowrap; }
 
@@ -631,7 +631,7 @@
 
   font-size: 1.85rem;
 
-  font-weight: 800;
+  font-weight: 700;
 
   line-height: 1.2;
 
@@ -661,7 +661,7 @@
 
   font-size: .8rem;
 
-  font-weight: 750;
+  font-weight: 500;
 
   text-decoration: none;
 
@@ -778,7 +778,7 @@
 
   font-size: 1rem;
 
-  font-weight: 800;
+  font-weight: 600;
 
   line-height: 1.35;
 
@@ -978,7 +978,7 @@
   min-width: 1.7rem;
   color: #2489f6;
   font-size: .98rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.4;
 }
 
@@ -994,7 +994,7 @@
   margin: 0;
   color: #10303b;
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.4;
   letter-spacing: -.015em;
 }
@@ -1066,7 +1066,7 @@
   margin: .8rem 0 .75rem;
   color: #10303b;
   font-size: clamp(2rem, 2.3vw, 2.65rem);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.1;
   letter-spacing: -.045em;
 }
@@ -1154,7 +1154,7 @@
 
 .landing-page .landing-footer__brand { min-width: 0; }
 
-.landing-page .landing-footer__brand .landing-brand { display: inline-flex; align-items: center; gap: .55rem; color: #102d39; font-size: 1.15rem; font-weight: 800; letter-spacing: -.035em; }
+.landing-page .landing-footer__brand .landing-brand { display: inline-flex; align-items: center; gap: .55rem; color: #102d39; font-size: 1.15rem; font-weight: 700; letter-spacing: -.035em; }
 
 .landing-page .landing-footer__brand p { margin: .3rem 0 0; color: #66808b; font-size: .76rem; line-height: 1.5; }
 

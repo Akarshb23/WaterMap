@@ -41,7 +41,7 @@ export default function CityMapPage() {
           borderRadius: '8px',
           boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
           fontSize: '0.85rem',
-          fontWeight: '600',
+          fontWeight: '500',
         }}>
           {toastMessage}
         </div>

@@ -58,7 +58,7 @@
   text-decoration: none;
   color: #0e2937;
   font-size: 1.2rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.035em;
   white-space: nowrap;
   transition: opacity 0.15s ease;
@@ -82,7 +82,7 @@
 
 .sidebar__name {
   font-size: 1.2rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #0e2937;
   letter-spacing: -0.035em;
 }
@@ -126,7 +126,7 @@
   background-color: var(--wm-color-primary-soft);
   border-inline-start-color: var(--wm-color-primary);
   color: var(--wm-color-primary);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .sidebar__promo {

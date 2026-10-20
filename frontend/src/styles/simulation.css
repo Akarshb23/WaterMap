@@ -25,7 +25,7 @@
 
 .simulation-header__title {
   font-size: 1.85rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #0f172a;
   letter-spacing: -0.025em;
   margin: 0 0 0.35rem 0;
@@ -139,7 +139,7 @@
   color: #ffffff !important;
   border-radius: 8px !important;
   padding: 0.55rem 1.35rem !important;
-  font-weight: 600 !important;
+  font-weight: 600;
   font-size: 0.82rem !important;
   display: inline-flex !important;
   align-items: center !important;

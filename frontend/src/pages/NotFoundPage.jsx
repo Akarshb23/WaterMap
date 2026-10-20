@@ -15,7 +15,7 @@ const NotFoundPage = () => (
         textDecoration: 'none',
         color: '#0e2937',
         fontSize: '1.4rem',
-        fontWeight: '800',
+        fontWeight: '700',
         letterSpacing: '-0.035em',
         marginBottom: '2rem',
       }}
@@ -34,7 +34,7 @@ const NotFoundPage = () => (
         borderRadius: '999px',
         backgroundColor: '#0ba984',
         color: '#ffffff',
-        fontWeight: '600',
+        fontWeight: '500',
         textDecoration: 'none',
       }}
     >

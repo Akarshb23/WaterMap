@@ -1,27 +1,158 @@
+/* ===========================================================================
+ * WaterMap Unified Typography & Font Weight System
+ *
+ * Strict Design System Scale:
+ *   - Base Body Text: 400 (normal)
+ *   - Headings (h1, h2, h3, h4): 700 (bold)
+ *   - Card Titles & Section Headers: 600 (semibold) / 700 (bold)
+ *   - UI Elements & Navigation (sidebar, buttons, tabs, badges): 500 (medium)
+ *   - Micro-copy & Subtext: 400 (normal) + differentiated by color (muted)
+ * =========================================================================== */
+
+/* 1. Global Base Typography */
+html,
+body {
+  font-family: var(--wm-font-sans, 'Segoe UI', system-ui, -apple-system, sans-serif);
+  font-weight: var(--wm-font-normal, 400);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--wm-color-text, #142e3b);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enforce base weight across standard containers to prevent bold inheritance */
+p,
+div,
+span,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figcaption,
+input,
+textarea,
+select {
+  font-weight: var(--wm-font-normal, 400);
+}
+
+/* 2. Headings (Uniform Bold: 700) */
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
+  font-weight: var(--wm-font-bold, 700);
   line-height: 1.25;
+  color: var(--wm-color-text, #142e3b);
+  margin: 0;
 }
 
 h1 {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
 }
 
 h2 {
   font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  line-height: 1.22;
 }
 
 h3 {
   font-size: 1.1rem;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
 }
 
-p {
+h4 {
   font-size: 1rem;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
 }
 
-small {
-  font-size: 0.85rem;
-  color: var(--wm-color-muted);
+h5 {
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+h6 {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* 3. Card & Inner Headings */
+.card__title,
+.card-title,
+.section-title,
+.panel-title {
+  font-weight: var(--wm-font-semibold, 600);
+  color: var(--wm-color-text, #142e3b);
+}
+
+/* 4. UI Elements & Navigation (Medium: 500) */
+button,
+.btn,
+.button,
+.sidebar__link,
+.topbar__link,
+.nav-link,
+.tabs__trigger,
+.tab-btn,
+.tab-item,
+.badge,
+.chip,
+.tag,
+.filter-btn,
+.native-select,
+label,
+.form-label,
+th,
+table th {
+  font-weight: var(--wm-font-medium, 500);
+}
+
+/* Active links remain medium weight to prevent layout jump while retaining accent colors */
+.sidebar__link--active,
+.nav-link--active,
+.tabs__trigger[data-state='active'] {
+  font-weight: var(--wm-font-medium, 500);
+}
+
+/* 5. Micro-copy & Subtext (Standard Base 400 + Muted Color) */
+.subtext,
+.subtitle,
+.caption,
+.footnote,
+.card__subtitle,
+.page-header__description,
+.city-dashboard-header__subtitle,
+.about-header__subtitle,
+.city-map-page-header__subtitle,
+small,
+.text-muted,
+.desc,
+.step-desc,
+.formula-explanation {
+  font-weight: var(--wm-font-normal, 400);
+  color: var(--wm-color-muted, #637783);
+}
+
+strong,
+b {
+  font-weight: var(--wm-font-bold, 700);
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875em;
+  font-weight: var(--wm-font-normal, 400);
 }

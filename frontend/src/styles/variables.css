@@ -41,6 +41,12 @@
   --wm-sidebar-width: 240px;
   --wm-topbar-height: 62px;
 
+  /* Typography scale */
+  --wm-font-normal: 400;
+  --wm-font-medium: 500;
+  --wm-font-semibold: 600;
+  --wm-font-bold: 700;
+
   --wm-font-sans: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial,
     sans-serif;
 }
