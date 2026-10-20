@@ -46,26 +46,45 @@
 .sidebar__brand {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.6rem;
   padding: 0.15rem 0.5rem 1.1rem;
 }
 
-.sidebar__logo {
+.sidebar__brand-link {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 2.2rem;
+  gap: 0.55rem;
+  text-decoration: none;
+  color: #0e2937;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.sidebar__brand-link:hover {
+  opacity: 0.85;
+}
+
+.sidebar__logo {
+  display: grid;
+  place-items: center;
+  width: 2rem;
   height: 2.2rem;
-  border-radius: var(--wm-radius-sm);
-  background-color: var(--wm-color-primary);
-  color: #ffffff;
+  flex: 0 0 auto;
+  background: none;
+  border-radius: 0;
+  transform: none;
+  color: inherit;
 }
 
 .sidebar__name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--wm-color-text);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0e2937;
+  letter-spacing: -0.035em;
 }
 
 .sidebar__close {
@@ -440,7 +459,7 @@
 .app-layout__content{max-width:none;padding:1.1rem 1.05rem 1.5rem}
 .sidebar{width:var(--wm-sidebar-width);padding:1rem .75rem .85rem;background:rgba(255,255,255,.96)}
 .sidebar__brand{padding:.15rem .7rem 1.35rem}
-.sidebar__logo{background:linear-gradient(150deg,#13c6a0,#2489f6);border-radius:0 60% 60% 60%;transform:rotate(-8deg)}
+.sidebar__logo{background:none;border-radius:0;transform:none}
 .sidebar__name{font-size:1.25rem}
 .sidebar__list{gap:.22rem}
 .sidebar__link{padding:.68rem .8rem;border-radius:9px;font-size:.84rem}

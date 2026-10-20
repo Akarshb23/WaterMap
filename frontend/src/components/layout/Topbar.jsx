@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Bell, ChevronDown, MapPin, Search } from 'lucide-react'
+import { Bell, ChevronDown, MapPin, Menu, Search } from 'lucide-react'
 import { useFilters } from '../../context/FilterContext.jsx'
 import { useCity } from '../../context/CityContext.jsx'
 
-const Topbar = () => {
+const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const location = useLocation()
   const { searchQuery, setSearchQuery } = useFilters()
   const { selectedCityId, setSelectedCityId } = useCity()
@@ -39,6 +39,16 @@ const Topbar = () => {
   return (
     <header className="topbar">
       <div className="topbar__left">
+        {onToggleSidebar && (
+          <button
+            type="button"
+            className="topbar__menu"
+            onClick={onToggleSidebar}
+            aria-label={isSidebarOpen ? 'Close navigation' : 'Open navigation'}
+          >
+            <Menu size={18} />
+          </button>
+        )}
         <div className="topbar__city">
           <MapPin
             className="topbar__city-icon"

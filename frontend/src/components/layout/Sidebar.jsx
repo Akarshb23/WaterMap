@@ -1,6 +1,6 @@
 import {
   Database,
-  Droplets,
+
   Sprout,
   Info,
   LayoutDashboard,
@@ -10,7 +10,8 @@ import {
   TrendingUp,
   X,
 } from 'lucide-react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import BrandMark from '../common/BrandMark.jsx'
 import cityscape from '../../assets/watermap-cityscape.png'
 import { SIDEBAR_NAV_ITEMS } from '../../constants/navigation.js'
 import { ROUTES } from '../../constants/routes.js'
@@ -46,10 +47,12 @@ const Sidebar = ({ isOpen = false, onClose }) => {
     ) : null}
     <aside className={`sidebar${isOpen ? ' sidebar--open' : ''}`} id="app-sidebar">
       <div className="sidebar__brand">
-        <span className="sidebar__logo">
-          <Droplets size={19} aria-hidden="true" />
+        <Link to="/" className="sidebar__brand-link" aria-label="WaterMap home">
+          <span className="sidebar__logo">
+          <BrandMark id="wm-drop-sidebar" size={26} />
         </span>
-        <span className="sidebar__name">WaterMap</span>
+          <span className="sidebar__name">WaterMap</span>
+        </Link>
         <button
           type="button"
           className="sidebar__close"
