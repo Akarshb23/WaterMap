@@ -1,7 +1,7 @@
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../constants/routes.js'
-import { TOP_HIGH_RISK_WARDS } from '../../data/demoData.js'
+import { TOP_HIGH_RISK_DISTRICTS } from '../../data/demoData.js'
 import Badge from '../common/Badge.jsx'
 
 const SparklineTrend = () => (
@@ -17,58 +17,61 @@ const SparklineTrend = () => (
 )
 
 /**
- * Ranked table of the highest water-stress wards with WSI badges and
+ * Ranked table of the highest water-stress districts with WSI badges and
  * red trend indicators.
  */
-const HighRiskWards = ({ wards = TOP_HIGH_RISK_WARDS }) => (
-  <section className="card dashboard-card" aria-labelledby="high-risk-wards-title">
-    <div className="card__header">
-      <h2 className="card__title" id="high-risk-wards-title">
-        Top High-Risk Wards
-      </h2>
-    </div>
+const HighRiskWards = ({ districts }) => {
+  const list = districts || TOP_HIGH_RISK_DISTRICTS
+  return (
+    <section className="card dashboard-card" aria-labelledby="high-risk-districts-title">
+      <div className="card__header">
+        <h2 className="card__title" id="high-risk-districts-title">
+          Top High-Risk Districts
+        </h2>
+      </div>
 
-    <div className="wards-table-wrap">
-      <table className="wards-table">
-        <caption className="sr-only">Wards ranked by water stress index</caption>
-        <thead>
-          <tr>
-            <th scope="col">Rank</th>
-            <th scope="col">Ward</th>
-            <th scope="col">WSI</th>
-            <th scope="col">Population</th>
-            <th scope="col">Trend</th>
-          </tr>
-        </thead>
-        <tbody>
-          {wards.map((ward) => (
-            <tr key={ward.rank}>
-              <td>
-                <span className="ward-rank">{ward.rank}</span>
-              </td>
-              <td className="ward-name">{ward.name}</td>
-              <td>
-                <Badge tone="danger">{ward.wsi}</Badge>
-              </td>
-              <td>{ward.population}</td>
-              <td>
-                <span className="ward-trend" title={`${ward.trend} increase`}>
-                  <SparklineTrend />
-                </span>
-              </td>
+      <div className="wards-table-wrap">
+        <table className="wards-table">
+          <caption className="sr-only">Districts ranked by water stress index</caption>
+          <thead>
+            <tr>
+              <th scope="col">Rank</th>
+              <th scope="col">District</th>
+              <th scope="col">WSI</th>
+              <th scope="col">Population</th>
+              <th scope="col">Trend</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {list.map((district) => (
+              <tr key={district.rank}>
+                <td>
+                  <span className="ward-rank">{district.rank}</span>
+                </td>
+                <td className="ward-name">{district.name}</td>
+                <td>
+                  <Badge tone="danger">{district.wsi}</Badge>
+                </td>
+                <td>{district.population}</td>
+                <td>
+                  <span className="ward-trend" title={`${district.trend} increase`}>
+                    <SparklineTrend />
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-    <div className="dashboard-card__footer dashboard-card__footer--left">
-      <Link className="link-action" to={ROUTES.CITY_MAP}>
-        View All Wards
-        <ArrowRight size={14} aria-hidden="true" />
-      </Link>
-    </div>
-  </section>
-)
+      <div className="dashboard-card__footer dashboard-card__footer--left">
+        <Link className="link-action" to={ROUTES.CITY_MAP}>
+          View All Districts
+          <ArrowRight size={14} aria-hidden="true" />
+        </Link>
+      </div>
+    </section>
+  )
+}
 
 export default HighRiskWards

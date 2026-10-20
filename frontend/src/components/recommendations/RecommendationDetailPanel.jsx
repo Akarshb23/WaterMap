@@ -1,4 +1,5 @@
 import {
+  Activity,
   AlertTriangle,
   ArrowRight,
   Bookmark,
@@ -9,33 +10,43 @@ import {
   Droplets,
   FileImage,
   FileText,
+  Filter,
   Gauge,
   Heart,
+  Layers,
+  Leaf,
   RotateCcw,
   Scale,
   ShieldCheck,
   Sprout,
   TrendingUp,
   Users,
+  Waves,
   Wrench,
   X,
 } from 'lucide-react'
 import rainwaterHarvestingImg from '../../assets/images/rainwater-harvesting-concept.jpg'
 
 const ICON_MAP = {
-  CloudRain,
-  RotateCcw,
-  Sprout,
-  Wrench,
-  FileText,
-  Users,
-  Droplets,
-  Coins,
-  TrendingUp,
+  Activity,
   Building2,
-  Scale,
+  CloudRain,
+  Coins,
+  Droplets,
+  FileText,
+  Filter,
   Gauge,
   Heart,
+  Layers,
+  Leaf,
+  RotateCcw,
+  Scale,
+  ShieldCheck,
+  Sprout,
+  TrendingUp,
+  Users,
+  Waves,
+  Wrench,
 }
 
 const TABS = [
@@ -127,8 +138,8 @@ const RecommendationDetailPanel = ({
               {/* Left Specifications List */}
               <div className="recommendation-detail__specs">
                 <div className="recommendation-detail__spec-row">
-                  <span className="recommendation-detail__spec-label">Target Wards</span>
-                  <span className="recommendation-detail__spec-value">{recommendation.targetWards}</span>
+                  <span className="recommendation-detail__spec-label">Target Districts</span>
+                  <span className="recommendation-detail__spec-value">{recommendation.targetDistricts || recommendation.targetWards}</span>
                 </div>
                 <div className="recommendation-detail__spec-row">
                   <span className="recommendation-detail__spec-label">Implementation Level</span>
@@ -198,22 +209,22 @@ const RecommendationDetailPanel = ({
                 </div>
               ))}
             </div>
-            {recommendation.expectedImpact?.wardBreakdown && (
+            {(recommendation.expectedImpact?.districtBreakdown || recommendation.expectedImpact?.wardBreakdown) && (
               <div className="recommendation-detail__subtable-wrap">
-                <h5 className="recommendation-detail__subtable-title">Target Ward WSI Projections</h5>
+                <h5 className="recommendation-detail__subtable-title">Target District WSI Projections</h5>
                 <table className="recommendation-detail__subtable">
                   <thead>
                     <tr>
-                      <th>Ward</th>
+                      <th>District</th>
                       <th>Current</th>
                       <th>Projected</th>
                       <th>Delta</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {recommendation.expectedImpact.wardBreakdown.map((row) => (
-                      <tr key={row.ward}>
-                        <td>{row.ward}</td>
+                    {(recommendation.expectedImpact.districtBreakdown || recommendation.expectedImpact.wardBreakdown).map((row) => (
+                      <tr key={row.district || row.ward}>
+                        <td>{row.district || row.ward}</td>
                         <td><span className="badge-wsi-curr">{row.current.toFixed(2)}</span></td>
                         <td><span className="badge-wsi-proj">{row.projected.toFixed(2)}</span></td>
                         <td className="recommendation-detail__delta-positive">{row.reduction}</td>

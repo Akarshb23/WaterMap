@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   CUMULATIVE_IMPACT_PROJECTION, INTERVENTION_TYPE_IMPACT, RECOMMENDATION_METRICS,
-  RECOMMENDATIONS_LIST, TOP_PRIORITY_WARDS_DATA,
+  RECOMMENDATIONS_LIST, TOP_PRIORITY_DISTRICTS_DATA,
 } from '../data/recommendationsData.js'
 import { fetchRecommendations, fetchRecommendationImpact, fetchRecommendationMetrics, saveRecommendationPlan } from '../services/recommendationService.js'
 import { getApiErrorMessage } from '../services/apiClient.js'
@@ -16,7 +16,7 @@ export function useRecommendations() {
     metrics: RECOMMENDATION_METRICS,
     cumulativeImpact: CUMULATIVE_IMPACT_PROJECTION,
     interventionImpact: INTERVENTION_TYPE_IMPACT,
-    topWards: TOP_PRIORITY_WARDS_DATA,
+    topDistricts: TOP_PRIORITY_DISTRICTS_DATA,
     isLoading: false,
     error: null,
   })
@@ -40,7 +40,7 @@ export function useRecommendations() {
           metrics: metrics && metrics.length > 0 ? metrics : RECOMMENDATION_METRICS,
           cumulativeImpact: impact?.cumulative ?? CUMULATIVE_IMPACT_PROJECTION,
           interventionImpact: impact?.interventions ?? INTERVENTION_TYPE_IMPACT,
-          topWards: impact?.topWards ?? TOP_PRIORITY_WARDS_DATA,
+          topDistricts: impact?.topDistricts ?? TOP_PRIORITY_DISTRICTS_DATA,
           isLoading: false,
           error: null,
         })
@@ -98,14 +98,43 @@ export function useRecommendations() {
       return 0
     }), [data.recommendations, categoryFilter, priorityFilter, sortBy])
 
+  const categoryCounts = useMemo(() => {
+    const counts = {
+      all: data.recommendations.length,
+      infrastructure: 0,
+      policy: 0,
+      demand: 0,
+      nature: 0,
+    }
+    data.recommendations.forEach((item) => {
+      if (counts[item.category] !== undefined) {
+        counts[item.category] += 1
+      }
+    })
+    return counts
+  }, [data.recommendations])
+
+  const dynamicMetrics = useMemo(() => {
+    return data.metrics.map((metric) => {
+      if (metric.id === 'recommended-actions') {
+        return {
+          ...metric,
+          value: categoryCounts.all.toString(),
+        }
+      }
+      return metric
+    })
+  }, [data.metrics, categoryCounts])
+
   return {
     recommendations: filteredRecommendations,
     allRecommendations: data.recommendations,
+    categoryCounts,
     selectedRecommendation, selectedId, setSelectedId,
     activeTab, setActiveTab, categoryFilter, setCategoryFilter,
     priorityFilter, setPriorityFilter, sortBy, setSortBy,
-    plannedIds, togglePlanned, metrics: data.metrics,
+    plannedIds, togglePlanned, metrics: dynamicMetrics,
     cumulativeImpact: data.cumulativeImpact, interventionImpact: data.interventionImpact,
-    topWards: data.topWards, isLoading: data.isLoading, error: data.error,
+    topDistricts: data.topDistricts, isLoading: data.isLoading, error: data.error,
   }
 }

@@ -1,7 +1,7 @@
 import { BarChart3, Droplet, MapPin, Waves } from 'lucide-react'
 
 const TAKEAWAY_META = {
-  wards: { icon: BarChart3, tone: 'green' },
+  districts: { icon: BarChart3, tone: 'green' },
   wsi: { icon: Droplet, tone: 'blue' },
   groundwater: { icon: Waves, tone: 'blue' },
   impact: { icon: MapPin, tone: 'red' },

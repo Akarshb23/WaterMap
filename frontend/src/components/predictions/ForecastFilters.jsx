@@ -1,5 +1,5 @@
 /**
- * Filters for the predictions page (horizon, ward, scenario).
+ * Filters for the predictions page (horizon, district, scenario).
  * Controlled by the caller; state wiring comes with page implementation.
  */
 const ForecastFilters = ({ children }) => (

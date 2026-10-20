@@ -63,15 +63,16 @@ const WorkflowCard = () => {
                   }
                 }}
               >
+                <span className="about-workflow-step__badge">Step 0{step.step}</span>
                 <div className={`about-workflow-step__icon about-workflow-step__icon--${step.tone}`}>
                   <Icon size={20} aria-hidden="true" />
                 </div>
-                <h4 className="about-workflow-step__title">{step.title}</h4>
+                <h4 className="about-workflow-step__title">{step.title.replace(/^\d+\.\s*/, '')}</h4>
                 <p className="about-workflow-step__desc">{step.description}</p>
               </div>
               {!isLast && (
                 <div className="about-workflow-arrow" aria-hidden="true">
-                  <ArrowRight size={18} className="about-workflow-arrow__icon" />
+                  <ArrowRight size={14} className="about-workflow-arrow__icon" />
                 </div>
               )}
             </div>

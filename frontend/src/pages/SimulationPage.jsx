@@ -23,8 +23,8 @@ import {
  * - Panoramic banner with city skyline and lightbulb info badge
  * - Scenario controls bar with Select Scenario, Target Area, Implementation Level, Time Horizon, Run Simulation
  * - 3x3 dashboard grid:
- *     Left: Simulated Water Stress Map (with Current / Simulated toggle and Ward 12 pinpoint callout)
- *     Center: Scenario Impact (Ward 12) + City-wide Comparison
+ *     Left: Simulated Water Stress Map (with Current / Simulated toggle and Koramangala pinpoint callout)
+ *     Center: Scenario Impact (Koramangala) + City-wide Comparison
  *     Right: Summary metrics cards + Key Takeaways
  *     Bottom: Water Stress Index Forecast + Intervention Effectiveness + Try Different Scenarios
  * - Fully interactive: changing scenarios or clicking Run Simulation recalculates all metrics and charts dynamically.
@@ -63,10 +63,18 @@ const SimulationPage = () => {
 
         <div
           className="simulation-header__banner"
-          style={{ backgroundImage: `url(${predictionBanner})` }}
-          role="img"
-          aria-label="City landscape banner"
+          role="region"
+          aria-label="Simulation scenario banner"
         >
+          <div
+            className="simulation-header__banner-bg"
+            style={{
+              backgroundImage: `linear-gradient(90deg, #f1f6f8 0%, rgba(241, 246, 248, 0.75) 16%, rgba(241, 246, 248, 0.1) 38%, rgba(241, 246, 248, 0) 55%), url(${predictionBanner})`,
+            }}
+            aria-hidden="true"
+          />
+          <div className="simulation-header__blur-veil" aria-hidden="true" />
+
           <div className="simulation-header__badge">
             <div className="simulation-header__badge-icon">
               <Lightbulb size={18} />

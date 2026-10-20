@@ -16,11 +16,13 @@ const ROW_PRESETS = {
  * 4. More resilient water supply (soft green circle with leaf)
  */
 const SimulationResults = ({ result }) => {
+  const reductionPct = result.districtReductionPct ?? result.wardReductionPct ?? 44
+  const areaName = result.area?.label || 'Koramangala'
   const rows = [
     {
       id: 'wsi',
-      value: `${result.wardReductionPct}% reduction`,
-      label: `in water stress index in ${result.area.label}`,
+      value: `${reductionPct}% reduction`,
+      label: `in water stress index in ${areaName}`,
     },
     {
       id: 'demand',

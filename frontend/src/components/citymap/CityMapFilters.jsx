@@ -23,8 +23,8 @@ const FilterSelect = ({ id, label, options, value, onChange }) => (
 
 /**
  * Filter toolbar above the map: View, Time Period and Zone selects plus a
- * ward/area search box. All values are controlled by the parent page, which
- * uses them to update the map overlays and the filtered ward readout.
+ * district/area search box. All values are controlled by the parent page, which
+ * uses them to update the map overlays and the filtered district readout.
  */
 const CityMapFilters = ({ filters, onChange }) => {
   const { view, period, zone, query } = filters
@@ -56,16 +56,16 @@ const CityMapFilters = ({ filters, onChange }) => {
       />
 
       <div className="city-map-filter">
-        <label className="city-map-filter__label" htmlFor="city-map-ward-search">
+        <label className="city-map-filter__label" htmlFor="city-map-district-search">
           Search
         </label>
         <div className="city-map-filter__search">
           <Search size={15} className="city-map-filter__search-icon" aria-hidden="true" />
           <input
-            id="city-map-ward-search"
+            id="city-map-district-search"
             type="search"
             className="search-bar"
-            placeholder="Search ward or area..."
+            placeholder="Search district or area..."
             value={query}
             onChange={update('query')}
           />

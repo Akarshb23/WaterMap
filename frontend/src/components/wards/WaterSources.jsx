@@ -12,7 +12,7 @@ const WaterSources = ({ sources = [] }) => (
     </div>
 
     {sources.length === 0 ? (
-      <p className="ward-card__empty">No water source data available for this ward.</p>
+      <p className="ward-card__empty">No water source data available for this district.</p>
     ) : (
       <ul className="ward-sources">
         {sources.map((source) => (

@@ -1,14 +1,15 @@
 /**
- * Route paths for the WaterMap app. `WARD_DETAILS` contains a path
- * parameter consumed via `useParams()`; `WARD_DETAILS_HOME` is the
- * concrete link target used by the sidebar (Ward 12 details).
+ * Route paths for the WaterMap app.
  */
 export const ROUTES = {
   HOME: '/',
   DASHBOARD: '/dashboard',
   CITY_MAP: '/map',
-  WARD_DETAILS: '/wards/:wardId',
-  WARD_DETAILS_HOME: '/wards/12',
+  DISTRICT_DETAILS: '/districts/:districtId',
+  DISTRICT_DETAILS_HOME: '/districts/12',
+  // Backward compatibility alias
+  WARD_DETAILS: '/districts/:districtId',
+  WARD_DETAILS_HOME: '/districts/12',
   PREDICTIONS: '/predictions',
   SIMULATION: '/simulation',
   RECOMMENDATIONS: '/recommendations',

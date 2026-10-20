@@ -10,7 +10,7 @@ export async function runSimulation(scenario, { signal, cityId = 'bengaluru' } =
   const wards = await fetchWards({ signal, cityId })
   const selectedArea = AREAS.find((item) => item.id === payload.area) ?? AREAS[0]
   const ward = wards.find((item) => String(item.id) === String(payload.area) || String(item.ward_id) === String(payload.area)) ?? wards[0]
-  if (!ward) throw new Error('No ward data is available for simulation.')
+  if (!ward) throw new Error('No district data is available for simulation.')
   const coverage = Math.max(0, Math.min(1, Number(payload.level ?? 50) / 100))
   const intervention_type = INTERVENTION_MAP[payload.scenario] ?? 'rainwater_harvesting'
   const response = await apiPost('/simulations/run', { city_id: cityId, ward_id: ward.ward_id ?? ward.id, intervention_type, coverage }, { signal })
@@ -20,7 +20,7 @@ export async function runSimulation(scenario, { signal, cityId = 'bengaluru' } =
   const level = { value: String(payload.level ?? '50'), label: `${payload.level ?? 50}% implementation` }
   const horizon = { value: String(payload.horizon ?? '2030'), label: String(payload.horizon ?? '2030') }
   const reduction = Number(response.relative_reduction_pct ?? 0)
-  return { scenario: { ...selectedScenario, label: response.intervention_label ?? selectedScenario.label }, area: { ...selectedArea, id: ward.id, label: ward.name ?? selectedArea.label }, level, horizon, baseline: { wsi: baselineWsi, rainfall: null, demand: null, groundwater: null }, simulated: { wsi: simulatedWsi, rainfall: null, demand: null, groundwater: null }, impact: { reduction, absoluteReduction: Number(response.absolute_reduction ?? baselineWsi - simulatedWsi) }, wardReduction: reduction / 100, wardReductionPct: reduction, cityReduction: null, cityReductionPct: null, adjustment: Number(payload.level ?? 50) / 100, demandDrop: null, groundwaterGain: null, resilience: 'Not estimated', backendResult: response }
+  return { scenario: { ...selectedScenario, label: response.intervention_label ?? selectedScenario.label }, area: { ...selectedArea, id: ward.id, label: ward.name ?? selectedArea.label }, level, horizon, baseline: { wsi: baselineWsi, rainfall: null, demand: null, groundwater: null }, simulated: { wsi: simulatedWsi, rainfall: null, demand: null, groundwater: null }, impact: { reduction, absoluteReduction: Number(response.absolute_reduction ?? baselineWsi - simulatedWsi) }, districtReduction: reduction / 100, districtReductionPct: reduction, wardReduction: reduction / 100, wardReductionPct: reduction, cityReduction: null, cityReductionPct: null, adjustment: Number(payload.level ?? 50) / 100, demandDrop: null, groundwaterGain: null, resilience: 'Not estimated', backendResult: response }
 }
 
 export async function fetchSimulationRun(runId, { signal } = {}) {

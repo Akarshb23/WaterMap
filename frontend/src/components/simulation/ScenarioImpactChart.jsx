@@ -5,7 +5,7 @@ const BASELINE_COLOR = '#94a3b8'
 const SIMULATED_COLOR = '#52b788'
 
 /**
- * Scenario Impact (Ward 12):
+ * Scenario Impact (Koramangala):
  * Grouped bar chart comparing Baseline (2024) vs Simulated (2030)
  * across Water Stress Index, Annual Rainfall, Water Demand, and Groundwater Level.
  * Exactly matches the reference screenshot with data labels above bars.
@@ -13,7 +13,7 @@ const SIMULATED_COLOR = '#52b788'
 const ScenarioImpactChart = ({ result }) => {
   const [hoveredItem, setHoveredItem] = useState(null)
 
-  const areaLabel = result?.area?.label ?? 'Ward 12'
+  const areaLabel = result?.area?.label ?? 'Koramangala'
   const baselineWsi = Number(result?.baseline?.wsi ?? 0.82)
   const simulatedWsi = Number(result?.simulated?.wsi ?? 0.46)
   const baselineRainfall = Number(result?.baseline?.rainfall ?? 520)
@@ -68,20 +68,50 @@ const ScenarioImpactChart = ({ result }) => {
 
   return (
     <section className="card impact-chart" aria-label={`Scenario impact chart for ${areaLabel}`}>
-      <div className="card__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-        <h2 className="card__title" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '0.95rem', whiteSpace: 'nowrap' }}>
+      <div
+        className="card__header"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '6px 8px',
+          marginBottom: '4px',
+        }}
+      >
+        <h2
+          className="card__title"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5,
+            fontSize: '0.86rem',
+            fontWeight: 700,
+            margin: 0,
+            minWidth: 0,
+          }}
+        >
           Scenario Impact ({areaLabel})
           <span title="Compare projected water stress indicators under selected interventions" style={{ cursor: 'help', color: '#94a3b8' }}>
-            <Info size={14} />
+            <Info size={13} />
           </span>
         </h2>
-        <div className="forecast-card__legend" style={{ display: 'flex', gap: '14px', margin: 0, whiteSpace: 'nowrap' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '11px', color: '#64748b' }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: BASELINE_COLOR }} />
+        <div
+          className="forecast-card__legend"
+          style={{
+            display: 'inline-flex',
+            gap: '8px',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            margin: 0,
+          }}
+        >
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: '10.5px', color: '#64748b', whiteSpace: 'nowrap' }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: BASELINE_COLOR, flexShrink: 0 }} />
             Baseline (2024)
           </span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '11px', color: '#64748b' }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: SIMULATED_COLOR }} />
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: '10.5px', color: '#64748b', whiteSpace: 'nowrap' }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: SIMULATED_COLOR, flexShrink: 0 }} />
             Simulated (2030)
           </span>
         </div>

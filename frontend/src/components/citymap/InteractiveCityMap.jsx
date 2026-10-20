@@ -1,30 +1,32 @@
 import { useState } from 'react'
 import { Locate, Minus, Plus } from 'lucide-react'
-import { DELHI_DASHBOARD_WARDS } from '../../data/delhiDashboardData.js'
+import { BANGALORE_DASHBOARD_DISTRICTS } from '../../data/bangaloreDashboardData.js'
 
 /**
- * 5 Regional geographic labels matching the reference mockup exactly:
- * NORTH DELHI, WEST DELHI, CENTRAL DELHI, EAST DELHI, SOUTH DELHI.
+ * 5 Regional geographic labels matching Bangalore zones:
+ * NORTH BANGALORE, WEST BANGALORE, CENTRAL BANGALORE, EAST BANGALORE, SOUTH BANGALORE.
  */
 const CITY_MAP_REGIONS = [
-  { id: 'north-delhi', label: 'NORTH DELHI', x: 288, y: 92 },
-  { id: 'west-delhi', label: 'WEST DELHI', x: 172, y: 242 },
-  { id: 'central-delhi', label: 'CENTRAL DELHI', x: 282, y: 295 },
-  { id: 'east-delhi', label: 'EAST DELHI', x: 422, y: 285 },
-  { id: 'south-delhi', label: 'SOUTH DELHI', x: 292, y: 436 },
+  { id: 'north-bangalore', label: 'NORTH BANGALORE', x: 288, y: 92 },
+  { id: 'west-bangalore', label: 'WEST BANGALORE', x: 172, y: 242 },
+  { id: 'central-bangalore', label: 'CENTRAL BANGALORE', x: 282, y: 295 },
+  { id: 'east-bangalore', label: 'EAST BANGALORE', x: 422, y: 285 },
+  { id: 'south-bangalore', label: 'SOUTH BANGALORE', x: 292, y: 436 },
 ]
 
 /**
- * Interactive City Map component matching the reference mockup:
- * - Basemap with authentic road grid, green parks, and winding Yamuna river
- * - 42 interlocking ward polygons with risk-color choropleth
- * - Selected ward dashed boundary, concentric pin, and attached tooltip popup
+ * Interactive City Map component matching Bangalore geography:
+ * - Basemap with arterial road grid, green reserves (Cubbon Park, Lalbagh), and lake valleys
+ * - 42 interlocking district polygons with risk-color choropleth
+ * - Selected district dashed boundary, concentric pin, and attached tooltip popup
  * - Top-left zoom controls (+, -, locate) in grouped container
- * - Bottom-left floating legend & toggle switches (Ward Boundaries, Satellite View)
+ * - Bottom-left floating legend & toggle switches (District Boundaries, Satellite View)
  * - Bottom-left cartographic scale bar (0, 5, 10 km)
  */
 const InteractiveCityMap = ({
-  selectedWardId = 'ward-12',
+  selectedDistrictId = 'district-12',
+  selectedWardId,
+  onSelectDistrict,
   onSelectWard,
   zone = 'all',
   searchQuery = '',
@@ -33,23 +35,26 @@ const InteractiveCityMap = ({
   const [showBoundaries, setShowBoundaries] = useState(true)
   const [satelliteView, setSatelliteView] = useState(false)
 
-  const selectedWard =
-    DELHI_DASHBOARD_WARDS.find((w) => w.id === selectedWardId) ||
-    DELHI_DASHBOARD_WARDS[0]
+  const activeId = selectedDistrictId || selectedWardId || 'district-12'
+  const handleSelect = onSelectDistrict || onSelectWard
+
+  const selectedDistrict =
+    BANGALORE_DASHBOARD_DISTRICTS.find((d) => d.id === activeId || d.legacyId === activeId) ||
+    BANGALORE_DASHBOARD_DISTRICTS[0]
 
   const handleZoomIn = () => setZoom((z) => Math.min(1.4, +(z + 0.12).toFixed(2)))
   const handleZoomOut = () => setZoom((z) => Math.max(0.85, +(z - 0.12).toFixed(2)))
   const handleResetZoom = () => {
     setZoom(1)
-    onSelectWard?.(DELHI_DASHBOARD_WARDS.find((w) => w.id === 'ward-12') || DELHI_DASHBOARD_WARDS[0])
+    handleSelect?.(BANGALORE_DASHBOARD_DISTRICTS.find((d) => d.id === 'district-12') || BANGALORE_DASHBOARD_DISTRICTS[0])
   }
 
-  const isWardVisible = (ward) => {
-    if (zone !== 'all' && ward.zoneKey !== zone) return false
+  const isDistrictVisible = (district) => {
+    if (zone !== 'all' && district.zoneKey !== zone) return false
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim()
-      const matchName = ward.name.toLowerCase().includes(q)
-      const matchZone = ward.zone.toLowerCase().includes(q)
+      const matchName = district.name.toLowerCase().includes(q)
+      const matchZone = district.zone.toLowerCase().includes(q)
       if (!matchName && !matchZone) return false
     }
     return true
@@ -59,7 +64,7 @@ const InteractiveCityMap = ({
     <div
       className={`interactive-map-viewport ${satelliteView ? 'interactive-map-viewport--satellite' : ''}`}
       role="region"
-      aria-label="Interactive city map of New Delhi"
+      aria-label="Interactive city map of Bangalore"
     >
       {/* Zoom Controls: Top-Left Grouped Container */}
       <div className="interactive-map-controls" role="toolbar" aria-label="Map zoom controls">
@@ -125,7 +130,7 @@ const InteractiveCityMap = ({
               className="interactive-map-switch__input"
             />
             <span className="interactive-map-switch__slider" />
-            <span className="interactive-map-switch__label">Ward Boundaries</span>
+            <span className="interactive-map-switch__label">District Boundaries</span>
           </label>
 
           <label className="interactive-map-switch">
@@ -166,7 +171,7 @@ const InteractiveCityMap = ({
           viewBox="120 20 340 450"
           className="interactive-map-svg"
           role="img"
-          aria-label="Choropleth map of New Delhi wards"
+          aria-label="Choropleth map of Bangalore districts"
         >
           {/* 1. Basemap Land Fill */}
           <rect
@@ -177,20 +182,20 @@ const InteractiveCityMap = ({
             fill={satelliteView ? '#1e293b' : '#f2f6f4'}
           />
 
-          {/* 2. Soft Green Parks & Forest Belts (Delhi Ridge & Sanctuaries) */}
+          {/* 2. Soft Green Parks & Forest Belts (Cubbon Park, Lalbagh, Turahalli) */}
           {!satelliteView && (
             <g fill="#dcefdc" opacity="0.85">
               {/* Northern Ridge */}
               <path d="M 230 45 Q 255 75 260 115 Q 240 125 220 85 Z" />
-              {/* Central Ridge / Buddha Jayanti Park */}
+              {/* Central Greenery / Cubbon Park */}
               <path d="M 205 195 Q 235 205 245 245 Q 220 265 200 235 Z" />
-              {/* Southern Ridge / Sanjay Van */}
+              {/* Lalbagh Botanical Gardens */}
               <path d="M 225 375 Q 260 385 275 435 Q 235 455 215 415 Z" />
-              {/* Yamuna Floodplain Greenway */}
+              {/* Bellandur-Varthur wetland corridor */}
               <path d="M 335 30 Q 360 85 355 135 Q 370 195 380 245 Q 370 245 355 175 Q 345 115 330 45 Z" fill="#d8edd9" />
-              {/* East Delhi Sanjay Lake park */}
+              {/* Ulsoor Lake Park */}
               <path d="M 415 125 Q 445 145 435 185 Q 405 175 415 125 Z" />
-              {/* South-East Okhla sanctuary */}
+              {/* Bannerghatta reserve buffer */}
               <path d="M 395 355 Q 435 375 425 415 Q 385 395 395 355 Z" />
             </g>
           )}
@@ -254,9 +259,9 @@ const InteractiveCityMap = ({
             </g>
           </g>
 
-          {/* 4. Yamuna River (Realistic Sky-Blue Ribbon with Bridge Crossings) */}
+          {/* 4. Valley Stream Ribbon with Crossings */}
           <g fill="none">
-            {/* River bed ribbon */}
+            {/* Water flow ribbon */}
             <path
               d="M 342 20 Q 365 110 360 160 Q 375 215 382 280 Q 408 360 440 465"
               stroke={satelliteView ? '#1e3a8a' : '#90cdf4'}
@@ -264,7 +269,7 @@ const InteractiveCityMap = ({
               opacity="0.92"
               strokeLinecap="round"
             />
-            {/* River flow center line */}
+            {/* Stream center line */}
             <path
               d="M 342 20 Q 365 110 360 160 Q 375 215 382 280 Q 408 360 440 465"
               stroke={satelliteView ? '#2563eb' : '#63b3ed'}
@@ -283,7 +288,7 @@ const InteractiveCityMap = ({
             </g>
           </g>
 
-          {/* 5. Regional Geographic Labels (Exactly 5 matching mockup) */}
+          {/* 5. Regional Geographic Labels (Exactly 5 Bangalore zones) */}
           <g
             fill={satelliteView ? '#cbd5e1' : '#4b5563'}
             fontSize="8.5"
@@ -298,11 +303,11 @@ const InteractiveCityMap = ({
             ))}
           </g>
 
-          {/* 6. 42 Seamless Interlocking Ward Polygons */}
+          {/* 6. 42 Seamless Interlocking District Polygons */}
           <g className="interactive-map-polygons">
-            {DELHI_DASHBOARD_WARDS.map((w) => {
-              const visible = isWardVisible(w)
-              const isSelected = selectedWard.id === w.id
+            {BANGALORE_DASHBOARD_DISTRICTS.map((w) => {
+              const visible = isDistrictVisible(w)
+              const isSelected = selectedDistrict.id === w.id
 
               return (
                 <polygon
@@ -322,7 +327,7 @@ const InteractiveCityMap = ({
                   strokeLinejoin="round"
                   opacity={visible ? 1 : 0.22}
                   className={`interactive-map-poly ${isSelected ? 'interactive-map-poly--selected' : ''}`}
-                  onClick={() => onSelectWard?.(w)}
+                  onClick={() => handleSelect?.(w)}
                   role="button"
                   tabIndex={0}
                   aria-label={`${w.name}: ${w.riskLabel}, WSI ${w.wsi}`}
@@ -332,10 +337,10 @@ const InteractiveCityMap = ({
             })}
           </g>
 
-          {/* 7. Selected Ward Concentric Bullseye Marker Pin */}
+          {/* 7. Selected District Concentric Bullseye Marker Pin */}
           <g
             className="interactive-map-pin"
-            transform={`translate(${selectedWard.center[0]}, ${selectedWard.center[1]})`}
+            transform={`translate(${selectedDistrict.center[0]}, ${selectedDistrict.center[1]})`}
             pointerEvents="none"
           >
             {/* White outer halo */}
@@ -349,30 +354,30 @@ const InteractiveCityMap = ({
           </g>
         </svg>
 
-        {/* 8. Attached Popup Card on Active Ward */}
+        {/* 8. Attached Popup Card on Active District */}
         <div
           className="interactive-map-popup"
           style={{
-            left: `${((selectedWard.center[0] - 120) / 340) * 100}%`,
-            top: `${((selectedWard.center[1] - 20) / 450) * 100}%`,
+            left: `${((selectedDistrict.center[0] - 120) / 340) * 100}%`,
+            top: `${((selectedDistrict.center[1] - 20) / 450) * 100}%`,
           }}
         >
           <div className="interactive-map-popup__inner">
             <div className="interactive-map-popup__line">
               <span className="interactive-map-popup__name">
                 <span className="interactive-map-popup__dot" style={{ backgroundColor: '#f59e0b' }} />
-                {selectedWard.name}
+                {selectedDistrict.name}
               </span>
             </div>
             <div className="interactive-map-popup__line">
               <span className="interactive-map-popup__risk">
                 <span className="interactive-map-popup__dot" style={{ backgroundColor: '#ef4444' }} />
-                {selectedWard.riskLabel}
+                {selectedDistrict.riskLabel}
               </span>
             </div>
             <div className="interactive-map-popup__line">
               <span className="interactive-map-popup__wsi">
-                WSI: <strong>{selectedWard.wsi.toFixed(2)}</strong>
+                WSI: <strong>{selectedDistrict.wsi.toFixed(2)}</strong>
               </span>
             </div>
           </div>

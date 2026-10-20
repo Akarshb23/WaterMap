@@ -20,7 +20,7 @@ const RecommendedActions = ({ actions = [], onViewAll }) => (
     </div>
 
     {actions.length === 0 ? (
-      <p className="ward-card__empty">No recommendations available for this ward.</p>
+      <p className="ward-card__empty">No recommendations available for this district.</p>
     ) : (
       <ul className="ward-actions">
         {actions.map((action) => {

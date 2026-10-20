@@ -70,23 +70,46 @@
   color: var(--wm-color-muted);
 }
 
-/* Skyline / Nature Banner Placeholder */
+/* Skyline / Nature Banner with left-side blur */
 .recommendations-banner {
   position: relative;
-  width: 23.5rem;
-  height: 4.8rem;
-  border-radius: var(--wm-radius);
+  width: 32rem;
+  height: 5.25rem;
+  border-radius: var(--wm-radius, 14px);
   overflow: hidden;
-  border: 1px solid var(--wm-color-border);
-  box-shadow: var(--wm-shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-inline-end: 0.85rem;
   flex-shrink: 0;
 }
 
-.recommendations-banner__image-placeholder {
+.recommendations-banner__backdrop {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #e3f2f5 0%, #d4ebf0 45%, #daf0ea 100%);
+  background-size: cover;
+  background-position: right 30%;
+  pointer-events: none;
   z-index: 1;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.2) 14%, rgba(0, 0, 0, 0.65) 28%, black 46%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.2) 14%, rgba(0, 0, 0, 0.65) 28%, black 46%);
+  transition: transform 0.4s ease;
+}
+
+.recommendations-banner:hover .recommendations-banner__backdrop {
+  transform: scale(1.02);
+}
+
+.recommendations-banner__blur-veil {
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  pointer-events: none;
+  z-index: 1;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(90deg, black 0%, rgba(0, 0, 0, 0.8) 25%, transparent 100%);
+  mask-image: linear-gradient(90deg, black 0%, rgba(0, 0, 0, 0.8) 25%, transparent 100%);
 }
 
 .recommendations-banner__card {
@@ -95,31 +118,41 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  height: 100%;
-  padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  padding: 0.65rem 1rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--wm-radius, 12px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 16px rgba(7, 93, 76, 0.1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.recommendations-banner__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(7, 93, 76, 0.15);
 }
 
 .recommendations-banner__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.1rem;
-  height: 2.1rem;
+  width: 2.35rem;
+  height: 2.35rem;
   border-radius: 50%;
-  background-color: var(--wm-color-low-soft);
-  color: var(--wm-color-positive);
+  background-color: var(--wm-color-low-soft, #e2f6ef);
+  color: var(--wm-color-positive, #0f9d6e);
   flex-shrink: 0;
 }
 
 .recommendations-banner__text {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .recommendations-banner__heading {
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: var(--wm-color-text);
   line-height: 1.25;
@@ -129,6 +162,7 @@
   font-size: 0.72rem;
   color: var(--wm-color-muted);
   line-height: 1.3;
+  margin-top: 0.1rem;
 }
 
 /* ---------------------------------------------------------------------------
@@ -244,6 +278,9 @@
 }
 
 .recommendation-filters-bar__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   padding: 0.38rem 0.85rem;
   border: 1px solid var(--wm-color-border);
   border-radius: var(--wm-radius-sm);
@@ -267,6 +304,24 @@
   border-color: #45bd9b;
   color: var(--wm-color-primary-dark);
   font-weight: 600;
+}
+
+.recommendation-filters-bar__pill-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  background-color: #f1f5f9;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  line-height: 1.2;
+}
+
+.recommendation-filters-bar__pill--active .recommendation-filters-bar__pill-count {
+  background-color: #075d4c;
+  color: #ffffff;
 }
 
 .recommendation-filters-bar__selects {
@@ -305,6 +360,12 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
+}
+
+.recommendations-main-col--detail {
+  min-height: 0;
+  height: 100%;
 }
 
 /* --- Left Column: Priority Wards Map --- */
@@ -488,15 +549,24 @@
 
 /* --- Center Column: Selectable Recommendation Cards --- */
 
+.recommendations-main-col--list {
+  min-height: 0;
+  height: 100%;
+}
+
 .recommendations-list-card {
   padding: 1rem;
   height: 100%;
+  max-height: 590px;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .recommendations-list-card__header {
   margin-bottom: 0.75rem;
+  flex-shrink: 0;
 }
 
 .recommendations-list-card__title {
@@ -507,7 +577,31 @@
 
 .recommendations-list-card__body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.4rem;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #075d4c #f1f5f9;
+}
+
+.recommendations-list-card__body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recommendations-list-card__body::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+
+.recommendations-list-card__body::-webkit-scrollbar-thumb {
+  background: #075d4c;
+  border-radius: 999px;
+}
+
+.recommendations-list-card__body::-webkit-scrollbar-thumb:hover {
+  background: #04382a;
 }
 
 .recommendations-list-card__items {
@@ -658,9 +752,12 @@
 .recommendation-detail-panel {
   padding: 1.15rem;
   height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.75rem;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .recommendation-detail-panel--empty {
@@ -785,22 +882,32 @@
 .recommendation-detail__tabs {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.55rem;
   border-bottom: 1px solid var(--wm-color-border);
   overflow-x: auto;
+  overflow-y: hidden;
   white-space: nowrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.recommendation-detail__tabs::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .recommendation-detail__tab-btn {
-  padding: 0.4rem 0.15rem 0.5rem;
+  padding: 0.4rem 0.2rem 0.5rem;
   border: 0;
   background: transparent;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 500;
   color: var(--wm-color-muted);
   cursor: pointer;
   position: relative;
   transition: color 0.15s ease;
+  flex-shrink: 0;
 }
 
 .recommendation-detail__tab-btn:hover {
@@ -826,8 +933,33 @@
 /* Tab Panels */
 .recommendation-detail__tab-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   overflow-y: auto;
-  min-height: 16rem;
+  overflow-x: hidden;
+  padding-right: 0.35rem;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #075d4c #f1f5f9;
+}
+
+.recommendation-detail__tab-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recommendation-detail__tab-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+
+.recommendation-detail__tab-content::-webkit-scrollbar-thumb {
+  background: #075d4c;
+  border-radius: 999px;
+}
+
+.recommendation-detail__tab-content::-webkit-scrollbar-thumb:hover {
+  background: #04382a;
 }
 
 /* Overview Tab */
@@ -1278,6 +1410,7 @@
   margin-top: auto;
   padding-top: 0.75rem;
   border-top: 1px solid var(--wm-color-border);
+  flex-shrink: 0;
 }
 
 .recommendation-detail__action-plan-btn {
@@ -1988,11 +2121,7 @@
 .priority-wards-map__placeholder-body {
   display: none !important;
 }
-.recommendations-banner__image-placeholder {
-  background-size: cover;
-  background-position: 63% 58%;
-  background-repeat: no-repeat;
-}
+
 
 
 .recommendations-page { gap: 1rem; }

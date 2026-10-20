@@ -9,7 +9,7 @@ import { CITY_MAP_ICONS } from './cityMapIcons.js'
 const WardRiskFactorsTab = () => (
   <div className="ward-tab-panel">
     <p className="ward-tab-panel__intro">
-      What is driving the high water stress rating for this ward:
+      What is driving the high water stress rating for this district:
     </p>
     <ul className="factor-list">
       {WARD_RISK_FACTORS.map((factor) => {

@@ -13,11 +13,11 @@ const RiskFactors = ({ factors = [] }) => (
       </h2>
     </div>
     <p className="ward-tab-panel__intro">
-      What is driving the high water-stress rating for this ward:
+      What is driving the high water-stress rating for this district:
     </p>
 
     {factors.length === 0 ? (
-      <p className="ward-card__empty">No risk factor data available for this ward.</p>
+      <p className="ward-card__empty">No risk factor data available for this district.</p>
     ) : (
       <ul className="factor-list">
         {factors.map((factor) => {

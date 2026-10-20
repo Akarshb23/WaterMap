@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { MapPin } from 'lucide-react'
 import CityMapFilterBar from '../components/citymap/CityMapFilterBar.jsx'
 import InteractiveCityMap from '../components/citymap/InteractiveCityMap.jsx'
 import InteractiveWardPanel from '../components/citymap/InteractiveWardPanel.jsx'
-import { DELHI_DASHBOARD_WARDS } from '../data/delhiDashboardData.js'
+import { BANGALORE_DASHBOARD_DISTRICTS } from '../data/bangaloreDashboardData.js'
+import cityscape from '../assets/watermap-cityscape.png'
 import '../styles/interactive-city-map.css'
 
 export default function CityMapPage() {
@@ -10,19 +12,19 @@ export default function CityMapPage() {
   const [period, setPeriod] = useState('2024')
   const [zone, setZone] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedWard, setSelectedWard] = useState(
-    () => DELHI_DASHBOARD_WARDS.find((w) => w.id === 'ward-12') || DELHI_DASHBOARD_WARDS[0]
+  const [selectedDistrict, setSelectedDistrict] = useState(
+    () => BANGALORE_DASHBOARD_DISTRICTS.find((w) => w.id === 'district-12') || BANGALORE_DASHBOARD_DISTRICTS[0]
   )
   const [isPanelOpen, setIsPanelOpen] = useState(true)
   const [toastMessage, setToastMessage] = useState(null)
 
-  const handleSelectWard = (ward) => {
-    setSelectedWard(ward)
+  const handleSelectDistrict = (district) => {
+    setSelectedDistrict(district)
     setIsPanelOpen(true)
   }
 
-  const handleCompareWards = (ward) => {
-    setToastMessage(`Comparing ${ward.name} with city average. Full comparison matrix loaded.`)
+  const handleCompareDistricts = (district) => {
+    setToastMessage(`Comparing ${district.name} with city average. Full comparison matrix loaded.`)
     setTimeout(() => setToastMessage(null), 3500)
   }
 
@@ -47,42 +49,35 @@ export default function CityMapPage() {
         </div>
       )}
 
-      {/* Page Header with Botanical Leaves Decoration */}
+      {/* Page Header with Skyline Banner matching Dashboard, Predictions, Simulations, About */}
       <header className="city-map-page-header">
         <div className="city-map-page-header__intro">
           <h1 className="city-map-page-header__title">Interactive City Map</h1>
           <p className="city-map-page-header__subtitle">
-            Explore ward-level water stress, compare areas, and understand key risk factors.
+            Explore district-level water stress, compare areas, and understand key risk factors.
           </p>
         </div>
 
-        {/* Botanical Foliage Watermark on Top-Right */}
-        <svg viewBox="0 0 160 120" className="city-map-page-header__foliage" aria-hidden="true">
-          <defs>
-            <linearGradient id="foliageGrad1" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#45bd9b" />
-              <stop offset="100%" stopColor="#075d4c" />
-            </linearGradient>
-            <linearGradient id="foliageGrad2" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#86efac" />
-              <stop offset="100%" stopColor="#10b981" />
-            </linearGradient>
-          </defs>
-          <path
-            d="M 160 0 Q 120 40 80 85 Q 50 115 10 120"
-            fill="none"
-            stroke="#075d4c"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            opacity="0.35"
+        {/* Top-Right Skyline Banner with left side completely blurred */}
+        <div className="city-map-header__banner" role="region" aria-label="City geospatial telemetry banner">
+          <div
+            className="city-map-header__backdrop"
+            style={{
+              backgroundImage: `linear-gradient(90deg, rgba(242, 250, 247, 1) 0%, rgba(242, 250, 247, 0.35) 25%, rgba(242, 250, 247, 0) 55%), url(${cityscape})`,
+            }}
+            aria-hidden="true"
           />
-          {/* Leaves */}
-          <path d="M 120 30 Q 100 10 85 25 Q 105 45 120 30 Z" fill="url(#foliageGrad1)" opacity="0.85" />
-          <path d="M 95 55 Q 70 40 60 60 Q 85 75 95 55 Z" fill="url(#foliageGrad2)" opacity="0.9" />
-          <path d="M 140 10 Q 125 -10 110 5 Q 125 25 140 10 Z" fill="url(#foliageGrad1)" opacity="0.75" />
-          <path d="M 68 85 Q 45 75 35 95 Q 60 105 68 85 Z" fill="url(#foliageGrad2)" opacity="0.85" />
-          <path d="M 38 108 Q 15 105 10 120 Q 30 125 38 108 Z" fill="url(#foliageGrad1)" opacity="0.9" />
-        </svg>
+          <div className="city-map-header__blur-veil" aria-hidden="true" />
+          <div className="city-map-header__card">
+            <span className="city-map-header__icon">
+              <MapPin size={18} aria-hidden="true" />
+            </span>
+            <div className="city-map-header__text">
+              <h2 className="city-map-header__heading">Bangalore Urban Basin</h2>
+              <p className="city-map-header__caption">High-resolution geospatial water telemetry.</p>
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* Filter Toolbar: View, Time Period, Zone + Search */}
@@ -97,12 +92,12 @@ export default function CityMapPage() {
         onSearchChange={setSearchQuery}
       />
 
-      {/* Main Grid: Interactive Map (Left) + Ward Details (Right) */}
+      {/* Main Grid: Interactive Map (Left) + District Details (Right) */}
       <div className={`city-map-main-layout ${!isPanelOpen ? 'city-map-main-layout--collapsed' : ''}`}>
         <div style={{ position: 'relative' }}>
           <InteractiveCityMap
-            selectedWardId={selectedWard?.id || 'ward-12'}
-            onSelectWard={handleSelectWard}
+            selectedDistrictId={selectedDistrict?.id || 'district-12'}
+            onSelectDistrict={handleSelectDistrict}
             zone={zone}
             searchQuery={searchQuery}
           />
@@ -113,16 +108,16 @@ export default function CityMapPage() {
               className="interactive-map-restore-panel-btn"
               onClick={() => setIsPanelOpen(true)}
             >
-              Show {selectedWard?.name || 'Ward'} Details
+              Show {selectedDistrict?.name || 'District'} Details
             </button>
           )}
         </div>
 
         {isPanelOpen && (
           <InteractiveWardPanel
-            ward={selectedWard}
+            district={selectedDistrict}
             onClose={() => setIsPanelOpen(false)}
-            onCompare={handleCompareWards}
+            onCompare={handleCompareDistricts}
           />
         )}
       </div>

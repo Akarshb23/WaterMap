@@ -3,9 +3,9 @@ import { ArrowRight, Droplet, Locate, Minus, Plus, Users } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import cityscape from '../../assets/watermap-cityscape.png'
 import {
-  DELHI_DASHBOARD_REGIONS,
-  DELHI_DASHBOARD_WARDS,
-} from '../../data/delhiDashboardData.js'
+  BANGALORE_DASHBOARD_REGIONS,
+  BANGALORE_DASHBOARD_DISTRICTS,
+} from '../../data/bangaloreDashboardData.js'
 
 const MAP_METRIC_OPTIONS = [
   { value: 'wsi', label: 'Water Stress Index' },
@@ -23,49 +23,50 @@ const MAP_ZONE_OPTIONS = [
   { value: 'south', label: 'South Zone' },
 ]
 
-const MAP_WARD_FILTER_OPTIONS = [
-  { value: 'all', label: 'All Wards' },
-  { value: 'high', label: 'High Risk Wards' },
-  { value: 'moderate', label: 'Moderate Risk Wards' },
-  { value: 'low', label: 'Low Risk Wards' },
+const MAP_DISTRICT_FILTER_OPTIONS = [
+  { value: 'all', label: 'All Districts' },
+  { value: 'high', label: 'High Risk Districts' },
+  { value: 'moderate', label: 'Moderate Risk Districts' },
+  { value: 'low', label: 'Low Risk Districts' },
 ]
 
 /**
- * Interactive Water Stress Map component matching the New Delhi city dashboard reference mockup:
- * - Top-right filter dropdowns (Metric, Zone, Ward)
- * - Map canvas with Yamuna River, Ring Roads, region names, colored interlocking ward polygons, and scale bar
+ * Interactive Water Stress Map component matching the Bangalore city dashboard:
+ * - Top-right filter dropdowns (Metric, Zone, District)
+ * - Map canvas with lake valleys, Outer Ring Road, region names, colored interlocking district polygons, and scale bar
  * - Floating top-left zoom controls (+, -, locate)
  * - Floating bottom-left risk legend
- * - Interactive Ward 12 concentric pin & attached popup card
- * - Right-hand Ward details panel with photographic hero and "View Full Details →" button
+ * - Interactive Koramangala concentric pin & attached popup card
+ * - Right-hand District details panel with photographic hero and "View Full Details →" button
  */
-const CityWaterStressMap = ({ onSelectWard }) => {
+const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
   const navigate = useNavigate()
-  const [selectedWardId, setSelectedWardId] = useState('ward-12')
+  const handleSelect = onSelectDistrict || onSelectWard
+  const [selectedDistrictId, setSelectedDistrictId] = useState('district-12')
   const [zoom, setZoom] = useState(1)
   const [metric, setMetric] = useState('wsi')
   const [zone, setZone] = useState('all')
-  const [wardFilter, setWardFilter] = useState('all')
+  const [districtFilter, setDistrictFilter] = useState('all')
 
-  const selectedWard =
-    DELHI_DASHBOARD_WARDS.find((w) => w.id === selectedWardId) ||
-    DELHI_DASHBOARD_WARDS[0]
+  const selectedDistrict =
+    BANGALORE_DASHBOARD_DISTRICTS.find((w) => w.id === selectedDistrictId || w.legacyId === selectedDistrictId) ||
+    BANGALORE_DASHBOARD_DISTRICTS[0]
 
   const handleZoomIn = () => setZoom((z) => Math.min(1.5, +(z + 0.15).toFixed(2)))
   const handleZoomOut = () => setZoom((z) => Math.max(0.85, +(z - 0.15).toFixed(2)))
   const handleResetZoom = () => {
     setZoom(1)
-    setSelectedWardId('ward-12')
+    setSelectedDistrictId('district-12')
   }
 
-  const handleWardClick = (ward) => {
-    setSelectedWardId(ward.id)
-    onSelectWard?.(ward)
+  const handleDistrictClick = (district) => {
+    setSelectedDistrictId(district.id)
+    handleSelect?.(district)
   }
 
-  const isWardVisible = (ward) => {
-    if (zone !== 'all' && ward.zoneKey !== zone) return false
-    if (wardFilter !== 'all' && ward.risk !== wardFilter) return false
+  const isDistrictVisible = (district) => {
+    if (zone !== 'all' && district.zoneKey !== zone) return false
+    if (districtFilter !== 'all' && district.risk !== districtFilter) return false
     return true
   }
 
@@ -77,7 +78,7 @@ const CityWaterStressMap = ({ onSelectWard }) => {
             Water Stress Map
           </h2>
           <p className="city-map-card__subtitle">
-            Ward-level water stress across New Delhi
+            District-level water stress across Bangalore
           </p>
         </div>
 
@@ -106,14 +107,14 @@ const CityWaterStressMap = ({ onSelectWard }) => {
             ))}
           </select>
 
-          <label className="sr-only" htmlFor="dashboard-ward-filter-select">Filter Wards</label>
+          <label className="sr-only" htmlFor="dashboard-district-filter-select">Filter Districts</label>
           <select
-            id="dashboard-ward-filter-select"
+            id="dashboard-district-filter-select"
             className="native-select city-map-card__select"
-            value={wardFilter}
-            onChange={(e) => setWardFilter(e.target.value)}
+            value={districtFilter}
+            onChange={(e) => setDistrictFilter(e.target.value)}
           >
-            {MAP_WARD_FILTER_OPTIONS.map((opt) => (
+            {MAP_DISTRICT_FILTER_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
@@ -122,7 +123,7 @@ const CityWaterStressMap = ({ onSelectWard }) => {
 
       <div className="city-map-layout">
         {/* Main Map Viewport */}
-        <div className="city-map-viewport" role="region" aria-label="Interactive water stress map of New Delhi">
+        <div className="city-map-viewport" role="region" aria-label="Interactive water stress map of Bangalore">
           {/* Controls: Top-Left */}
           <div className="city-map-controls" role="toolbar" aria-label="Map zoom controls">
             <button
@@ -196,7 +197,7 @@ const CityWaterStressMap = ({ onSelectWard }) => {
               viewBox="120 20 340 450"
               className="city-map-svg"
               role="img"
-              aria-label="Map of New Delhi wards showing water stress index"
+              aria-label="Map of Bangalore districts showing water stress index"
             >
               {/* Basemap Canvas Background */}
               <rect x="120" y="20" width="340" height="450" fill="#f4f7f6" />
@@ -238,18 +239,18 @@ const CityWaterStressMap = ({ onSelectWard }) => {
 
               {/* Regional Geographic Labels */}
               <g fill="#4b5563" fontSize="8.5" fontWeight="700" letterSpacing="0.8" opacity="0.8">
-                {DELHI_DASHBOARD_REGIONS.map((r) => (
+                {BANGALORE_DASHBOARD_REGIONS.map((r) => (
                   <text key={r.id} x={r.x} y={r.y} textAnchor="middle">
                     {r.label}
                   </text>
                 ))}
               </g>
 
-              {/* All 42 Seamless Interlocking Ward Polygons */}
+              {/* All 42 Seamless Interlocking District Polygons */}
               <g className="city-map-polygons">
-                {DELHI_DASHBOARD_WARDS.map((w) => {
-                  const visible = isWardVisible(w)
-                  const isSelected = selectedWard.id === w.id
+                {BANGALORE_DASHBOARD_DISTRICTS.map((w) => {
+                  const visible = isDistrictVisible(w)
+                  const isSelected = selectedDistrict.id === w.id
 
                   return (
                     <polygon
@@ -261,7 +262,7 @@ const CityWaterStressMap = ({ onSelectWard }) => {
                       strokeLinejoin="round"
                       opacity={visible ? 1 : 0.22}
                       className={`city-map-poly ${isSelected ? 'city-map-poly--selected' : ''}`}
-                      onClick={() => handleWardClick(w)}
+                      onClick={() => handleDistrictClick(w)}
                       role="button"
                       tabIndex={0}
                       aria-label={`${w.name}: ${w.riskLabel}, WSI ${w.wsi}`}
@@ -271,10 +272,10 @@ const CityWaterStressMap = ({ onSelectWard }) => {
                 })}
               </g>
 
-              {/* Selected Ward Concentric Marker on Ward 12 */}
+              {/* Selected District Concentric Marker on Koramangala */}
               <g
                 className="city-map-pin"
-                transform={`translate(${selectedWard.center[0]}, ${selectedWard.center[1]})`}
+                transform={`translate(${selectedDistrict.center[0]}, ${selectedDistrict.center[1]})`}
                 pointerEvents="none"
               >
                 <circle r="12" fill="none" stroke="#ffffff" strokeWidth="2.8" opacity="0.95" />
@@ -284,22 +285,22 @@ const CityWaterStressMap = ({ onSelectWard }) => {
               </g>
             </svg>
 
-            {/* Attached Ward 12 Interactive Popup Card */}
+            {/* Attached District Interactive Popup Card */}
             <div
               className="city-map-popup"
               style={{
-                left: `${((selectedWard.center[0] - 120) / 340) * 100}%`,
-                top: `${((selectedWard.center[1] - 20) / 450) * 100}%`,
+                left: `${((selectedDistrict.center[0] - 120) / 340) * 100}%`,
+                top: `${((selectedDistrict.center[1] - 20) / 450) * 100}%`,
               }}
             >
               <div className="city-map-popup__inner">
                 <div className="city-map-popup__top">
                   <span className="city-map-popup__name">
                     <span className="city-map-popup__dot" style={{ backgroundColor: '#10b981' }} />
-                    {selectedWard.name}
+                    {selectedDistrict.name}
                   </span>
-                  <span className={`city-map-popup__badge city-map-popup__badge--${selectedWard.risk}`}>
-                    ● {selectedWard.riskLabel}
+                  <span className={`city-map-popup__badge city-map-popup__badge--${selectedDistrict.risk}`}>
+                    ● {selectedDistrict.riskLabel}
                   </span>
                 </div>
 
@@ -309,19 +310,19 @@ const CityWaterStressMap = ({ onSelectWard }) => {
                       <Droplet size={12} className="city-map-popup__metric-icon" />
                       WSI
                     </span>
-                    <strong className="city-map-popup__metric-val">{selectedWard.wsi.toFixed(2)}</strong>
+                    <strong className="city-map-popup__metric-val">{selectedDistrict.wsi.toFixed(2)}</strong>
                   </div>
                   <div className="city-map-popup__metric-row">
                     <span className="city-map-popup__metric-label">
                       <Users size={12} className="city-map-popup__metric-icon" />
                       Population
                     </span>
-                    <strong className="city-map-popup__metric-val">{selectedWard.population}</strong>
+                    <strong className="city-map-popup__metric-val">{selectedDistrict.population}</strong>
                   </div>
                 </div>
 
                 <Link
-                  to={`/wards/${selectedWard.wardNumber}`}
+                  to={`/districts/${selectedDistrict.districtNumber || selectedDistrict.wardNumber || 12}`}
                   className="city-map-popup__link"
                 >
                   View Details <ArrowRight size={13} aria-hidden="true" />
@@ -331,15 +332,15 @@ const CityWaterStressMap = ({ onSelectWard }) => {
           </div>
         </div>
 
-        {/* Right Ward Detail Panel */}
-        <aside className="city-ward-panel" aria-label={`Details for ${selectedWard.name}`}>
+        {/* Right District Detail Panel */}
+        <aside className="city-ward-panel" aria-label={`Details for ${selectedDistrict.name}`}>
           <div className="city-ward-panel__head">
             <div>
-              <h3 className="city-ward-panel__title">{selectedWard.name}</h3>
-              <p className="city-ward-panel__zone">{selectedWard.zone}</p>
+              <h3 className="city-ward-panel__title">{selectedDistrict.name}</h3>
+              <p className="city-ward-panel__zone">{selectedDistrict.zone}</p>
             </div>
-            <span className={`city-ward-panel__badge city-ward-panel__badge--${selectedWard.risk}`}>
-              ● {selectedWard.riskLabel}
+            <span className={`city-ward-panel__badge city-ward-panel__badge--${selectedDistrict.risk}`}>
+              ● {selectedDistrict.riskLabel}
             </span>
           </div>
 
@@ -352,7 +353,7 @@ const CityWaterStressMap = ({ onSelectWard }) => {
               backgroundPosition: 'center 35%',
             }}
             role="img"
-            aria-label={`Panoramic river view of ${selectedWard.name}`}
+            aria-label={`Panoramic view of ${selectedDistrict.name}`}
           />
 
           {/* Stats List */}
@@ -360,24 +361,24 @@ const CityWaterStressMap = ({ onSelectWard }) => {
             <div className="city-ward-panel__stat-row">
               <dt className="city-ward-panel__stat-label">Water Stress Index</dt>
               <dd className="city-ward-panel__stat-val city-ward-panel__stat-val--danger">
-                {selectedWard.wsi.toFixed(2)}
+                {selectedDistrict.wsi.toFixed(2)}
               </dd>
             </div>
             <div className="city-ward-panel__stat-row">
               <dt className="city-ward-panel__stat-label">Population</dt>
-              <dd className="city-ward-panel__stat-val">{selectedWard.population}</dd>
+              <dd className="city-ward-panel__stat-val">{selectedDistrict.population}</dd>
             </div>
             <div className="city-ward-panel__stat-row">
               <dt className="city-ward-panel__stat-label">Annual Rainfall</dt>
-              <dd className="city-ward-panel__stat-val">{selectedWard.rainfall}</dd>
+              <dd className="city-ward-panel__stat-val">{selectedDistrict.rainfall}</dd>
             </div>
             <div className="city-ward-panel__stat-row">
               <dt className="city-ward-panel__stat-label">Water Demand</dt>
-              <dd className="city-ward-panel__stat-val">{selectedWard.demand}</dd>
+              <dd className="city-ward-panel__stat-val">{selectedDistrict.demand}</dd>
             </div>
             <div className="city-ward-panel__stat-row">
               <dt className="city-ward-panel__stat-label">Groundwater Level</dt>
-              <dd className="city-ward-panel__stat-val">{selectedWard.groundwater}</dd>
+              <dd className="city-ward-panel__stat-val">{selectedDistrict.groundwater}</dd>
             </div>
           </dl>
 
@@ -386,7 +387,7 @@ const CityWaterStressMap = ({ onSelectWard }) => {
             <button
               type="button"
               className="city-ward-panel__btn"
-              onClick={() => navigate(`/wards/${selectedWard.wardNumber}`)}
+              onClick={() => navigate(`/districts/${selectedDistrict.districtNumber || selectedDistrict.wardNumber || 12}`)}
             >
               View Full Details <ArrowRight size={15} aria-hidden="true" />
             </button>

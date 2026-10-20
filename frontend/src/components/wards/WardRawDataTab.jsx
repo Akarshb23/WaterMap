@@ -16,7 +16,7 @@ const WardRawDataTab = () => (
 
     <div className="wards-table-wrap">
       <table className="wards-table">
-        <caption className="sr-only">Illustrative raw metrics for this ward</caption>
+        <caption className="sr-only">Illustrative raw metrics for this district</caption>
         <thead>
           <tr>
             <th scope="col">Metric</th>

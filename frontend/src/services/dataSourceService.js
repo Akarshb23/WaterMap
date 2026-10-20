@@ -8,7 +8,7 @@ import {
 
 /**
  * Fetch all verified data sources.
- * Returns the high-fidelity catalogue of 8 primary data sources for Delhi.
+ * Returns the high-fidelity catalogue of 8 primary data sources for Bangalore.
  */
 export async function fetchDataSources() {
   return DATA_SOURCES_TABLE_RECORDS

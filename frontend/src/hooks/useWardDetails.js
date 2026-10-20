@@ -7,7 +7,7 @@ export function useWardDetails(wardId) {
 
   useEffect(() => {
     if (!wardId) {
-      setState({ ward: null, isLoading: false, error: 'A ward ID is required.' })
+      setState({ ward: null, isLoading: false, error: 'A district ID is required.' })
       return undefined
     }
     const controller = new AbortController()

@@ -28,18 +28,19 @@ const RECOMMENDATION_METRIC_ICONS = { Leaf, Target, Droplets, Users }
  * - 4 Key metric cards
  * - Category filter pills and risk/impact sort selectors
  * - Main 3-column layout:
- *     1. Priority Wards Map (Delhi SVG map with controls & legend)
+ *     1. Priority Districts Map (Bangalore SVG map with controls & legend)
  *     2. Recommended Actions list (24)
  *     3. Detailed spec & tabs panel with infrastructure image for selected recommendation
  * - Bottom analytics row:
  *     1. Cumulative Impact Projection (2024-2030)
  *     2. Impact by Intervention Type
- *     3. Top Priority Wards table
+ *     3. Top Priority Districts table
  */
 const RecommendationsPage = () => {
   const {
     recommendations,
     allRecommendations,
+    categoryCounts,
     selectedRecommendation,
     selectedId,
     setSelectedId,
@@ -56,6 +57,7 @@ const RecommendationsPage = () => {
     metrics,
     cumulativeImpact,
     interventionImpact,
+    topDistricts,
     topWards,
   } = useRecommendations()
 
@@ -103,18 +105,20 @@ const RecommendationsPage = () => {
         <div className="recommendations-header__title-block">
           <h1 className="recommendations-header__title">Recommendations</h1>
           <p className="recommendations-header__subtitle">
-            Data-driven, actionable solutions for a more water secure New Delhi.
+            Data-driven, actionable solutions for a more water secure Bangalore.
           </p>
         </div>
 
-        {/* Top-Right Skyline Banner */}
-        <div className="recommendations-banner">
+        {/* Top-Right Skyline Banner with left side completely blurred */}
+        <div className="recommendations-banner" role="region" aria-label="WaterMap recommendations banner">
           <div
-            className="recommendations-banner__image-placeholder header-skyline-banner-placeholder"
-            style={{ backgroundImage: `linear-gradient(90deg, rgba(226, 248, 241, 0.14), rgba(226, 248, 241, 0.03)), url(${cityscape})` }}
-            role="img"
-            aria-label="Green city skyline beside water"
+            className="recommendations-banner__backdrop"
+            style={{
+              backgroundImage: `linear-gradient(90deg, rgba(242, 250, 247, 1) 0%, rgba(242, 250, 247, 0.35) 25%, rgba(242, 250, 247, 0) 55%), url(${cityscape})`,
+            }}
+            aria-hidden="true"
           />
+          <div className="recommendations-banner__blur-veil" aria-hidden="true" />
           <div className="recommendations-banner__card">
             <span className="recommendations-banner__icon">
               <Leaf size={18} aria-hidden="true" />
@@ -163,17 +167,18 @@ const RecommendationsPage = () => {
           onPriorityChange={setPriorityFilter}
           sortBy={sortBy}
           onSortChange={setSortBy}
+          categoryCounts={categoryCounts}
         />
       </section>
 
       {/* Main 3-Column Layout */}
       <section className="recommendations-main-grid" aria-label="Recommendations interactive explorer">
-        {/* Left Column: Priority Wards Map (Delhi SVG map with controls & legend) */}
+        {/* Left Column: Priority Districts Map (Bangalore SVG map with controls & legend) */}
         <div className="recommendations-main-col recommendations-main-col--map">
-          <PriorityWardMap onSelectWard={(ward) => {
-            const num = ward.id.replace('W', '')
+          <PriorityWardMap onSelectDistrict={(district) => {
+            const num = district.id.replace('D', '').replace('W', '')
             const matching = allRecommendations.find(
-              (r) => r.targetWardIds?.includes(num) || r.targetWards?.includes(num)
+              (r) => r.targetDistrictIds?.includes(num) || r.targetDistricts?.includes(district.name) || r.targetWardIds?.includes(num)
             )
             if (matching) setSelectedId(matching.id)
           }} />
@@ -184,7 +189,7 @@ const RecommendationsPage = () => {
           <div className="recommendations-list-card card">
             <header className="recommendations-list-card__header">
               <h3 className="recommendations-list-card__title">
-                Recommended Actions ({categoryFilter === 'all' && priorityFilter === 'all' ? 24 : recommendations.length})
+                Recommended Actions ({recommendations.length})
               </h3>
             </header>
             <div className="recommendations-list-card__body">
@@ -245,7 +250,7 @@ const RecommendationsPage = () => {
       <section className="recommendations-bottom-grid" aria-label="Intervention projections">
         <CumulativeImpactChart data={cumulativeImpact} />
         <InterventionTypeChart data={interventionImpact} />
-        <TopPriorityWardsTable data={topWards} />
+        <TopPriorityWardsTable districts={topDistricts} data={topDistricts} />
       </section>
 
       {/* Implementation Plan Roadmap Modal */}

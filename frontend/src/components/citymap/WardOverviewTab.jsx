@@ -16,7 +16,7 @@ const WardOverviewTab = ({ onViewAnalysis, onCompareWards, ward = FEATURED_WARD 
   const displayWsi = Number.isFinite(wsi) ? wsi : FEATURED_WARD.wsi
   return (
     <div className="ward-tab-panel">
-    <div className="ward-metric-grid" aria-label="Ward metrics">
+    <div className="ward-metric-grid" aria-label="District metrics">
       <WardMetricCard
         label="Water Stress Index"
         value={displayWsi.toFixed(2)}
@@ -63,7 +63,7 @@ const WardOverviewTab = ({ onViewAnalysis, onCompareWards, ward = FEATURED_WARD 
         <ArrowRight size={14} aria-hidden="true" />
       </button>
       <button type="button" className="btn btn--secondary" onClick={onCompareWards}>
-        Compare Wards
+        Compare Districts
       </button>
     </div>
 

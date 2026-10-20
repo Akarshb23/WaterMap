@@ -3,7 +3,7 @@ import { DASHBOARD_KPIS } from '../../data/demoData.js'
 
 const KPI_ICONS = {
   'water-stress': Droplet,
-  'high-risk-wards': AlertTriangle,
+  'high-risk-districts': AlertTriangle,
   'annual-rainfall': CloudRain,
   population: Users,
 }
@@ -11,12 +11,12 @@ const KPI_ICONS = {
 const RAINFALL_BAR_HEIGHTS = [12, 18, 14, 28, 20, 16, 32, 24, 16, 24, 16, 20]
 
 /**
- * 4 KPI Metric Summary Cards matching the City Dashboard reference mockup:
+ * 4 KPI Metric Summary Cards matching the City Dashboard:
  * - Icon on the left
  * - Value, units, trend or note on the right
  * - Distinct visualizations at bottom:
  *   1. WSI: Smooth undulating blue wave
- *   2. High Risk Wards: Red horizontal progress bar with soft gradient track
+ *   2. High Risk Districts: Red horizontal progress bar with soft gradient track
  *   3. Annual Rainfall: 12-bar mini histogram
  *   4. Population: Upward green curve
  */
@@ -74,7 +74,7 @@ const CityDashboardKpis = ({ kpis = DASHBOARD_KPIS }) => {
                 </div>
               ) : null}
 
-              {kpi.id === 'high-risk-wards' ? (
+              {kpi.id === 'high-risk-districts' ? (
                 <div
                   className="city-kpi-card__progress-track"
                   role="progressbar"

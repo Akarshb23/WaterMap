@@ -14,14 +14,15 @@ const AboutHeader = () => (
     </div>
 
     <div className="about-header__banner" role="region" aria-label="WaterMap sustainability banner">
-      {/* City skyline, river & trees photographic landscape backdrop */}
+      {/* City skyline, river & trees photographic landscape backdrop with left side blur */}
       <div
         className="about-header__cityscape-bg"
         style={{
-          backgroundImage: `linear-gradient(90deg, rgba(243, 249, 250, 1) 0%, rgba(243, 249, 250, 0.3) 22%, rgba(243, 249, 250, 0) 50%), url(${cityscape})`,
+          backgroundImage: `linear-gradient(90deg, rgba(242, 250, 247, 1) 0%, rgba(242, 250, 247, 0.3) 22%, rgba(242, 250, 247, 0) 50%), url(${cityscape})`,
         }}
         aria-hidden="true"
       />
+      <div className="about-header__blur-veil" aria-hidden="true" />
 
       {/* Sustainability message badge */}
       <div className="about-header__card">

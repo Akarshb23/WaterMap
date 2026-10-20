@@ -19,26 +19,15 @@ const AboutPage = () => (
     {/* 2. Four core pillars: Mission, Vision, Approach, Impact */}
     <MissionVisionCards />
 
-    {/* 3 & 4. Main grid: Workflow + Components/Formula on left, Methodology + Risk on right */}
+    {/* 3. Five-stage connected workflow: How WaterMap Works */}
+    <WorkflowCard />
+
+    {/* 4. Analytics & Methodology Grid: Balanced 2x2 cards */}
     <div className="about-content-grid">
-      <div className="about-content-grid__main">
-        {/* Five-stage connected workflow */}
-        <WorkflowCard />
-
-        {/* 2x2 Key components + Formula side-by-side */}
-        <div className="about-factors-grid">
-          <KeyComponentsCard />
-          <WaterStressFormulaCard />
-        </div>
-      </div>
-
-      <div className="about-content-grid__side">
-        {/* Methodology pillars */}
-        <MethodologyCard />
-
-        {/* WSI Risk categories table */}
-        <RiskCategoriesCard />
-      </div>
+      <KeyComponentsCard />
+      <WaterStressFormulaCard />
+      <MethodologyCard />
+      <RiskCategoriesCard />
     </div>
 
     {/* 5. Team & multidisciplinary collaboration */}

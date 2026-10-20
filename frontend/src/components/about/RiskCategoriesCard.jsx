@@ -15,7 +15,7 @@ const RiskCategoriesCard = () => {
           Risk Categories
         </h3>
         <p className="about-risk-card__subtitle">
-          Wards are classified into risk levels based on WSI.
+          Districts are classified into risk levels based on WSI.
         </p>
       </header>
 

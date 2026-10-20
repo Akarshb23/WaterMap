@@ -2,7 +2,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
 import { RISK_DISTRIBUTION, RISK_DISTRIBUTION_TOTAL } from '../../data/demoData.js'
 
 /**
- * Water stress distribution donut chart with the ward total in the centre
+ * Water stress distribution donut chart with the district total in the centre
  * and a colour legend underneath.
  */
 const RiskDistribution = ({ data = RISK_DISTRIBUTION, total = RISK_DISTRIBUTION_TOTAL }) => (

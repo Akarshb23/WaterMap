@@ -36,10 +36,10 @@ const optionLabel = (options, value) =>
   options.find((option) => option.value === value)?.label ?? value
 
 /**
- * City map workspace using the shared ward polygon illustration. Controls,
- * view readout, legend and ward details stay in their existing layout.
+ * City map workspace using the shared district polygon illustration. Controls,
+ * view readout, legend and district details stay in their existing layout.
  */
-const CityMapCanvas = ({ filters, matchedWards = [], selectedWardId = 'ward-12', onWardSelect, isPanelOpen = true, onRestorePanel }) => {
+const CityMapCanvas = ({ filters, matchedDistricts, matchedWards = [], selectedDistrictId = 'district-12', selectedWardId, onDistrictSelect, onWardSelect, isPanelOpen = true, onRestorePanel }) => {
   const [zoomLevel, setZoomLevel] = useState(1)
   const [showBoundaries, setShowBoundaries] = useState(true)
   const [satelliteView, setSatelliteView] = useState(false)
@@ -49,23 +49,27 @@ const CityMapCanvas = ({ filters, matchedWards = [], selectedWardId = 'ward-12',
   const handleZoomOut = () => setZoomLevel((level) => Math.max(ZOOM_MIN, level - ZOOM_STEP))
   const handleLocate = () => setZoomLevel(1)
 
+  const districts = matchedDistricts || matchedWards
+  const handleSelect = onDistrictSelect || onWardSelect
+  const selId = selectedDistrictId || selectedWardId || 'district-12'
+
   const metricSeries = WARD_METRIC_SERIES[filters.view]
-  const matchedNames = matchedWards.map((ward) => ward.name)
-  const activeWard = matchedWards.find((ward) => String(ward.id) === String(selectedWardId)) ?? matchedWards[0]
+  const matchedNames = districts.map((district) => district.name)
+  const activeDistrict = districts.find((district) => String(district.id) === String(selId)) ?? districts[0]
 
   return (
     <div
       className="city-map-canvas"
       role="group"
-      aria-label="Interactive ward-level water stress map of New Delhi"
+      aria-label="Interactive district-level water stress map of Bangalore"
     >
       <WardRiskIllustration
         satellite={satelliteView}
-        wards={matchedWards}
+        wards={districts}
         zoom={zoomLevel}
         showBoundaries={showBoundaries}
-        selectedWardId={selectedWardId}
-        onWardSelect={onWardSelect}
+        selectedWardId={selId}
+        onWardSelect={handleSelect}
       />
 
       <MapControls
@@ -82,7 +86,7 @@ const CityMapCanvas = ({ filters, matchedWards = [], selectedWardId = 'ward-12',
       <aside className="city-map-view-card" aria-label="Current map view">
         <p className="city-map-view-card__title">Current view</p>
         <p className="city-map-view-card__value">
-          {formatMetricValue(filters.view, filters.period, activeWard)}
+          {formatMetricValue(filters.view, filters.period, activeDistrict)}
         </p>
         <p className="city-map-view-card__meta">{metricSeries?.label ?? 'Water Stress Index'}</p>
         <p className="city-map-view-card__meta">
@@ -91,7 +95,7 @@ const CityMapCanvas = ({ filters, matchedWards = [], selectedWardId = 'ward-12',
         </p>
         <div className="city-map-view-card__wards">
           <p className="city-map-view-card__count">
-            {matchedWards.length} {matchedWards.length === 1 ? 'ward matches' : 'wards match'}
+            {districts.length} {districts.length === 1 ? 'district matches' : 'districts match'}
           </p>
           {matchedNames.length > 0 ? (
             <ul className="city-map-view-card__list">
@@ -101,21 +105,21 @@ const CityMapCanvas = ({ filters, matchedWards = [], selectedWardId = 'ward-12',
               {matchedNames.length > 3 ? <li>+{matchedNames.length - 3} more</li> : null}
             </ul>
           ) : (
-            <p className="city-map-view-card__empty">No wards match the filters.</p>
+            <p className="city-map-view-card__empty">No districts match the filters.</p>
           )}
         </div>
       </aside>
 
-      {/* Placeholder for the selected-ward marker: restores the details panel. */}
+      {/* Placeholder for the selected-district marker: restores the details panel. */}
       {!isPanelOpen ? (
         <button
           type="button"
           className="city-map-ward-marker"
           onClick={onRestorePanel}
-          aria-label={`Open ${activeWard?.name ?? 'selected ward'} details`}
+          aria-label={`Open ${activeDistrict?.name ?? 'selected district'} details`}
         >
           <span className="city-map-ward-marker__pin" aria-hidden="true" />
-          {activeWard?.name ?? 'Selected ward'} · {activeWard?.riskLabel ?? 'Risk unavailable'}
+          {activeDistrict?.name ?? 'Selected district'} · {activeDistrict?.riskLabel ?? 'Risk unavailable'}
         </button>
       ) : null}
 
@@ -123,7 +127,7 @@ const CityMapCanvas = ({ filters, matchedWards = [], selectedWardId = 'ward-12',
         <div className="city-map-legend__switches">
           <ToggleSwitch
             id="city-map-boundaries-toggle"
-            label="Ward Boundaries"
+            label="District Boundaries"
             checked={showBoundaries}
             onChange={setShowBoundaries}
           />

@@ -16,14 +16,14 @@ const MAP_LEGEND_ITEMS = [
 /**
  * Predicted Water Stress Map (2030) card.
  *
- * The forecast view uses the shared illustrative ward polygons with
+ * The forecast view uses the shared illustrative district polygons with
  * adjustable zoom and consistent risk controls across map-based screens.
  */
 const PredictedRiskMap = () => {
   const [year, setYear] = useState('2030')
   const [zoomLevel, setZoomLevel] = useState(1)
 
-  // This card always renders the static illustrative ward layer; the
+  // This card always renders the static illustrative district layer; the
   // backend supplies no forecast geometry. Labels must never claim
   // backend-provided boundaries or categories for these polygons.
 
@@ -36,10 +36,10 @@ const PredictedRiskMap = () => {
       <div className="card__header">
         <div>
           <h2 className="card__title" id="pred-map-title">
-            {isApiMode() ? 'Current Ward Risk Map' : `Predicted Water Stress Map (${year})`}
+            {isApiMode() ? 'Current District Risk Map' : `Predicted Water Stress Map (${year})`}
           </h2>
           <p className="card__subtitle">
-            {isApiMode() ? 'Illustrative ward view — the backend provides no forecast polygons.' : 'Ward-level forecast of water stress index based on current trends.'}
+            {isApiMode() ? 'Illustrative district view — the backend provides no forecast polygons.' : 'District-level forecast of water stress index based on current trends.'}
           </p>
         </div>
         {!isApiMode() ? (
@@ -82,21 +82,21 @@ const PredictedRiskMap = () => {
           onZoomIn={handleZoomIn}
           onZoomOut={handleZoomOut}
           onReset={handleReset}
-          resetLabel="Centre map on Ward 12"
+          resetLabel="Centre map on Koramangala"
         />
         <span className="pred-map-zoom" aria-hidden="true">
           {zoomLevel.toFixed(1)}×
         </span>
 
-        {/* Selected-ward marker (static in this build). */}
+        {/* Selected-district marker (static in this build). */}
         <span className="pred-map-marker">
           <span className="pred-map-marker__pin" aria-hidden="true" />
-          Ward 12
+          Koramangala
         </span>
 
         <MapLegend title="Water Stress Index" items={isApiMode() ? [{ label: 'Low (0–0.34)', color: '#45BD9B' }, { label: 'Moderate (0.35–0.54)', color: '#FFCC59' }, { label: 'High (0.55–0.74)', color: '#FF7B45' }, { label: 'Critical (0.75–1.0)', color: '#EF4444' }] : MAP_LEGEND_ITEMS} />
 
-        <p className="map-disclaimer">Illustrative ward map — not verified GIS boundaries; values shown are placeholders, not backend data.</p>
+        <p className="map-disclaimer">Illustrative district map — not verified GIS boundaries; values shown are placeholders, not backend data.</p>
 
         <div className="pred-map-scale" aria-label="Map scale: 0 to 10 kilometres">
           <div className="pred-map-scale__bar" aria-hidden="true">

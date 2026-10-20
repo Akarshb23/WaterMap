@@ -64,7 +64,7 @@ const features = [
 
     title: 'Interactive City Map',
 
-    text: 'Explore ward-level water stress with clear, visual insights.',
+    text: 'Explore district-level water stress with clear, visual insights.',
 
     tone: 'blue',
 
@@ -120,7 +120,7 @@ const features = [
 
 const statistics = [
 
-  { icon: Map, value: '100+', label: 'City wards analysed', tone: 'blue' },
+  { icon: Map, value: '100+', label: 'Districts analysed', tone: 'blue' },
 
   { icon: Database, value: '5+', label: 'Data sources', tone: 'blue' },
 

@@ -147,7 +147,7 @@ export const KEY_COMPONENTS = [
 
 export const WSI_FORMULA_DATA = {
   formula: 'WSI = w₁D + w₂S + w₃G + w₄C + w₅U',
-  subtitle: 'A composite index (0 – 1) indicating the level of water stress in each ward.',
+  subtitle: 'A composite index (0 – 1) indicating the level of water stress in each district.',
   variables: [
     { symbol: 'D', name: 'Water Demand Index', color: '#2589e9' },
     { symbol: 'S', name: 'Water Supply Index', color: '#10b981' },

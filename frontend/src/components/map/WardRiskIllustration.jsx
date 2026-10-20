@@ -1,17 +1,17 @@
 import { useId } from 'react'
 import { isApiMode } from '../../services/apiClient.js'
 import LeafletWardMap from './LeafletWardMap.jsx'
-import { MAP_WARDS } from '../../data/demoData.js'
+import { MAP_DISTRICTS } from '../../data/demoData.js'
 
 /**
- * Reusable illustrated New Delhi ward-risk map.
- * This remains a front-end demonstration layer; real ward GeoJSON can replace
+ * Reusable illustrated Bangalore district-risk map.
+ * This remains a front-end demonstration layer; real district GeoJSON can replace
  * it later without changing the map toolbars, legends, markers, or API hooks.
  */
 const WardRiskIllustration = ({ variant = 'city', satellite = false, wards, zoom = 1, showBoundaries = true, selectedWardId = null, onWardSelect, riskMode = 'baseline' }) => {
   const id = useId().replace(/:/g, '')
   if (isApiMode()) return <LeafletWardMap wards={wards ?? []} showAllWhenEmpty={!Array.isArray(wards)} selectedWardId={selectedWardId} onWardSelect={onWardSelect} satellite={satellite} showBoundaries={showBoundaries} riskMode={variant === 'prediction' ? 'prediction' : riskMode} className={`ward-risk-illustration ward-risk-illustration--${variant}`} />
-  const areas = Array.isArray(wards) ? wards : MAP_WARDS
+  const areas = Array.isArray(wards) ? wards : MAP_DISTRICTS
   const mapAreas = areas
   const riskColors = {
     low: { edge: '#3ebf9e', fill: '#b9eadb' },
@@ -31,7 +31,7 @@ const WardRiskIllustration = ({ variant = 'city', satellite = false, wards, zoom
       style={{ '--ward-map-zoom': zoom }}
       aria-hidden={onWardSelect ? undefined : true}
       role={onWardSelect ? 'group' : undefined}
-      aria-label={onWardSelect ? 'Ward risk map. Select a ward to inspect its details.' : undefined}
+      aria-label={onWardSelect ? 'District risk map. Select a district to inspect its details.' : undefined}
     >
       <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" role="presentation">
         <defs>
@@ -70,7 +70,7 @@ const WardRiskIllustration = ({ variant = 'city', satellite = false, wards, zoom
                 key={ward.id ?? ward.name}
                 role={onWardSelect ? 'button' : undefined}
                 tabIndex={onWardSelect ? 0 : undefined}
-                aria-label={onWardSelect ? `${ward.name || `Ward ${ward.id}`} — ${ward.riskLabel || ward.risk || 'risk unknown'}` : undefined}
+                aria-label={onWardSelect ? `${ward.name || `District ${ward.id}`} — ${ward.riskLabel || ward.risk || 'risk unknown'}` : undefined}
                 aria-pressed={onWardSelect ? String(ward.id) === String(selectedWardId) : undefined}
                 onClick={onWardSelect ? () => onWardSelect(ward) : undefined}
                 onKeyDown={onWardSelect ? (event) => {
@@ -113,13 +113,13 @@ const WardRiskIllustration = ({ variant = 'city', satellite = false, wards, zoom
           return <g transform={`translate(${x} ${y - 18})`} pointerEvents="none"><path d="M0 -17 C-11 -17 -16 -8 -16 0 C-16 10 0 25 0 25 S16 10 16 0 C16 -8 11 -17 0 -17Z" fill="#ef4444" stroke="#fff" strokeWidth="3"/><circle cx="0" cy="0" r="5" fill="#fff"/></g>
         })() : null}
         <g fill="#59747b" fontSize="21" fontWeight="700" letterSpacing="4" opacity=".8" pointerEvents="none">
-          <text x="350" y="64">NORTH DELHI</text>
-          <text x="65" y="295">WEST DELHI</text>
-          <text x="815" y="290">EAST DELHI</text>
-          <text x="420" y="510">SOUTH DELHI</text>
-          <text x="405" y="300">CENTRAL DELHI</text>
-          <text x="120" y="128" fontSize="15" letterSpacing="3">ROHINI</text>
-          <text x="820" y="128" fontSize="15" letterSpacing="3">SHAHDARA</text>
+          <text x="350" y="64">NORTH BANGALORE</text>
+          <text x="65" y="295">WEST BANGALORE</text>
+          <text x="815" y="290">EAST BANGALORE</text>
+          <text x="420" y="510">SOUTH BANGALORE</text>
+          <text x="405" y="300">CENTRAL BANGALORE</text>
+          <text x="120" y="128" fontSize="15" letterSpacing="3">PEENYA</text>
+          <text x="820" y="128" fontSize="15" letterSpacing="3">WHITEFIELD</text>
         </g>
       </svg>
     </div>

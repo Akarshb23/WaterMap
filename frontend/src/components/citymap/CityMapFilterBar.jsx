@@ -17,17 +17,17 @@ const PERIOD_OPTIONS = [
 
 const ZONE_OPTIONS = [
   { value: 'all', label: 'All Zones' },
-  { value: 'north', label: 'North Delhi' },
-  { value: 'central', label: 'Central Delhi' },
-  { value: 'west', label: 'West Delhi' },
-  { value: 'east', label: 'East Delhi' },
-  { value: 'south', label: 'South Delhi' },
+  { value: 'north', label: 'North Bangalore' },
+  { value: 'central', label: 'Central Bangalore' },
+  { value: 'west', label: 'West Bangalore' },
+  { value: 'east', label: 'East Bangalore' },
+  { value: 'south', label: 'South Bangalore' },
 ]
 
 /**
- * Filter bar above the interactive city map matching the reference mockup:
+ * Filter bar above the interactive city map matching Bangalore geography:
  * - 3 Selects on the left: View, Time Period, Zone
- * - Search bar on the right: Search ward or area...
+ * - Search bar on the right: Search district or area...
  */
 const CityMapFilterBar = ({
   view = 'wsi',
@@ -114,10 +114,10 @@ const CityMapFilterBar = ({
             id="city-map-search-input"
             type="search"
             className="city-map-search__input"
-            placeholder="Search ward or area..."
+            placeholder="Search district or area..."
             value={searchQuery}
             onChange={(e) => onSearchChange?.(e.target.value)}
-            aria-label="Search ward or area"
+            aria-label="Search district or area"
           />
         </div>
       </div>

@@ -48,7 +48,7 @@ const WardDetailsPanel = ({ onClose, ward = FEATURED_WARD }) => {
           type="button"
           className="ward-detail__close"
           onClick={onClose}
-          aria-label="Close ward details"
+          aria-label="Close district details"
         >
           <X size={16} aria-hidden="true" />
         </button>
@@ -74,9 +74,9 @@ const WardDetailsPanel = ({ onClose, ward = FEATURED_WARD }) => {
         {activeTab === 'overview' ? (
           <WardOverviewTab
             ward={selectedWard}
-            onViewAnalysis={() => navigate(ROUTES.WARD_DETAILS_HOME)}
+            onViewAnalysis={() => navigate(ROUTES.DISTRICT_DETAILS_HOME || ROUTES.WARD_DETAILS_HOME)}
             onCompareWards={() =>
-              showNotice('Ward comparison is not available in this demo yet — it will open on its own page in a future update.')
+              showNotice('District comparison is not available in this demo yet — it will open on its own page in a future update.')
             }
           />
         ) : null}

@@ -29,7 +29,7 @@ export default function LeafletWardMap({ wards = [], showAllWhenEmpty = false, s
   useEffect(() => {
     if (!isApiMode()) return undefined
     const controller = new AbortController()
-    fetchWardsGeoJSON({ signal: controller.signal, cityId }).then((data) => { if (!controller.signal.aborted) { setGeojson(data); setError(null) } }).catch((err) => { if (!controller.signal.aborted) setError(err.message || 'Could not load ward boundaries.') })
+    fetchWardsGeoJSON({ signal: controller.signal, cityId }).then((data) => { if (!controller.signal.aborted) { setGeojson(data); setError(null) } }).catch((err) => { if (!controller.signal.aborted) setError(err.message || 'Could not load district boundaries.') })
     return () => controller.abort()
   }, [cityId])
 
@@ -53,7 +53,7 @@ export default function LeafletWardMap({ wards = [], showAllWhenEmpty = false, s
   const onEachFeature = (feature, layer) => {
     const props = feature.properties ?? {}
     const wardId = String(props.ward_id ?? feature.id ?? '')
-    const name = props.name ?? `Ward ${wardId}`
+    const name = props.name ?? `District ${wardId}`
     const wsi = Number(props.water_stress_index ?? 0)
     layer.bindPopup(`<strong>${name}</strong><br/>WSI: ${wsi.toFixed(2)}<br/>Risk: ${props.risk_category ?? 'unclassified'}<br/>Population: ${Number(props.population ?? 0).toLocaleString()}`)
     layer.on({ click: () => { const ward = wards.find((item) => String(item.id ?? item.ward_id) === wardId) ?? { ...props, id: wardId, ward_id: wardId, name, wsi, risk: props.risk_category ?? 'moderate', zone: props.zone ?? props.district ?? '' }; onWardSelect?.(ward) } })
@@ -66,6 +66,6 @@ export default function LeafletWardMap({ wards = [], showAllWhenEmpty = false, s
       {data ? <><FitBounds data={data} /><GeoJSON key={(data.features ?? []).map((feature) => feature.id ?? feature.properties?.ward_id).join('|')} ref={layerRef} data={data} style={styleFeature} onEachFeature={onEachFeature} /></> : null}
     </MapContainer>
     {error ? <div className="leaflet-ward-map__error" role="status">{error}</div> : null}
-    {!data && !error ? <div className="leaflet-ward-map__loading" role="status">Loading real ward boundaries…</div> : null}
+    {!data && !error ? <div className="leaflet-ward-map__loading" role="status">Loading real district boundaries…</div> : null}
   </div>
 }

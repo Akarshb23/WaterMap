@@ -38,7 +38,7 @@ const MiniBars = ({ data, color }) => (
   </div>
 )
 
-/** Simple CSS progress indicator (used by the high-risk wards metric). */
+/** Simple CSS progress indicator (used by the high-risk districts metric). */
 const Progress = ({ percent, color, label }) => (
   <div className="metric-card__progress" role="img" aria-label={label}>
     <div
@@ -109,7 +109,7 @@ const MetricCard = ({
         <Progress
           percent={visual.percent}
           color={visual.color}
-          label={`${visual.percent}% of wards are high risk`}
+          label={`${visual.percent}% of districts are high risk`}
         />
       ) : null}
     </div>

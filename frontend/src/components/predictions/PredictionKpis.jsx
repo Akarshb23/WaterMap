@@ -91,7 +91,7 @@ const PredictionKpis = () => {
         </div>
       </article>
 
-      {/* Card 3: High Risk Wards (2030) */}
+      {/* Card 3: High Risk Districts (2030) */}
       <article className="pred-kpi-card">
         <div className="pred-kpi-card__left">
           <div className="pred-kpi-icon pred-kpi-icon--red">
@@ -99,7 +99,7 @@ const PredictionKpis = () => {
           </div>
           <div className="pred-kpi-info">
             <span className="pred-kpi-value">12</span>
-            <span className="pred-kpi-label">High Risk Wards (2030)</span>
+            <span className="pred-kpi-label">High Risk Districts (2030)</span>
             <div className="pred-kpi-trend pred-kpi-trend--red">
               <ArrowUp size={13} strokeWidth={2.5} />
               <span>5 more than 2024</span>

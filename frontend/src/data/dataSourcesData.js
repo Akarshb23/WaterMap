@@ -1,7 +1,7 @@
 /**
  * Illustrative sample datasets for the WaterMap Data Sources catalogue.
  *
- * All values represent planning-grade demo figures for New Delhi's water resilience
+ * All values represent planning-grade demo figures for Bangalore's water resilience
  * monitoring — these are illustrative simulations and catalogue metadata, not live API outputs.
  */
 
@@ -50,14 +50,14 @@ export const DATA_SOURCES_SUMMARY_METRICS = [
 
 export const DATA_SOURCES_TABLE_RECORDS = [
   {
-    id: 'djb',
+    id: 'bwssb',
     index: 1,
-    name: 'Delhi Jal Board (DJB)',
-    shortName: 'DJB',
+    name: 'Bangalore Water Supply & Sewerage Board (BWSSB)',
+    shortName: 'BWSSB',
     type: 'Government',
     typeKey: 'government',
     indicators: 'Water supply, demand, infrastructure',
-    coverage: 'Delhi (City)',
+    coverage: 'Bangalore (City)',
     coverageKey: 'city',
     lastUpdated: 'Oct 10, 2026',
     status: 'Active',
@@ -72,7 +72,7 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     type: 'Climate',
     typeKey: 'climate',
     indicators: 'Rainfall, temperature',
-    coverage: 'Delhi (District)',
+    coverage: 'Bangalore (District)',
     coverageKey: 'district',
     lastUpdated: 'Oct 12, 2026',
     status: 'Active',
@@ -87,8 +87,8 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     type: 'Government',
     typeKey: 'government',
     indicators: 'Groundwater levels',
-    coverage: 'Delhi (Wards)',
-    coverageKey: 'wards',
+    coverage: 'Bangalore (Districts)',
+    coverageKey: 'districts',
     lastUpdated: 'Oct 08, 2026',
     status: 'Active',
     iconName: 'Droplet',
@@ -102,7 +102,7 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     type: 'Satellite',
     typeKey: 'satellite',
     indicators: 'Land use, water bodies, green cover',
-    coverage: 'Delhi (City)',
+    coverage: 'Bangalore (City)',
     coverageKey: 'city',
     lastUpdated: 'Oct 05, 2026',
     status: 'Active',
@@ -117,8 +117,8 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     type: 'Government',
     typeKey: 'government',
     indicators: 'Population, density',
-    coverage: 'Delhi (Wards)',
-    coverageKey: 'wards',
+    coverage: 'Bangalore (Districts)',
+    coverageKey: 'districts',
     lastUpdated: 'Jan 15, 2026',
     status: 'Active',
     iconName: 'Users',
@@ -132,7 +132,7 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     type: 'Geospatial',
     typeKey: 'geospatial',
     indicators: 'Urbanization, built-up area',
-    coverage: 'Delhi (City)',
+    coverage: 'Bangalore (City)',
     coverageKey: 'city',
     lastUpdated: 'Sep 28, 2026',
     status: 'Active',
@@ -147,7 +147,7 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     type: 'Geospatial',
     typeKey: 'geospatial',
     indicators: 'Roads, infrastructure, administrative boundaries',
-    coverage: 'Delhi (City)',
+    coverage: 'Bangalore (City)',
     coverageKey: 'city',
     lastUpdated: 'Sep 20, 2026',
     status: 'Active',
@@ -162,7 +162,7 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     type: 'Climate',
     typeKey: 'climate',
     indicators: 'Future rainfall, temperature',
-    coverage: 'Delhi (Region)',
+    coverage: 'Bangalore (Region)',
     coverageKey: 'region',
     lastUpdated: 'Sep 15, 2026',
     status: 'Active',
@@ -181,19 +181,19 @@ export const DATA_SOURCE_TYPE_FILTERS = [
 
 export const DATA_COVERAGE_SOURCES = [
   { id: 'all', label: 'All Sources' },
-  { id: 'djb', label: 'Delhi Jal Board (City)' },
-  { id: 'cgwb', label: 'Groundwater (Wards)' },
+  { id: 'bwssb', label: 'BWSSB Water Supply (City)' },
+  { id: 'cgwb', label: 'Groundwater (Districts)' },
   { id: 'imd', label: 'Rainfall (District)' },
   { id: 'lulc', label: 'Land Use (City)' },
-  { id: 'census', label: 'Population (Wards)' },
+  { id: 'census', label: 'Population (Districts)' },
 ]
 
 export const COVERAGE_MAP_LEGEND = [
-  { id: 'djb', label: 'Delhi Jal Board (City)', color: '#10b981' },
-  { id: 'cgwb', label: 'Groundwater (Wards)', color: '#34d399' },
+  { id: 'bwssb', label: 'BWSSB Water Supply (City)', color: '#10b981' },
+  { id: 'cgwb', label: 'Groundwater (Districts)', color: '#34d399' },
   { id: 'imd', label: 'Rainfall (District)', color: '#38bdf8' },
   { id: 'lulc', label: 'Land Use (City)', color: '#fbbf24' },
-  { id: 'census', label: 'Population (Wards)', color: '#6ee7b7' },
+  { id: 'census', label: 'Population (Districts)', color: '#6ee7b7' },
 ]
 
 export const KEY_INDICATORS = [

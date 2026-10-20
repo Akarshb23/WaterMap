@@ -80,15 +80,16 @@ const TrendChartTooltip = ({ active, payload, label }) => {
 }
 
 /**
- * Right-hand Ward Details Panel matching the reference mockup:
- * - Ward 12, Central Delhi, High Risk badge, Close button
+ * Right-hand District Details Panel matching Bangalore context:
+ * - Koramangala, South Bangalore, High Risk badge, Close button
  * - Overview, Risk Factors, Trends, Recommendations tabs
  * - 2x2 Metric tiles (WSI, Population, Annual Rainfall, Water Demand)
  * - Water Stress Index Trend chart (Last 5 years)
  * - Key Insights with colored icons
- * - Two action buttons: "View Detailed Analysis →" & "📊 Compare Wards"
+ * - Two action buttons: "View Detailed Analysis →" & "📊 Compare Districts"
  */
 const InteractiveWardPanel = ({
+  district,
   ward,
   onClose,
   onCompare,
@@ -97,10 +98,10 @@ const InteractiveWardPanel = ({
   const [activeTab, setActiveTab] = useState('overview')
   const [trendRange, setTrendRange] = useState('5')
 
-  const currentWard = ward || {
-    id: 'ward-12',
-    name: 'Ward 12',
-    zone: 'Central Delhi',
+  const currentDistrict = district || ward || {
+    id: 'district-12',
+    name: 'Koramangala',
+    zone: 'South Bangalore',
     risk: 'high',
     riskLabel: 'High Risk',
     wsi: 0.87,
@@ -112,18 +113,18 @@ const InteractiveWardPanel = ({
   const trendData = WSI_TREND.slice(-Number(trendRange))
 
   return (
-    <aside className="interactive-ward-panel" aria-label={`Details for ${currentWard.name}`}>
+    <aside className="interactive-ward-panel" aria-label={`Details for ${currentDistrict.name}`}>
       {/* Header */}
       <div className="interactive-ward-panel__head">
         <div className="interactive-ward-panel__head-info">
-          <h2 className="interactive-ward-panel__title">{currentWard.name}</h2>
-          <p className="interactive-ward-panel__zone">{currentWard.zone}</p>
+          <h2 className="interactive-ward-panel__title">{currentDistrict.name}</h2>
+          <p className="interactive-ward-panel__zone">{currentDistrict.zone}</p>
         </div>
 
         <div className="interactive-ward-panel__head-actions">
-          <span className={`interactive-ward-panel__badge interactive-ward-panel__badge--${currentWard.risk}`}>
+          <span className={`interactive-ward-panel__badge interactive-ward-panel__badge--${currentDistrict.risk}`}>
             <AlertTriangle size={12} aria-hidden="true" />
-            <span>{currentWard.riskLabel}</span>
+            <span>{currentDistrict.riskLabel}</span>
           </span>
           <button
             type="button"
@@ -138,7 +139,7 @@ const InteractiveWardPanel = ({
       </div>
 
       {/* Tab Navigation */}
-      <nav className="interactive-ward-panel__tabs" aria-label="Ward details sections">
+      <nav className="interactive-ward-panel__tabs" aria-label="District details sections">
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -163,10 +164,10 @@ const InteractiveWardPanel = ({
             <div className="interactive-ward-metrics-grid">
               {/* Card 1: Water Stress Index */}
               <div className="interactive-ward-metric-card">
-                <GaugeRingArc percent={Math.round((currentWard.wsi || 0.87) * 100)} />
+                <GaugeRingArc percent={Math.round((currentDistrict.wsi || 0.87) * 100)} />
                 <div className="interactive-ward-metric-card__info">
                   <span className="interactive-ward-metric-card__val">
-                    {currentWard.wsi ? currentWard.wsi.toFixed(2) : '0.87'}
+                    {currentDistrict.wsi ? currentDistrict.wsi.toFixed(2) : '0.87'}
                   </span>
                   <span className="interactive-ward-metric-card__lbl">Water Stress Index</span>
                 </div>
@@ -178,7 +179,7 @@ const InteractiveWardPanel = ({
                   <Users size={17} aria-hidden="true" />
                 </div>
                 <div className="interactive-ward-metric-card__info">
-                  <span className="interactive-ward-metric-card__val">{currentWard.population || '240,000'}</span>
+                  <span className="interactive-ward-metric-card__val">{currentDistrict.population || '240,000'}</span>
                   <span className="interactive-ward-metric-card__lbl">Population</span>
                 </div>
               </div>
@@ -189,7 +190,7 @@ const InteractiveWardPanel = ({
                   <CloudRain size={17} aria-hidden="true" />
                 </div>
                 <div className="interactive-ward-metric-card__info">
-                  <span className="interactive-ward-metric-card__val">{currentWard.rainfall || '520 mm'}</span>
+                  <span className="interactive-ward-metric-card__val">{currentDistrict.rainfall || '520 mm'}</span>
                   <span className="interactive-ward-metric-card__lbl">Annual Rainfall</span>
                 </div>
               </div>
@@ -200,7 +201,7 @@ const InteractiveWardPanel = ({
                   <Droplet size={17} aria-hidden="true" />
                 </div>
                 <div className="interactive-ward-metric-card__info">
-                  <span className="interactive-ward-metric-card__val">{currentWard.demand || '124 MLD'}</span>
+                  <span className="interactive-ward-metric-card__val">{currentDistrict.demand || '124 MLD'}</span>
                   <span className="interactive-ward-metric-card__lbl">Water Demand</span>
                 </div>
               </div>
@@ -314,7 +315,7 @@ const InteractiveWardPanel = ({
               <button
                 type="button"
                 className="interactive-ward-btn interactive-ward-btn--primary"
-                onClick={() => navigate(`/wards/${currentWard.wardNumber || 12}`)}
+                onClick={() => navigate(`/districts/${currentDistrict.districtNumber || currentDistrict.wardNumber || 12}`)}
               >
                 View Detailed Analysis
                 <ArrowRight size={14} aria-hidden="true" />
@@ -323,10 +324,10 @@ const InteractiveWardPanel = ({
               <button
                 type="button"
                 className="interactive-ward-btn interactive-ward-btn--secondary"
-                onClick={() => onCompare?.(currentWard)}
+                onClick={() => onCompare?.(currentDistrict)}
               >
                 <BarChart2 size={15} aria-hidden="true" />
-                Compare Wards
+                Compare Districts
               </button>
             </div>
           </div>

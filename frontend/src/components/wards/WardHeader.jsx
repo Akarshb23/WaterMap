@@ -20,13 +20,13 @@ const WardHeader = ({ ward = {}, onCompare }) => (
       </Link>
       <button type="button" className="btn btn--primary ward-page-header__compare" onClick={onCompare}>
         <BarChart3 size={15} aria-hidden="true" />
-        Compare Ward
+        Compare District
       </button>
     </div>
 
     <div className="ward-page-header__identity">
       <div className="ward-page-header__titles">
-        <h1 className="ward-page-header__name">{ward.name ?? 'Ward'}</h1>
+        <h1 className="ward-page-header__name">{ward.name ?? 'District'}</h1>
         {ward.riskLabel ? (
           <span className="badge badge--danger ward-page-header__badge">
             <TriangleAlert size={12} aria-hidden="true" />

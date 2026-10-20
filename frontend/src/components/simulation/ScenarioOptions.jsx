@@ -34,14 +34,19 @@ const ScenarioOptions = ({ scenarios = [], selected, onSelect }) => (
         return (
           <li key={scenario.id}>
             <label className={`scenario-options__item${active ? ' scenario-options__item--active' : ''}`}>
-              <input
-                type="radio"
-                name="scenario-quick-pick"
-                className="scenario-options__radio"
-                value={scenario.id}
-                checked={active}
-                onChange={() => onSelect?.(scenario.id)}
-              />
+              <span className="scenario-options__radio-wrapper">
+                <input
+                  type="radio"
+                  name="scenario-quick-pick"
+                  className="scenario-options__radio"
+                  value={scenario.id}
+                  checked={active}
+                  onChange={() => onSelect?.(scenario.id)}
+                />
+                <span className="scenario-options__radio-custom" aria-hidden="true">
+                  <span className="scenario-options__radio-dot" />
+                </span>
+              </span>
               <span
                 className="scenario-options__icon"
                 style={{ backgroundColor: theme.bg, color: theme.color }}

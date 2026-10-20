@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import {
   Bar,
   BarChart,
@@ -24,13 +25,13 @@ const SIMULATED_GREEN = '#34d399'
 const formatValue = (metric, value) => {
   if (metric === 'demand') return `${Math.round(value)} MLD`
   if (metric === 'groundwater') return `${Number(value).toFixed(1)} m`
-  return `${value} Wards`
+  return `${value} Districts`
 }
 
 /**
  * City-wide Comparison card:
  * Side-by-side grouped bars (Baseline 2024 blue vs Simulated 2030 green)
- * with numbers directly on top of each bar, Y-axis "Number of Wards", and metric dropdown.
+ * with numbers directly on top of each bar, Y-axis "Number of Districts", and metric dropdown.
  */
 const ScenarioComparison = ({ result }) => {
   const [metric, setMetric] = useState('wsi')
@@ -38,22 +39,30 @@ const ScenarioComparison = ({ result }) => {
 
   return (
     <section className="card citywide-comparison" aria-label="City-wide comparison">
-      <div className="card__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2 className="card__title">City-wide Comparison</h2>
-        <div className="citywide-comparison__select">
+      <div className="card__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+        <h2 className="card__title" style={{ margin: 0 }}>City-wide Comparison</h2>
+        <div className="citywide-comparison__select" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
           <select
             id="citywide-metric-select"
-            className="native-select"
             value={metric}
             onChange={(event) => setMetric(event.target.value)}
             style={{
-              padding: '4px 10px',
+              appearance: 'none',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              padding: '5px 32px 5px 12px',
               fontSize: '12px',
-              borderRadius: '6px',
+              fontWeight: 500,
+              borderRadius: '8px',
               border: '1px solid #cbd5e1',
-              backgroundColor: '#fff',
+              backgroundColor: '#ffffff',
               color: '#334155',
               cursor: 'pointer',
+              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
+              minWidth: '160px',
+              height: '32px',
+              outline: 'none',
+              lineHeight: '20px',
             }}
           >
             {CITYWIDE_METRIC_OPTIONS.map((option) => (
@@ -62,6 +71,16 @@ const ScenarioComparison = ({ result }) => {
               </option>
             ))}
           </select>
+          <ChevronDown
+            size={14}
+            style={{
+              position: 'absolute',
+              right: 10,
+              pointerEvents: 'none',
+              color: '#64748b',
+            }}
+            aria-hidden="true"
+          />
         </div>
       </div>
 
@@ -100,7 +119,7 @@ const ScenarioComparison = ({ result }) => {
               domain={[0, 60]}
               ticks={[0, 20, 40, 60]}
               label={{
-                value: 'Number of Wards',
+                value: 'Number of Districts',
                 angle: -90,
                 position: 'insideLeft',
                 offset: 2,

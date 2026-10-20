@@ -16,7 +16,8 @@ const WARD_LEGEND_ITEMS = [
  * Shows the shared illustrated ward polygons with zoom/layer controls and
  * a selected-ward label, keeping map presentation consistent across pages.
  */
-const WardMapCanvas = ({ wardName = 'Ward 12' }) => {
+const WardMapCanvas = ({ wardName, districtName = 'Koramangala' }) => {
+  const name = districtName || wardName || 'Koramangala'
   const [zoomLevel, setZoomLevel] = useState(1)
   const [layersOn, setLayersOn] = useState(true)
 
@@ -28,14 +29,14 @@ const WardMapCanvas = ({ wardName = 'Ward 12' }) => {
     <section className="card ward-map" aria-labelledby="ward-map-title">
       <div className="card__header">
         <h2 className="card__title" id="ward-map-title">
-          Ward Map
+          District Map
         </h2>
       </div>
 
       <div
         className="ward-map-canvas"
         role="group"
-        aria-label={`${wardName} illustrative ward map`}
+        aria-label={`${name} illustrative district map`}
       >
         <WardRiskIllustration satellite={layersOn} zoom={zoomLevel} />
 
@@ -71,10 +72,10 @@ const WardMapCanvas = ({ wardName = 'Ward 12' }) => {
           {zoomLevel.toFixed(1)}×
         </span>
 
-        {/* Selected-ward marker label (static in this build). */}
+        {/* Selected-district marker label (static in this build). */}
         <span className="ward-map-marker">
           <span className="ward-map-marker__pin" aria-hidden="true" />
-          {wardName} · High Risk
+          {name} · High Risk
         </span>
 
         <MapLegend title="Risk Level" items={isApiMode() ? [{ label: 'Low (0–0.34)', color: '#45BD9B' }, { label: 'Moderate (0.35–0.54)', color: '#FFCC59' }, { label: 'High (0.55–0.74)', color: '#FF7B45' }, { label: 'Critical (0.75–1.0)', color: '#EF4444' }] : WARD_LEGEND_ITEMS} />

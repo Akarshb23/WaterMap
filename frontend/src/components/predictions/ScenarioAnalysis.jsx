@@ -8,6 +8,33 @@ const DEFAULT_SCENARIOS = {
   greenInfra: 20,
 }
 
+const SCENARIO_PRESETS = [
+  {
+    id: 'baseline',
+    label: 'Baseline',
+    desc: 'Current trajectory',
+    values: { popGrowth: 0, annualRain: 0, waterDemand: 0, greenInfra: 0 },
+  },
+  {
+    id: 'moderate',
+    label: 'Moderate',
+    desc: 'Projected 2030 baseline',
+    values: { popGrowth: 20, annualRain: -10, waterDemand: 30, greenInfra: 20 },
+  },
+  {
+    id: 'climate-shock',
+    label: 'Climate Shock',
+    desc: 'Drought & high consumption',
+    values: { popGrowth: 15, annualRain: -35, waterDemand: 40, greenInfra: 10 },
+  },
+  {
+    id: 'green-push',
+    label: 'Green Push',
+    desc: 'Sustainable conservation',
+    values: { popGrowth: 10, annualRain: 10, waterDemand: 10, greenInfra: 45 },
+  },
+]
+
 const ScenarioAnalysis = ({ outlook, baseline = 0.79, onSimulate, onReset }) => {
   // Test compatibility: when empty array is explicitly passed
   if (Array.isArray(outlook) && outlook.length === 0) {
@@ -29,13 +56,23 @@ const ScenarioAnalysis = ({ outlook, baseline = 0.79, onSimulate, onReset }) => 
   }
 
   // Interactive slider states
+  const [activePreset, setActivePreset] = useState('moderate')
   const [popGrowth, setPopGrowth] = useState(DEFAULT_SCENARIOS.popGrowth)
   const [annualRain, setAnnualRain] = useState(DEFAULT_SCENARIOS.annualRain)
   const [waterDemand, setWaterDemand] = useState(DEFAULT_SCENARIOS.waterDemand)
   const [greenInfra, setGreenInfra] = useState(DEFAULT_SCENARIOS.greenInfra)
   const [isSimulating, setIsSimulating] = useState(false)
 
+  const handleSelectPreset = (preset) => {
+    setActivePreset(preset.id)
+    setPopGrowth(preset.values.popGrowth)
+    setAnnualRain(preset.values.annualRain)
+    setWaterDemand(preset.values.waterDemand)
+    setGreenInfra(preset.values.greenInfra)
+  }
+
   const handleReset = () => {
+    setActivePreset('moderate')
     setPopGrowth(DEFAULT_SCENARIOS.popGrowth)
     setAnnualRain(DEFAULT_SCENARIOS.annualRain)
     setWaterDemand(DEFAULT_SCENARIOS.waterDemand)
@@ -85,6 +122,36 @@ const ScenarioAnalysis = ({ outlook, baseline = 0.79, onSimulate, onReset }) => 
         </div>
       </div>
 
+      {/* Quick Scenario Preset Radio Controls */}
+      <div className="scenario-presets-bar" role="radiogroup" aria-label="Scenario presets">
+        <span className="scenario-presets-label">Preset:</span>
+        <div className="scenario-presets-list">
+          {SCENARIO_PRESETS.map((preset) => {
+            const isChecked = activePreset === preset.id
+            return (
+              <label
+                key={preset.id}
+                className={`scenario-preset-option ${isChecked ? 'scenario-preset-option--active' : ''}`}
+                title={preset.desc}
+              >
+                <input
+                  type="radio"
+                  name="scenario-preset-selection"
+                  className="scenario-preset-radio"
+                  value={preset.id}
+                  checked={isChecked}
+                  onChange={() => handleSelectPreset(preset)}
+                />
+                <span className="scenario-preset-dot" aria-hidden="true">
+                  <span className="scenario-preset-dot__inner" />
+                </span>
+                <span className="scenario-preset-name">{preset.label}</span>
+              </label>
+            )
+          })}
+        </div>
+      </div>
+
       <div className="scenario-sliders">
         {/* Slider 1: Population Growth */}
         <div className="scenario-slider-group">
@@ -100,7 +167,10 @@ const ScenarioAnalysis = ({ outlook, baseline = 0.79, onSimulate, onReset }) => 
             max="50"
             step="5"
             value={popGrowth}
-            onChange={(e) => setPopGrowth(Number(e.target.value))}
+            onChange={(e) => {
+              setPopGrowth(Number(e.target.value))
+              setActivePreset('custom')
+            }}
             className="scenario-range"
           />
           <div className="scenario-slider-ticks">
@@ -123,7 +193,10 @@ const ScenarioAnalysis = ({ outlook, baseline = 0.79, onSimulate, onReset }) => 
             max="20"
             step="5"
             value={annualRain}
-            onChange={(e) => setAnnualRain(Number(e.target.value))}
+            onChange={(e) => {
+              setAnnualRain(Number(e.target.value))
+              setActivePreset('custom')
+            }}
             className="scenario-range"
           />
           <div className="scenario-slider-ticks">
@@ -146,7 +219,10 @@ const ScenarioAnalysis = ({ outlook, baseline = 0.79, onSimulate, onReset }) => 
             max="50"
             step="5"
             value={waterDemand}
-            onChange={(e) => setWaterDemand(Number(e.target.value))}
+            onChange={(e) => {
+              setWaterDemand(Number(e.target.value))
+              setActivePreset('custom')
+            }}
             className="scenario-range"
           />
           <div className="scenario-slider-ticks">
@@ -169,7 +245,10 @@ const ScenarioAnalysis = ({ outlook, baseline = 0.79, onSimulate, onReset }) => 
             max="50"
             step="5"
             value={greenInfra}
-            onChange={(e) => setGreenInfra(Number(e.target.value))}
+            onChange={(e) => {
+              setGreenInfra(Number(e.target.value))
+              setActivePreset('custom')
+            }}
             className="scenario-range"
           />
           <div className="scenario-slider-ticks">

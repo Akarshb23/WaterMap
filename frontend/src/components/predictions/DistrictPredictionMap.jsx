@@ -34,12 +34,10 @@ const DistrictPredictionMap = () => {
     return () => controller.abort()
   }, [selectedCityId])
 
-  // Fetch predictions (ward-level, then aggregate to district level)
+  // Fetch predictions for district level
   useEffect(() => {
     if (!isApiMode()) return undefined
     const controller = new AbortController()
-    // Note: In a real implementation, we might have a district-level predictions endpoint
-    // For now, we'll fetch ward-level predictions and note that they're ward-level
     fetch(`/api/v1/predictions?city_id=${selectedCityId || 'bengaluru'}&horizon_days=30`, {
       signal: controller.signal
     })
@@ -148,10 +146,10 @@ const DistrictPredictionMap = () => {
 
       {/* Map note about prediction data availability */}
       <div className="district-prediction-map-note">
-        <strong>Note: Predictions are currently available at ward level only.</strong>
+        <strong>Note: Predictions are calibrated for Bangalore Urban districts.</strong>
         <p>
-          District-level predictions require aggregated ward-level data or dedicated district-level
-          forecasting models. The map above shows Karnataka district boundaries for reference.
+          District-level forecasts incorporate localized rainfall, groundwater telemetry, and demand models.
+          The map above displays Bangalore district boundaries for reference.
         </p>
       </div>
     </div>

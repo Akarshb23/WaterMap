@@ -34,9 +34,11 @@ const WaterDemandForecast = ({ data = DEFAULT_DEMAND_DATA }) => {
           aria-label="Select area for demand forecast"
         >
           <option value="City Wide">City Wide</option>
-          <option value="North Delhi">North Delhi</option>
-          <option value="South Delhi">South Delhi</option>
-          <option value="Central Delhi">Central Delhi</option>
+          <option value="North Bangalore">North Bangalore</option>
+          <option value="South Bangalore">South Bangalore</option>
+          <option value="Central Bangalore">Central Bangalore</option>
+          <option value="East Bangalore">East Bangalore</option>
+          <option value="West Bangalore">West Bangalore</option>
         </select>
       </div>
 

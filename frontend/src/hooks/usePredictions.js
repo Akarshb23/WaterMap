@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { fetchForecasts, fetchRiskDrivers } from '../services/predictionService.js'
 import { getApiErrorMessage } from '../services/apiClient.js'
 
-export function usePredictions({ cityId = 'new-delhi', horizon = 2030 } = {}) {
+export function usePredictions({ cityId = 'bangalore', horizon = 2030 } = {}) {
   const [state, setState] = useState({ forecasts: null, riskDrivers: [], isLoading: true, error: null })
 
   useEffect(() => {

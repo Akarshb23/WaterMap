@@ -3,8 +3,8 @@ import { AlertTriangle, ArrowDown, ArrowUp, Droplet, Leaf, Users } from 'lucide-
 const DEFAULT_RESULTS = {
   wsi: '0.74',
   wsiTrend: '12% vs baseline',
-  highRiskWards: '15',
-  wardsTrend: '3 more than baseline',
+  highRiskDistricts: '15',
+  districtsTrend: '3 more than baseline',
   rainfall: '612 mm',
   rainTrend: '6% vs baseline',
   demand: '128 MLD',
@@ -41,20 +41,20 @@ const ProjectedResults = ({ results = DEFAULT_RESULTS }) => {
           </div>
         </div>
 
-        {/* Item 2: High Risk Wards */}
+        {/* Item 2: High Risk Districts */}
         <div className="projected-result-item">
           <div className="projected-result-item__left">
             <div className="projected-result-item__icon projected-result-item__icon--red">
               <AlertTriangle size={18} />
             </div>
             <div className="projected-result-item__body">
-              <strong>{results.highRiskWards}</strong>
-              <span>High Risk Wards</span>
+              <strong>{results.highRiskDistricts || results.highRiskWards}</strong>
+              <span>High Risk Districts</span>
             </div>
           </div>
           <div className="projected-result-item__delta projected-result-item__delta--red">
             <ArrowUp size={13} strokeWidth={2.5} />
-            <span>{results.wardsTrend}</span>
+            <span>{results.districtsTrend || results.wardsTrend}</span>
           </div>
         </div>
 

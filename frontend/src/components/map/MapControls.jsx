@@ -4,7 +4,7 @@ import { LocateFixed, Minus, Plus } from 'lucide-react'
  * Map control cluster: zoom in, zoom out and locate/reset. Behaviour is
  * provided by the host map (e.g. the dashboard's illustrative map).
  */
-const MapControls = ({ onZoomIn, onZoomOut, onReset, resetLabel = 'Locate selected ward' }) => (
+const MapControls = ({ onZoomIn, onZoomOut, onReset, resetLabel = 'Locate selected district' }) => (
   <div className="map-controls">
     <button
       type="button"

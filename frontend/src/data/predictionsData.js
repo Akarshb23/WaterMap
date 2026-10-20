@@ -1,10 +1,8 @@
 /**
- * Illustrative data for the Prediction & Analysis page.
+ * Illustrative data for the Prediction & Analysis page (Bangalore).
  *
  * Everything here is planning-grade demo data — these are NOT verified live
  * forecasts, trained-model outputs or validated hydrological projections.
- * Replace the arrays with `predictionService` responses once a backend
- * exists; the shapes are deliberately kept chart-ready.
  */
 
 export const PREDICTION_INFO =
@@ -22,8 +20,7 @@ export const WSI_YEAR_OPTIONS = [
 ]
 
 /**
- * KPI tiles for the top row. Icons are mapped in the page component so the
- * data module stays presentation-free (same convention as DASHBOARD_KPIS).
+ * KPI tiles for the top row.
  */
 export const PREDICTION_KPIS = [
   {
@@ -69,8 +66,8 @@ export const PREDICTION_KPIS = [
     },
   },
   {
-    id: 'high-risk-wards',
-    title: 'High Risk Wards (2030)',
+    id: 'high-risk-districts',
+    title: 'High Risk Districts (2030)',
     value: '12',
     tone: 'red',
     trend: '5 more than 2024',
@@ -111,15 +108,17 @@ export const PREDICTION_KPIS = [
   },
 ]
 
-/** Ward selector options for the trend-comparison chart (`factor` scales WSI). */
-export const TREND_WARD_OPTIONS = [
-  { value: 'ward-4', label: 'Ward 4', factor: 0.88 },
-  { value: 'ward-12', label: 'Ward 12', factor: 1 },
-  { value: 'ward-19', label: 'Ward 19', factor: 1.13 },
-  { value: 'ward-27', label: 'Ward 27', factor: 0.95 },
+/** District selector options for the trend-comparison chart. */
+export const TREND_DISTRICT_OPTIONS = [
+  { value: 'electronic-city', label: 'Electronic City', factor: 0.88 },
+  { value: 'koramangala', label: 'Koramangala', factor: 1 },
+  { value: 'whitefield', label: 'Whitefield', factor: 1.13 },
+  { value: 'indiranagar', label: 'Indiranagar', factor: 0.95 },
 ]
+export const TREND_WARD_OPTIONS = TREND_DISTRICT_OPTIONS
 
-export const DEFAULT_TREND_WARD = 'ward-12'
+export const DEFAULT_TREND_DISTRICT = 'koramangala'
+export const DEFAULT_TREND_WARD = DEFAULT_TREND_DISTRICT
 
 export const TREND_YEARS = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]
 
@@ -149,8 +148,7 @@ export const RAINFALL_FORECAST = [
 ]
 
 /**
- * "Key Drivers" — each driver's illustrative share of the projected WSI
- * increase by 2030 (shares sum to 100).
+ * "Key Drivers"
  */
 export const RISK_DRIVERS = [
   {
@@ -184,7 +182,7 @@ export const RISK_DRIVERS = [
   {
     id: 'pollution',
     label: 'Source pollution',
-    detail: 'Reduced usable inflow in the Yamuna',
+    detail: 'Reduced usable inflow in lake networks',
     share: 8,
     color: '#8aa6bf',
   },
@@ -192,7 +190,7 @@ export const RISK_DRIVERS = [
 
 /**
  * Scenario Analysis — projected 2030 WSI if each intervention is adopted
- * city-wide, versus the 0.79 baseline. `reduction` is the percent WSI drop.
+ * city-wide, versus the 0.79 baseline.
  */
 export const SCENARIO_OUTLOOK = [
   { id: 'rainwater', label: 'Rainwater harvesting', wsi: 0.7, reduction: 11 },
@@ -207,7 +205,7 @@ export const SCENARIO_BASELINE_WSI = 0.79
 /** Rows for the Projected Results card. */
 export const PROJECTED_RESULTS = [
   { id: 'wsi', label: 'Water Stress Index (2030)', value: '0.79', meta: '+0.11 vs 2024' },
-  { id: 'wards', label: 'High-risk wards', value: '12', meta: 'of 42 wards' },
+  { id: 'districts', label: 'High-risk districts', value: '12', meta: 'of 42 districts' },
   { id: 'demand', label: 'Water demand', value: '154 MLD', meta: '+24% vs 2024' },
   { id: 'groundwater', label: 'Groundwater level', value: '−21.2 m', meta: 'falling ~1.1 m per year' },
   { id: 'rainfall', label: 'Monsoon rainfall', value: '520 mm', meta: '−6% vs 10-year normal' },

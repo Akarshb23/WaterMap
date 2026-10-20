@@ -1,57 +1,57 @@
 import { useState } from 'react'
 import { Locate, Minus, Plus } from 'lucide-react'
 
-// 42 Ward polygons tessellating the geographical boundary of Delhi
-// Exactly matching the reference image layout:
+// 42 District polygons tessellating the geographical boundary of Bangalore
+// Exactly matching the required layout:
 // 12 High Priority (Red), 18 Medium Priority (Orange/Amber), 12 Low Priority (Green)
-const DELHI_PRIORITY_WARDS = [
-  // --- 12 HIGH PRIORITY (Red) - Central & Dense East/West Corridors ---
-  { id: 'W12', name: 'Ward 12 (Civil Lines)', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.87, shape: '298,185 330,180 342,212 308,218 296,200' },
-  { id: 'W13', name: 'Ward 13 (Karol Bagh)', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.78, shape: '268,202 296,200 306,232 278,236' },
-  { id: 'W14', name: 'Ward 14 (Paharganj)', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.85, shape: '296,200 326,196 332,228 306,232' },
-  { id: 'W15', name: 'Ward 15 (Chandni Chowk)', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.88, shape: '326,196 358,190 366,220 332,228' },
-  { id: 'W20', name: 'Ward 20 (Shahdara N)', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.79, shape: '368,172 402,168 412,198 376,204' },
-  { id: 'W21', name: 'Ward 21 (Shahdara S)', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.76, shape: '376,204 412,198 420,232 382,238' },
-  { id: 'W22', name: 'Ward 22 (Laxmi Nagar)', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.86, shape: '352,228 382,238 388,272 356,268' },
-  { id: 'W25', name: 'Ward 25 (Connaught Place)', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.83, shape: '278,236 306,232 312,266 284,270' },
-  { id: 'W26', name: 'Ward 26 (India Gate)', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.77, shape: '306,232 342,228 348,266 312,266' },
-  { id: 'W08', name: 'Ward 8 (Sadar Bazar)', region: 'North', priority: 'high', priorityLabel: 'High Priority', wsi: 0.82, shape: '298,155 338,150 330,180 298,185' },
-  { id: 'W17', name: 'Ward 17 (Tilak Nagar)', region: 'West', priority: 'high', priorityLabel: 'High Priority', wsi: 0.71, shape: '246,236 278,236 284,270 248,268' },
-  { id: 'W29', name: 'Ward 29 (Lajpat Nagar)', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.76, shape: '312,266 348,266 342,302 306,300' },
+export const BANGALORE_PRIORITY_DISTRICTS = [
+  // --- 12 HIGH PRIORITY (Red) - High Stress Core & Tech Corridors ---
+  { id: 'D12', name: 'Koramangala', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.87, shape: '298,185 330,180 342,212 308,218 296,200' },
+  { id: 'D13', name: 'Indiranagar', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.78, shape: '268,202 296,200 306,232 278,236' },
+  { id: 'D14', name: 'Whitefield', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.85, shape: '296,200 326,196 332,228 306,232' },
+  { id: 'D15', name: 'Electronic City', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.88, shape: '326,196 358,190 366,220 332,228' },
+  { id: 'D20', name: 'Bellandur', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.79, shape: '368,172 402,168 412,198 376,204' },
+  { id: 'D21', name: 'HSR Layout', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.76, shape: '376,204 412,198 420,232 382,238' },
+  { id: 'D22', name: 'Marathahalli', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.86, shape: '352,228 382,238 388,272 356,268' },
+  { id: 'D25', name: 'BTM Layout', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.83, shape: '278,236 306,232 312,266 284,270' },
+  { id: 'D26', name: 'Jayanagar', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.77, shape: '306,232 342,228 348,266 312,266' },
+  { id: 'D08', name: 'Hebbal', region: 'North', priority: 'high', priorityLabel: 'High Priority', wsi: 0.82, shape: '298,155 338,150 330,180 298,185' },
+  { id: 'D17', name: 'Yelahanka', region: 'North', priority: 'high', priorityLabel: 'High Priority', wsi: 0.71, shape: '246,236 278,236 284,270 248,268' },
+  { id: 'D29', name: 'Rajajinagar', region: 'West', priority: 'high', priorityLabel: 'High Priority', wsi: 0.76, shape: '312,266 348,266 342,302 306,300' },
 
-  // --- 18 MEDIUM PRIORITY (Orange/Amber) - Buffer Ring around Central ---
-  { id: 'W04', name: 'Ward 4 (Rohini N)', region: 'North', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '254,122 296,118 298,155 258,158' },
-  { id: 'W06', name: 'Ward 6 (Rohini S)', region: 'North', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.52, shape: '296,118 342,112 338,150 298,155' },
-  { id: 'W07', name: 'Ward 7 (Adarsh Nagar)', region: 'North', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.54, shape: '342,112 384,120 374,158 338,150' },
-  { id: 'W10', name: 'Ward 10 (Punjabi Bagh N)', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.49, shape: '216,160 258,158 258,198 214,196' },
-  { id: 'W11', name: 'Ward 11 (Rajouri Garden)', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '214,196 258,198 252,234 210,230' },
-  { id: 'W24', name: 'Ward 24 (Patparganj)', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.56, shape: '382,238 426,234 432,274 388,272' },
-  { id: 'W23', name: 'Ward 23 (Mayur Vihar N)', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.59, shape: '388,272 432,274 424,312 378,308' },
-  { id: 'W27', name: 'Ward 27 (Delhi Cantt)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.45, shape: '244,268 284,270 278,312 236,306' },
-  { id: 'W28', name: 'Ward 28 (Chanakyapuri)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.51, shape: '284,270 306,300 298,338 274,318' },
-  { id: 'W30', name: 'Ward 30 (Defence Colony)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.57, shape: '348,266 384,264 378,308 342,302' },
-  { id: 'W32', name: 'Ward 32 (Hauz Khas)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.49, shape: '274,318 316,334 310,374 266,364' },
-  { id: 'W33', name: 'Ward 33 (Saket)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.53, shape: '316,334 356,334 350,374 310,374' },
-  { id: 'W34', name: 'Ward 34 (Greater Kailash)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '356,334 396,330 390,370 350,374' },
-  { id: 'W35', name: 'Ward 35 (Kalkaji)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.52, shape: '378,308 418,306 412,350 374,352' },
-  { id: 'W39', name: 'Ward 39 (Okhla)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.55, shape: '390,370 432,364 424,408 382,410' },
-  { id: 'W40', name: 'Ward 40 (Janakpuri E)', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.51, shape: '206,230 248,236 244,268 202,264' },
-  { id: 'W41', name: 'Ward 41 (Mayur Vihar S)', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.53, shape: '374,308 418,306 410,348 368,348' },
-  { id: 'W42', name: 'Ward 42 (Malviya Nagar)', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.48, shape: '266,364 310,374 300,412 254,398' },
+  // --- 18 MEDIUM PRIORITY (Orange/Amber) - Buffer Ring around Urban Core ---
+  { id: 'D04', name: 'Banashankari', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '254,122 296,118 298,155 258,158' },
+  { id: 'D06', name: 'Malleshwaram', region: 'North', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.52, shape: '296,118 342,112 338,150 298,155' },
+  { id: 'D07', name: 'Basavanagudi', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.54, shape: '342,112 384,120 374,158 338,150' },
+  { id: 'D10', name: 'Frazer Town', region: 'Central', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.49, shape: '216,160 258,158 258,198 214,196' },
+  { id: 'D11', name: 'RT Nagar', region: 'North', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '214,196 258,198 252,234 210,230' },
+  { id: 'D24', name: 'Domlur', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.56, shape: '382,238 426,234 432,274 388,272' },
+  { id: 'D23', name: 'Ulsoor', region: 'Central', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.59, shape: '388,272 432,274 424,312 378,308' },
+  { id: 'D27', name: 'Yeshwanthpur', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.45, shape: '244,268 284,270 278,312 236,306' },
+  { id: 'D28', name: 'Peenya', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.51, shape: '284,270 306,300 298,338 274,318' },
+  { id: 'D30', name: 'Kengeri', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.57, shape: '348,266 384,264 378,308 342,302' },
+  { id: 'D32', name: 'Vijayanagar', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.49, shape: '274,318 316,334 310,374 266,364' },
+  { id: 'D33', name: 'Nagarbhavi', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.53, shape: '316,334 356,334 350,374 310,374' },
+  { id: 'D34', name: 'KR Puram', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '356,334 396,330 390,370 350,374' },
+  { id: 'D35', name: 'Mahadevapura', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.52, shape: '378,308 418,306 412,350 374,352' },
+  { id: 'D39', name: 'CV Raman Nagar', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.55, shape: '390,370 432,364 424,408 382,410' },
+  { id: 'D40', name: 'Sarjapur Road', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.51, shape: '206,230 248,236 244,268 202,264' },
+  { id: 'D41', name: 'Bommanahalli', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.53, shape: '374,308 418,306 410,348 368,348' },
+  { id: 'D42', name: 'JP Nagar', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.48, shape: '266,364 310,374 300,412 254,398' },
 
-  // --- 12 LOW PRIORITY (Green) - Outer North, West & South Perimeter ---
-  { id: 'W01', name: 'Ward 1 (Narela)', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '272,42 334,36 346,84 286,88' },
-  { id: 'W02', name: 'Ward 2 (Alipur)', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.25, shape: '334,36 384,48 380,100 338,92' },
-  { id: 'W03', name: 'Ward 3 (Bawana)', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.31, shape: '212,62 272,42 284,92 222,118' },
-  { id: 'W05', name: 'Ward 5 (Burari)', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.30, shape: '346,84 402,96 392,138 342,128' },
-  { id: 'W09', name: 'Ward 9 (Paschim Vihar W)', region: 'West', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.29, shape: '168,148 216,160 210,210 162,198' },
-  { id: 'W16', name: 'Ward 16 (Uttam Nagar)', region: 'West', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '162,204 210,210 204,256 156,246' },
-  { id: 'W18', name: 'Ward 18 (Dwarka N)', region: 'West', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.26, shape: '156,252 204,258 196,304 150,296' },
-  { id: 'W19', name: 'Ward 19 (Dwarka S)', region: 'West', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.27, shape: '150,300 196,306 188,352 144,342' },
-  { id: 'W31', name: 'Ward 31 (Vasant Kunj)', region: 'South', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '212,324 262,336 250,388 200,372' },
-  { id: 'W36', name: 'Ward 36 (Mehrauli)', region: 'South', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.26, shape: '254,398 300,412 288,454 242,438' },
-  { id: 'W37', name: 'Ward 37 (Sangam Vihar)', region: 'South', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.29, shape: '300,412 352,408 342,458 288,454' },
-  { id: 'W38', name: 'Ward 38 (Badarpur)', region: 'South', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.30, shape: '352,408 408,402 398,452 342,458' },
+  // --- 12 LOW PRIORITY (Green) - Outer Perimeter & Watershed Districts ---
+  { id: 'D01', name: 'Devanahalli', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '272,42 334,36 346,84 286,88' },
+  { id: 'D02', name: 'Vidyaranyapura', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.25, shape: '334,36 384,48 380,100 338,92' },
+  { id: 'D03', name: 'Thanisandra', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.31, shape: '212,62 272,42 284,92 222,118' },
+  { id: 'D05', name: 'Sahakara Nagar', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.30, shape: '346,84 402,96 392,138 342,128' },
+  { id: 'D09', name: 'Rajarajeshwari Nagar', region: 'West', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.29, shape: '168,148 216,160 210,210 162,198' },
+  { id: 'D16', name: 'Banaswadi', region: 'East', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '162,204 210,210 204,256 156,246' },
+  { id: 'D18', name: 'Kalyan Nagar', region: 'East', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.26, shape: '156,252 204,258 196,304 150,296' },
+  { id: 'D19', name: 'HBR Layout', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.27, shape: '150,300 196,306 188,352 144,342' },
+  { id: 'D31', name: 'Horamavu', region: 'East', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '212,324 262,336 250,388 200,372' },
+  { id: 'D36', name: 'Hennur', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.26, shape: '254,398 300,412 288,454 242,438' },
+  { id: 'D37', name: 'Varthur', region: 'East', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.29, shape: '300,412 352,408 342,458 288,454' },
+  { id: 'D38', name: 'Begur', region: 'South', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.30, shape: '352,408 408,402 398,452 342,458' },
 ]
 
 const PRIORITY_COLORS = {
@@ -60,32 +60,33 @@ const PRIORITY_COLORS = {
   low: { fill: '#48bb78', stroke: '#ffffff', label: 'Low Priority (12)' },
 }
 
-const PriorityWardMap = ({ onSelectWard }) => {
+const PriorityWardMap = ({ onSelectDistrict, onSelectWard }) => {
+  const handleSelect = onSelectDistrict || onSelectWard
   const [zoom, setZoom] = useState(1)
-  const [selectedWard, setSelectedWard] = useState(null)
+  const [selectedDistrict, setSelectedDistrict] = useState(null)
 
   const handleZoomIn = () => setZoom((z) => Math.min(1.8, +(z + 0.15).toFixed(2)))
   const handleZoomOut = () => setZoom((z) => Math.max(0.85, +(z - 0.15).toFixed(2)))
   const handleResetZoom = () => {
     setZoom(1)
-    setSelectedWard(null)
+    setSelectedDistrict(null)
   }
 
-  const handleWardClick = (ward) => {
-    setSelectedWard(ward)
-    onSelectWard?.(ward)
+  const handleDistrictClick = (district) => {
+    setSelectedDistrict(district)
+    handleSelect?.(district)
   }
 
   return (
-    <article className="card priority-wards-map" aria-label="Priority Wards Map">
+    <article className="card priority-wards-map" aria-label="Priority Districts Map">
       <div className="priority-wards-map__header">
-        <h3 className="priority-wards-map__title">Priority Wards Map</h3>
+        <h3 className="priority-wards-map__title">Priority Districts Map</h3>
         <p className="priority-wards-map__subtitle">
-          Wards recommended for immediate intervention.
+          Districts recommended for immediate intervention.
         </p>
       </div>
 
-      <div className="priority-wards-map__canvas" role="region" aria-label="Priority wards map">
+      <div className="priority-wards-map__canvas" role="region" aria-label="Priority districts map">
         {/* Floating Controls (top-left) */}
         <div className="priority-wards-map__controls" role="toolbar" aria-label="Map navigation controls">
           <button
@@ -117,7 +118,7 @@ const PriorityWardMap = ({ onSelectWard }) => {
           </button>
         </div>
 
-        {/* SVG Interactive Delhi Map */}
+        {/* SVG Interactive Bangalore Map */}
         <div
           className="priority-wards-map__svg-wrapper"
           style={{
@@ -132,13 +133,13 @@ const PriorityWardMap = ({ onSelectWard }) => {
             viewBox="130 20 320 450"
             className="priority-wards-map__svg"
             role="img"
-            aria-label="Map of Delhi showing priority wards for immediate intervention"
+            aria-label="Map of Bangalore showing priority districts for immediate intervention"
             style={{ width: '100%', height: '100%', display: 'block' }}
           >
             {/* Soft map canvas background */}
             <rect x="130" y="20" width="320" height="450" fill="#f1f5f3" />
 
-            {/* Subtle arterial roads behind wards */}
+            {/* Subtle arterial roads behind districts */}
             <g stroke="#ffffff" strokeWidth="2.5" fill="none" opacity="0.9" strokeLinecap="round">
               <path d="M 140 180 Q 280 190 440 175" />
               <path d="M 140 310 Q 280 290 440 315" />
@@ -147,7 +148,7 @@ const PriorityWardMap = ({ onSelectWard }) => {
               <path d="M 390 60 Q 380 250 400 440" />
             </g>
 
-            {/* Faint Yamuna River along East Delhi */}
+            {/* Faint valley stream corridor along East Bangalore */}
             <path
               d="M 358 20 Q 380 90 370 150 Q 365 200 376 250 Q 385 300 420 370 Q 435 410 445 465"
               fill="none"
@@ -159,18 +160,18 @@ const PriorityWardMap = ({ onSelectWard }) => {
 
             {/* Regional Name Labels */}
             <g fill="#4b5563" fontSize="9.5" fontWeight="700" letterSpacing="0.9">
-              <text x="290" y="60" textAnchor="middle">NORTH DELHI</text>
-              <text x="195" y="210" textAnchor="middle">WEST DELHI</text>
-              <text x="312" y="254" textAnchor="middle" fill="#1f2937" fontWeight="800">CENTRAL DELHI</text>
-              <text x="402" y="235" textAnchor="middle">EAST DELHI</text>
-              <text x="315" y="445" textAnchor="middle">SOUTH DELHI</text>
+              <text x="290" y="60" textAnchor="middle">NORTH BANGALORE</text>
+              <text x="195" y="210" textAnchor="middle">WEST BANGALORE</text>
+              <text x="312" y="254" textAnchor="middle" fill="#1f2937" fontWeight="800">CENTRAL BANGALORE</text>
+              <text x="402" y="235" textAnchor="middle">EAST BANGALORE</text>
+              <text x="315" y="445" textAnchor="middle">SOUTH BANGALORE</text>
             </g>
 
-            {/* 42 Ward Polygons */}
+            {/* 42 District Polygons */}
             <g className="priority-wards-map__polygons">
-              {DELHI_PRIORITY_WARDS.map((w) => {
+              {BANGALORE_PRIORITY_DISTRICTS.map((w) => {
                 const colorInfo = PRIORITY_COLORS[w.priority] || PRIORITY_COLORS.medium
-                const isSelected = selectedWard?.id === w.id
+                const isSelected = selectedDistrict?.id === w.id
 
                 return (
                   <polygon
@@ -181,7 +182,7 @@ const PriorityWardMap = ({ onSelectWard }) => {
                     strokeWidth={isSelected ? 2.2 : 1.2}
                     className="priority-wards-map__poly"
                     opacity={isSelected ? 1 : 0.9}
-                    onClick={() => handleWardClick(w)}
+                    onClick={() => handleDistrictClick(w)}
                     role="button"
                     tabIndex={0}
                     aria-label={`${w.name}: ${w.priorityLabel}, WSI ${w.wsi}`}
@@ -191,11 +192,11 @@ const PriorityWardMap = ({ onSelectWard }) => {
               })}
             </g>
 
-            {/* Selected Ward Indicator */}
-            {selectedWard && (
+            {/* Selected District Indicator */}
+            {selectedDistrict && (
               <circle
-                cx={selectedWard.shape.split(' ')[0].split(',')[0]}
-                cy={selectedWard.shape.split(' ')[0].split(',')[1]}
+                cx={selectedDistrict.shape.split(' ')[0].split(',')[0]}
+                cy={selectedDistrict.shape.split(' ')[0].split(',')[1]}
                 r="4.5"
                 fill="#ffffff"
                 stroke="#0f172a"
@@ -206,7 +207,7 @@ const PriorityWardMap = ({ onSelectWard }) => {
         </div>
 
         {/* Priority Legend Overlay (bottom-left) */}
-        <div className="priority-wards-map__legend" aria-label="Priority wards legend">
+        <div className="priority-wards-map__legend" aria-label="Priority districts legend">
           <ul className="priority-wards-map__legend-list">
             <li className="priority-wards-map__legend-item">
               <span className="priority-wards-map__legend-dot priority-wards-map__legend-dot--red" />

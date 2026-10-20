@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { fetchDashboardOverview } from '../services/dashboardService.js'
 import { getApiErrorMessage, isApiMode } from '../services/apiClient.js'
 
-export function useDashboard({ cityId = 'new-delhi', range = '12m' } = {}) {
+export function useDashboard({ cityId = 'bangalore', range = '12m' } = {}) {
   const [state, setState] = useState({
     overview: null,
     isLoading: true,

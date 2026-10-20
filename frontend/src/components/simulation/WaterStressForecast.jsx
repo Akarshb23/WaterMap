@@ -45,8 +45,8 @@ const ForecastTooltip = ({ active, payload, label }) => {
  */
 const WaterStressForecast = ({ result }) => {
   const data = useMemo(
-    () => buildWsiForecastSeries(result.wardReduction),
-    [result.wardReduction],
+    () => buildWsiForecastSeries(result.districtReduction ?? result.wardReduction ?? 0.44),
+    [result.districtReduction, result.wardReduction],
   )
   const last = data[data.length - 1]
 

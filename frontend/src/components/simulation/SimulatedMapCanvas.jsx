@@ -8,49 +8,49 @@ const MAP_LEGEND_ITEMS = [
 ]
 
 /**
- * Contiguous polygon definitions for Delhi wards cluster.
- * Centered on Central Delhi with Yamuna river running along eastern border.
+ * Contiguous polygon definitions for Bangalore districts cluster.
+ * Centered on Central Bangalore with the Bellandur lake valley system running along eastern corridor.
  */
-const DELHI_WARD_POLYGONS = [
-  // North Delhi (Greens & Yellows)
-  { id: 'w1', name: 'Ward 1', points: '270,180 320,170 345,210 310,240 260,220', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w2', name: 'Ward 2', points: '320,170 380,165 410,205 375,235 345,210', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'w3', name: 'Ward 3', points: '380,165 435,175 445,225 410,245 410,205', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'w4', name: 'Ward 4', points: '260,220 310,240 300,290 240,280 235,240', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w5', name: 'Ward 5', points: '310,240 375,235 370,285 300,290', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'w6', name: 'Ward 6', points: '375,235 410,245 425,290 370,285', baselineRisk: 'moderate', simRisk: 'low' },
+const BANGALORE_DISTRICT_POLYGONS = [
+  // North Bangalore (Greens & Yellows)
+  { id: 'd1', name: 'Yelahanka', points: '270,180 320,170 345,210 310,240 260,220', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd2', name: 'Hebbal', points: '320,170 380,165 410,205 375,235 345,210', baselineRisk: 'moderate', simRisk: 'low' },
+  { id: 'd3', name: 'Thanisandra', points: '380,165 435,175 445,225 410,245 410,205', baselineRisk: 'moderate', simRisk: 'low' },
+  { id: 'd4', name: 'Vidyaranyapura', points: '260,220 310,240 300,290 240,280 235,240', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd5', name: 'Kodigehalli', points: '310,240 375,235 370,285 300,290', baselineRisk: 'moderate', simRisk: 'low' },
+  { id: 'd6', name: 'Peenya', points: '375,235 410,245 425,290 370,285', baselineRisk: 'moderate', simRisk: 'low' },
 
-  // West & Central Delhi (Yellows, Oranges & Reds)
-  { id: 'w7', name: 'Ward 7', points: '240,280 300,290 290,340 220,330', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w8', name: 'Ward 8', points: '300,290 370,285 360,335 290,340', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'w9', name: 'Ward 9', points: '370,285 425,290 420,335 360,335', baselineRisk: 'moderate', simRisk: 'moderate' },
-  { id: 'w10', name: 'Ward 10', points: '220,330 290,340 280,390 205,380', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w11', name: 'Ward 11', points: '290,340 360,335 350,385 280,390', baselineRisk: 'moderate', simRisk: 'low' },
-  
-  // WARD 12 (Target Area - Central Core along river)
-  { id: 'ward-12', name: 'Ward 12', points: '360,335 420,335 440,365 415,395 350,385', baselineRisk: 'high', simRisk: 'simulated-target', isTarget: true },
+  // West & Central Bangalore (Yellows, Oranges & Reds)
+  { id: 'd7', name: 'Rajajinagar', points: '240,280 300,290 290,340 220,330', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd8', name: 'Malleshwaram', points: '300,290 370,285 360,335 290,340', baselineRisk: 'moderate', simRisk: 'low' },
+  { id: 'd9', name: 'Vijayanagar', points: '370,285 425,290 420,335 360,335', baselineRisk: 'moderate', simRisk: 'moderate' },
+  { id: 'd10', name: 'Kengeri', points: '220,330 290,340 280,390 205,380', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd11', name: 'Yeshwanthpur', points: '290,340 360,335 350,385 280,390', baselineRisk: 'moderate', simRisk: 'low' },
 
-  // Central Core High Risk Wards (Surrounding Ward 12)
-  { id: 'w13', name: 'Ward 13', points: '420,335 455,330 475,370 440,365', baselineRisk: 'high', simRisk: 'high' },
-  { id: 'w14', name: 'Ward 14', points: '415,395 440,365 475,370 470,415 410,430', baselineRisk: 'high', simRisk: 'high' },
-  { id: 'w15', name: 'Ward 15', points: '350,385 415,395 410,430 360,435', baselineRisk: 'high', simRisk: 'moderate' },
-  { id: 'w16', name: 'Ward 16', points: '280,390 350,385 360,435 300,445', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'w17', name: 'Ward 17', points: '205,380 280,390 300,445 230,440', baselineRisk: 'low', simRisk: 'low' },
+  // KORAMANGALA (Target Area - Central Core along lake corridor)
+  { id: 'district-12', name: 'Koramangala', points: '360,335 420,335 440,365 415,395 350,385', baselineRisk: 'high', simRisk: 'simulated-target', isTarget: true },
 
-  // East Delhi (Across the Yamuna River)
-  { id: 'w18', name: 'Ward 18', points: '495,300 550,290 565,340 510,350', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'w19', name: 'Ward 19', points: '510,350 565,340 580,390 520,405', baselineRisk: 'high', simRisk: 'moderate' },
-  { id: 'w20', name: 'Ward 20', points: '520,405 580,390 570,450 510,455', baselineRisk: 'moderate', simRisk: 'low' },
+  // Central Core High Risk Districts (Surrounding Koramangala)
+  { id: 'd13', name: 'Indiranagar', points: '420,335 455,330 475,370 440,365', baselineRisk: 'high', simRisk: 'high' },
+  { id: 'd14', name: 'Shanthi Nagar', points: '415,395 440,365 475,370 470,415 410,430', baselineRisk: 'high', simRisk: 'high' },
+  { id: 'd15', name: 'Domlur', points: '350,385 415,395 410,430 360,435', baselineRisk: 'high', simRisk: 'moderate' },
+  { id: 'd16', name: 'Ulsoor', points: '280,390 350,385 360,435 300,445', baselineRisk: 'moderate', simRisk: 'low' },
+  { id: 'd17', name: 'Basavanagudi', points: '205,380 280,390 300,445 230,440', baselineRisk: 'low', simRisk: 'low' },
 
-  // South Delhi (Lush Low-Risk Greens)
-  { id: 'w21', name: 'Ward 21', points: '230,440 300,445 290,500 215,490', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w22', name: 'Ward 22', points: '300,445 360,435 350,495 290,500', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w23', name: 'Ward 23', points: '360,435 410,430 405,490 350,495', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'w24', name: 'Ward 24', points: '410,430 470,415 460,480 405,490', baselineRisk: 'high', simRisk: 'moderate' },
-  { id: 'w25', name: 'Ward 25', points: '290,500 350,495 340,555 275,545', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w26', name: 'Ward 26', points: '350,495 405,490 395,550 340,555', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w27', name: 'Ward 27', points: '405,490 460,480 445,540 395,550', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'w28', name: 'Ward 28', points: '340,555 395,550 380,610 320,600', baselineRisk: 'low', simRisk: 'low' },
+  // East Bangalore (Across the Bellandur Lake Valley)
+  { id: 'd18', name: 'Whitefield', points: '495,300 550,290 565,340 510,350', baselineRisk: 'moderate', simRisk: 'low' },
+  { id: 'd19', name: 'Bellandur', points: '510,350 565,340 580,390 520,405', baselineRisk: 'high', simRisk: 'moderate' },
+  { id: 'd20', name: 'Varthur', points: '520,405 580,390 570,450 510,455', baselineRisk: 'moderate', simRisk: 'low' },
+
+  // South Bangalore (Lush Low-Risk Greens)
+  { id: 'd21', name: 'Electronic City', points: '230,440 300,445 290,500 215,490', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd22', name: 'HSR Layout', points: '300,445 360,435 350,495 290,500', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd23', name: 'BTM Layout', points: '360,435 410,430 405,490 350,495', baselineRisk: 'moderate', simRisk: 'low' },
+  { id: 'd24', name: 'Jayanagar', points: '410,430 470,415 460,480 405,490', baselineRisk: 'high', simRisk: 'moderate' },
+  { id: 'd25', name: 'JP Nagar', points: '290,500 350,495 340,555 275,545', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd26', name: 'Banashankari', points: '350,495 405,490 395,550 340,555', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd27', name: 'Padmanabhanagar', points: '405,490 460,480 445,540 395,550', baselineRisk: 'low', simRisk: 'low' },
+  { id: 'd28', name: 'Bommanahalli', points: '340,555 395,550 380,610 320,600', baselineRisk: 'low', simRisk: 'low' },
 ]
 
 const RISK_COLOR_MAP = {
@@ -65,7 +65,7 @@ const RISK_COLOR_MAP = {
  * Exact replication of reference mockup.
  */
 const SimulatedMapCanvas = ({
-  areaLabel = 'Ward 12',
+  areaLabel = 'Koramangala',
   currentWsi = 0.82,
   simulatedWsi = 0.46,
   reductionPct = 44,
@@ -80,12 +80,21 @@ const SimulatedMapCanvas = ({
 
   return (
     <section className="card sim-map" aria-labelledby="sim-map-title">
-      <div className="card__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-        <div>
-          <h2 className="card__title" id="sim-map-title" style={{ fontSize: '0.98rem', whiteSpace: 'nowrap' }}>
+      <div
+        className="card__header"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+          gap: '8px 12px',
+        }}
+      >
+        <div style={{ minWidth: 0 }}>
+          <h2 className="card__title" id="sim-map-title" style={{ fontSize: '0.96rem', margin: 0 }}>
             Simulated Water Stress Map ({horizon})
           </h2>
-          <p className="card__subtitle">
+          <p className="card__subtitle" style={{ margin: '2px 0 0 0' }}>
             Compare projected water stress index under different scenarios.
           </p>
         </div>
@@ -172,8 +181,8 @@ const SimulatedMapCanvas = ({
               <line x1="20" y1="0" x2="20" y2="40" stroke="#edf3ed" strokeWidth="0.8" />
               <line x1="0" y1="20" x2="40" y2="20" stroke="#edf3ed" strokeWidth="0.8" />
             </pattern>
-            {/* Soft river gradient */}
-            <linearGradient id="yamunaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            {/* Soft valley gradient */}
+            <linearGradient id="valleyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#93c5fd" />
               <stop offset="100%" stopColor="#60a5fa" />
             </linearGradient>
@@ -192,10 +201,10 @@ const SimulatedMapCanvas = ({
             <path d="M530,-20 Q500,200 520,500 T510,700" strokeWidth="3" />
           </g>
 
-          {/* Yamuna River (Flowing North to South-East) */}
+          {/* Bellandur / Vrishabhavathi Lake Valley System (Flowing North to South-East) */}
           <path
             d="M450,-30 C430,90 495,170 470,260 S495,350 480,440 S530,550 540,710 L575,710 C565,550 525,440 535,350 S505,260 540,170 S475,90 495,-30 Z"
-            fill="url(#yamunaGradient)"
+            fill="url(#valleyGradient)"
             opacity="0.95"
           />
           <path
@@ -206,15 +215,15 @@ const SimulatedMapCanvas = ({
             opacity="0.6"
           />
 
-          {/* Contiguous Ward Polygons */}
+          {/* Contiguous District Polygons */}
           <g stroke="#ffffff" strokeWidth="1.8" strokeLinejoin="round">
-            {DELHI_WARD_POLYGONS.map((ward) => {
-              const risk = mode === 'simulated' ? ward.simRisk : ward.baselineRisk
+            {BANGALORE_DISTRICT_POLYGONS.map((district) => {
+              const risk = mode === 'simulated' ? district.simRisk : district.baselineRisk
               const fillColor = RISK_COLOR_MAP[risk] || '#fbbf24'
               return (
                 <polygon
-                  key={ward.id}
-                  points={ward.points}
+                  key={district.id}
+                  points={district.points}
                   fill={fillColor}
                   opacity="0.88"
                   style={{
@@ -227,14 +236,14 @@ const SimulatedMapCanvas = ({
 
           {/* Regional Text Labels */}
           <g fill="#475569" fontSize="13" fontWeight="800" letterSpacing="1.5" opacity="0.75" pointerEvents="none">
-            <text x="340" y="145" textAnchor="middle">NORTH DELHI</text>
-            <text x="210" y="325" textAnchor="middle">WEST DELHI</text>
-            <text x="340" y="315" textAnchor="middle">CENTRAL DELHI</text>
-            <text x="590" y="320" textAnchor="middle">EAST DELHI</text>
-            <text x="365" y="475" textAnchor="middle">SOUTH DELHI</text>
+            <text x="340" y="145" textAnchor="middle">NORTH BANGALORE</text>
+            <text x="210" y="325" textAnchor="middle">WEST BANGALORE</text>
+            <text x="340" y="315" textAnchor="middle">CENTRAL BANGALORE</text>
+            <text x="590" y="320" textAnchor="middle">EAST BANGALORE</text>
+            <text x="365" y="475" textAnchor="middle">SOUTH BANGALORE</text>
           </g>
 
-          {/* Target Pinpoint on Ward 12 (Coordinates at x=395, y=360) */}
+          {/* Target Pinpoint on Koramangala (Coordinates at x=395, y=360) */}
           <g>
             {/* Outer Target Circle */}
             <circle cx="395" cy="360" r="7.5" fill="#0f172a" stroke="#ffffff" strokeWidth="2.5" />

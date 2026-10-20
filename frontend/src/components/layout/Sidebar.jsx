@@ -20,7 +20,7 @@ import { ROUTES } from '../../constants/routes.js'
 const NAV_ICONS = {
   [ROUTES.DASHBOARD]: LayoutDashboard,
   [ROUTES.CITY_MAP]: Map,
-  [ROUTES.WARD_DETAILS_HOME]: MapPinned,
+  [ROUTES.DISTRICT_DETAILS_HOME]: MapPinned,
   [ROUTES.PREDICTIONS]: TrendingUp,
   [ROUTES.SIMULATION]: Sprout,
   [ROUTES.RECOMMENDATIONS]: ShieldCheck,

@@ -22,18 +22,18 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
         location.pathname === '/about' ||
         location.pathname === '/recommendations' ||
         location.pathname === '/data-sources') &&
-      selectedCityId !== 'new-delhi'
+      selectedCityId !== 'bangalore'
     ) {
-      setSelectedCityId('new-delhi')
+      setSelectedCityId('bangalore')
     }
   }, [location.pathname, selectedCityId, setSelectedCityId])
 
-  const city = selectedCityId || 'new-delhi'
+  const city = selectedCityId || 'bangalore'
 
   const cityOptions = [
-    { label: 'New Delhi', value: 'new-delhi' },
-    { label: 'Bengaluru', value: 'bengaluru' },
-    { label: 'Mumbai', value: 'mumbai' },
+    { label: 'Bangalore', value: 'bangalore' },
+    { label: 'Bengaluru Urban', value: 'bengaluru-urban' },
+    { label: 'Bengaluru Rural', value: 'bengaluru-rural' },
   ]
 
   return (
@@ -77,20 +77,20 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
           type="search"
           placeholder={
             location.pathname === '/about'
-              ? 'Search wards, indicators, methodology...'
+              ? 'Search districts, indicators, methodology...'
               : location.pathname === '/city-map' || location.pathname === '/map'
-              ? 'Search wards, areas, landmarks...'
-              : 'Search wards, areas, indicators...'
+              ? 'Search districts, areas, landmarks...'
+              : 'Search districts, areas, indicators...'
           }
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.target.value)}
           className="search-bar"
           aria-label={
             location.pathname === '/about'
-              ? 'Search wards, indicators, methodology'
+              ? 'Search districts, indicators, methodology'
               : location.pathname === '/city-map' || location.pathname === '/map'
-              ? 'Search wards, areas, landmarks'
-              : 'Search wards, areas, indicators'
+              ? 'Search districts, areas, landmarks'
+              : 'Search districts, areas, indicators'
           }
         />
       </div>

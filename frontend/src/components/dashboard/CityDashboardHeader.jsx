@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Calendar, ChevronDown } from 'lucide-react'
 import cityscape from '../../assets/watermap-cityscape.png'
-import { CITY_DASHBOARD_HEADER } from '../../data/delhiDashboardData.js'
+import { CITY_DASHBOARD_HEADER } from '../../data/bangaloreDashboardData.js'
 
 /**
  * Header for City Dashboard featuring scenic river skyline background
@@ -27,14 +27,15 @@ const CityDashboardHeader = ({
       </div>
 
       <div className="city-dashboard-header__banner" role="region" aria-label="City skyline banner">
-        {/* Scenic photographic river and skyline background */}
+        {/* Scenic photographic river and skyline background with left side completely blurred */}
         <div
           className="city-dashboard-header__backdrop"
           style={{
-            backgroundImage: `linear-gradient(90deg, rgba(243, 249, 250, 1) 0%, rgba(243, 249, 250, 0.35) 25%, rgba(243, 249, 250, 0) 55%), url(${cityscape})`,
+            backgroundImage: `linear-gradient(90deg, rgba(242, 250, 247, 1) 0%, rgba(242, 250, 247, 0.35) 25%, rgba(242, 250, 247, 0) 55%), url(${cityscape})`,
           }}
           aria-hidden="true"
         />
+        <div className="city-dashboard-header__blur-veil" aria-hidden="true" />
 
         {/* Date Filter Card on Top Right */}
         <div className="city-dashboard-header__filter-wrap">

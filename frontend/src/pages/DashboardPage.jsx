@@ -27,7 +27,7 @@ export default function DashboardPage() {
         <StressTrendChart />
       </section>
 
-      <section className="city-bottom-grid" aria-label="High risk wards and recent alerts">
+      <section className="city-bottom-grid" aria-label="High risk districts and recent alerts">
         <HighRiskWards />
         <RecentAlerts />
       </section>

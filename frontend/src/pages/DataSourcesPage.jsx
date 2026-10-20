@@ -17,7 +17,7 @@ import cityscape from '../assets/watermap-cityscape.png'
  * - Header with subtitle and green skyline banner ("Reliable data. Better decisions. More resilient cities.")
  * - 4 Summary KPI cards (8 Data Sources, 25+ Indicators, 2015-2024 Time Range, Last Updated Oct 15, 2026)
  * - Data Sources Overview table with 8 active data sources
- * - Interactive Data Coverage Map of Delhi with spatial coverage layers, legend, and controls
+ * - Interactive Data Coverage Map of Bangalore with spatial coverage layers, legend, and controls
  * - Key Indicators from Data Sources (3-column grid of 8 indicators)
  * - Data Trends dual-axis chart with tabs (Rainfall, Groundwater, Water Demand)
  * - Data Quality & Completeness assessment with validation message
@@ -44,18 +44,16 @@ const DataSourcesPage = () => {
           <p className="datasources-header__subtitle">{DATA_SOURCES_HEADER.subtitle}</p>
         </div>
 
-        {/* Top-Right Skyline Banner */}
-        <div className="datasources-banner">
+        {/* Top-Right Skyline Banner with left side completely blurred */}
+        <div className="datasources-banner" role="region" aria-label="WaterMap data sources banner">
           <div
-            className="datasources-banner__image-placeholder"
+            className="datasources-banner__backdrop"
             style={{
-              backgroundImage: `linear-gradient(90deg, rgba(226, 248, 241, 0.14), rgba(226, 248, 241, 0.03)), url(${cityscape})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundImage: `linear-gradient(90deg, rgba(242, 250, 247, 1) 0%, rgba(242, 250, 247, 0.35) 25%, rgba(242, 250, 247, 0) 55%), url(${cityscape})`,
             }}
-            role="img"
-            aria-label="Header skyline and river landscape banner"
+            aria-hidden="true"
           />
+          <div className="datasources-banner__blur-veil" aria-hidden="true" />
           <div className="datasources-banner__card">
             <span className="datasources-banner__icon">
               <Database size={18} aria-hidden="true" />

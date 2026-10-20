@@ -1,5 +1,5 @@
 /**
- * Local demo data for the WaterMap dashboard.
+ * Local demo data for the WaterMap dashboard (Bangalore).
  *
  * Everything here is illustrative sample data for the dashboard-only
  * implementation — no backend, API or GIS service is involved.
@@ -7,10 +7,9 @@
 
 /** Cities offered by the top-bar city selector. */
 export const CITY_OPTIONS = [
-  { value: 'new-delhi', label: 'New Delhi' },
-  { value: 'mumbai', label: 'Mumbai' },
-  { value: 'bengaluru', label: 'Bengaluru' },
-  { value: 'chennai', label: 'Chennai' },
+  { value: 'bengaluru', label: 'Bangalore' },
+  { value: 'bengaluru-urban', label: 'Bengaluru Urban' },
+  { value: 'bengaluru-rural', label: 'Bengaluru Rural' },
 ]
 
 /** Date ranges offered by the dashboard date filter. */
@@ -51,8 +50,8 @@ export const DASHBOARD_KPIS = [
     },
   },
   {
-    id: 'high-risk-wards',
-    title: 'High Risk Wards',
+    id: 'high-risk-districts',
+    title: 'High Risk Districts',
     value: '12',
     tone: 'red',
     note: 'of 42 total',
@@ -89,7 +88,7 @@ export const DASHBOARD_KPIS = [
   {
     id: 'population',
     title: 'Population',
-    value: '12.5M',
+    value: '13.6M',
     tone: 'green',
     trend: '2.3% vs last year',
     trendDirection: 'up',
@@ -98,29 +97,29 @@ export const DASHBOARD_KPIS = [
       type: 'sparkline',
       color: '#45BD9B',
       data: [
-        { label: 'A', value: 12.1 },
-        { label: 'B', value: 12.15 },
-        { label: 'C', value: 12.2 },
-        { label: 'D', value: 12.26 },
-        { label: 'E', value: 12.3 },
-        { label: 'F', value: 12.34 },
-        { label: 'G', value: 12.38 },
-        { label: 'H', value: 12.42 },
-        { label: 'I', value: 12.46 },
-        { label: 'J', value: 12.5 },
+        { label: 'A', value: 13.1 },
+        { label: 'B', value: 13.15 },
+        { label: 'C', value: 13.2 },
+        { label: 'D', value: 13.26 },
+        { label: 'E', value: 13.3 },
+        { label: 'F', value: 13.34 },
+        { label: 'G', value: 13.38 },
+        { label: 'H', value: 13.42 },
+        { label: 'I', value: 13.46 },
+        { label: 'J', value: 13.6 },
       ],
     },
   },
 ]
 
-/** Donut chart: ward counts by water-stress risk band. */
+/** Donut chart: district counts by water-stress risk band. */
 export const RISK_DISTRIBUTION = [
   { name: 'High Risk', value: 12, percent: '29%', color: '#EF4444' },
   { name: 'Moderate Risk', value: 18, percent: '43%', color: '#FFCC59' },
   { name: 'Low Risk', value: 12, percent: '28%', color: '#45BD9B' },
 ]
 
-export const RISK_DISTRIBUTION_TOTAL = { value: 42, label: 'Wards' }
+export const RISK_DISTRIBUTION_TOTAL = { value: 42, label: 'Districts' }
 
 /** Monthly average water-stress index (WSI) across a calendar year. */
 export const WATER_STRESS_TREND = [
@@ -144,25 +143,26 @@ export const TREND_RANGE_OPTIONS = [
   { value: '3', label: 'Last 3 months' },
 ]
 
-/** Ranked highest-risk wards shown in the bottom table. */
-export const TOP_HIGH_RISK_WARDS = [
-  { rank: 1, name: 'Ward 12', wsi: '0.87', population: '240,000', trend: '18%' },
-  { rank: 2, name: 'Ward 8', wsi: '0.82', population: '198,000', trend: '11%' },
-  { rank: 3, name: 'Ward 21', wsi: '0.76', population: '175,000', trend: '9%' },
-  { rank: 4, name: 'Ward 4', wsi: '0.73', population: '210,000', trend: '7%' },
-  { rank: 5, name: 'Ward 17', wsi: '0.71', population: '190,000', trend: '6%' },
+/** Ranked highest-risk districts shown in the bottom table. */
+export const TOP_HIGH_RISK_DISTRICTS = [
+  { rank: 1, name: 'Koramangala', wsi: '0.87', population: '240,000', trend: '18%' },
+  { rank: 2, name: 'Whitefield', wsi: '0.82', population: '198,000', trend: '11%' },
+  { rank: 3, name: 'Indiranagar', wsi: '0.76', population: '175,000', trend: '9%' },
+  { rank: 4, name: 'Electronic City', wsi: '0.73', population: '210,000', trend: '7%' },
+  { rank: 5, name: 'Bellandur', wsi: '0.71', population: '190,000', trend: '6%' },
 ]
 
+export const TOP_HIGH_RISK_WARDS = TOP_HIGH_RISK_DISTRICTS
+
 /**
- * Recent alerts. `icon` is a lucide icon key resolved by the component;
- * the first four are shown until the feed is expanded.
+ * Recent alerts.
  */
 export const RECENT_ALERTS = [
   {
-    id: 'alert-stress-ward-12',
+    id: 'alert-stress-koramangala',
     icon: 'alert-triangle',
     tone: 'danger',
-    title: 'High water stress in Ward 12',
+    title: 'High water stress in Koramangala',
     description: 'WSI increased by 18% in the last 3 months.',
     timestamp: '2 hours ago',
   },
@@ -179,7 +179,7 @@ export const RECENT_ALERTS = [
     icon: 'trending-up',
     tone: 'warning',
     title: 'Rising water demand',
-    description: 'Demand increased by 12% in East Delhi.',
+    description: 'Demand increased by 12% in East Bangalore.',
     timestamp: '1 day ago',
   },
   {
@@ -194,21 +194,21 @@ export const RECENT_ALERTS = [
     id: 'alert-pipeline',
     icon: 'droplets',
     tone: 'info',
-    title: 'Pipe leakage reported in Rohini',
-    description: 'Approx. 6 MLD lost in Sector 7 distribution line.',
+    title: 'Pipe leakage reported in Malleshwaram',
+    description: 'Approx. 6 MLD lost in 8th Main distribution line.',
     timestamp: '3 days ago',
   },
   {
     id: 'alert-tanker',
     icon: 'clock',
     tone: 'moderate',
-    title: 'Tanker supply delays in Shahdara',
-    description: 'Supply lag of 3 hours across 4 wards.',
+    title: 'Tanker supply delays in Mahadevapura',
+    description: 'Supply lag of 3 hours across 4 districts.',
     timestamp: '4 days ago',
   },
 ]
 
-/** Map filter controls (the dashboard map is illustrative, not GIS). */
+/** Map filter controls. */
 export const MAP_METRIC_OPTIONS = [
   { value: 'wsi', label: 'Water Stress Index' },
   { value: 'groundwater', label: 'Groundwater Level' },
@@ -225,34 +225,32 @@ export const MAP_ZONE_OPTIONS = [
   { value: 'south', label: 'South Zone' },
 ]
 
-export const MAP_WARD_FILTER_OPTIONS = [
-  { value: 'all', label: 'All Wards' },
-  { value: 'high', label: 'High Risk Wards' },
-  { value: 'moderate', label: 'Moderate Risk Wards' },
-  { value: 'low', label: 'Low Risk Wards' },
+export const MAP_DISTRICT_FILTER_OPTIONS = [
+  { value: 'all', label: 'All Districts' },
+  { value: 'high', label: 'High Risk Districts' },
+  { value: 'moderate', label: 'Moderate Risk Districts' },
+  { value: 'low', label: 'Low Risk Districts' },
 ]
+
+export const MAP_WARD_FILTER_OPTIONS = MAP_DISTRICT_FILTER_OPTIONS
 
 /** Region labels placed on the illustrative city map (percent coords). */
 export const MAP_REGIONS = [
-  { id: 'rohini', label: 'Rohini', x: 15, y: 13 },
-  { id: 'north-delhi', label: 'North Delhi', x: 45, y: 7 },
-  { id: 'shahdara', label: 'Shahdara', x: 79, y: 15 },
-  { id: 'west-delhi', label: 'West Delhi', x: 12, y: 47 },
-  { id: 'central-delhi', label: 'Central Delhi', x: 45, y: 47 },
-  { id: 'east-delhi', label: 'East Delhi', x: 81, y: 49 },
-  { id: 'south-delhi', label: 'South Delhi', x: 45, y: 85 },
+  { id: 'north-bangalore', label: 'North Bangalore', x: 45, y: 7 },
+  { id: 'west-bangalore', label: 'West Bangalore', x: 12, y: 47 },
+  { id: 'central-bangalore', label: 'Central Bangalore', x: 45, y: 47 },
+  { id: 'east-bangalore', label: 'East Bangalore', x: 81, y: 49 },
+  { id: 'south-bangalore', label: 'South Bangalore', x: 45, y: 85 },
 ]
 
 /**
- * Ward tiles on the illustrative map.
- * `x`/`y` mark the tile centre and `w`/`h` its size, all in percent of the
- * map canvas; `shape` picks one of the CSS polygon silhouettes in map.css.
+ * District tiles on the illustrative map.
  */
-export const MAP_WARDS = [
+export const MAP_DISTRICTS = [
   {
-    id: 'ward-12',
-    name: 'Ward 12',
-    zone: 'Central Delhi',
+    id: 'district-12',
+    name: 'Koramangala',
+    zone: 'Central Bangalore',
     zoneKey: 'central',
     risk: 'high',
     riskLabel: 'High Risk',
@@ -268,10 +266,10 @@ export const MAP_WARDS = [
     shape: 1,
   },
   {
-    id: 'ward-8',
-    name: 'Ward 8',
-    zone: 'North Delhi',
-    zoneKey: 'north',
+    id: 'district-8',
+    name: 'Whitefield',
+    zone: 'East Bangalore',
+    zoneKey: 'east',
     risk: 'high',
     riskLabel: 'High Risk',
     wsi: '0.82',
@@ -286,10 +284,10 @@ export const MAP_WARDS = [
     shape: 2,
   },
   {
-    id: 'ward-21',
-    name: 'Ward 21',
-    zone: 'East Delhi',
-    zoneKey: 'east',
+    id: 'district-21',
+    name: 'Indiranagar',
+    zone: 'Central Bangalore',
+    zoneKey: 'central',
     risk: 'high',
     riskLabel: 'High Risk',
     wsi: '0.76',
@@ -304,10 +302,10 @@ export const MAP_WARDS = [
     shape: 3,
   },
   {
-    id: 'ward-4',
-    name: 'Ward 4',
-    zone: 'West Delhi',
-    zoneKey: 'west',
+    id: 'district-4',
+    name: 'Electronic City',
+    zone: 'South Bangalore',
+    zoneKey: 'south',
     risk: 'high',
     riskLabel: 'High Risk',
     wsi: '0.73',
@@ -322,10 +320,10 @@ export const MAP_WARDS = [
     shape: 4,
   },
   {
-    id: 'ward-17',
-    name: 'Ward 17',
-    zone: 'South Delhi',
-    zoneKey: 'south',
+    id: 'district-17',
+    name: 'Bellandur',
+    zone: 'East Bangalore',
+    zoneKey: 'east',
     risk: 'high',
     riskLabel: 'High Risk',
     wsi: '0.71',
@@ -340,10 +338,10 @@ export const MAP_WARDS = [
     shape: 2,
   },
   {
-    id: 'ward-5',
-    name: 'Ward 5',
-    zone: 'Rohini',
-    zoneKey: 'north',
+    id: 'district-5',
+    name: 'Malleshwaram',
+    zone: 'West Bangalore',
+    zoneKey: 'west',
     risk: 'moderate',
     riskLabel: 'Moderate Risk',
     wsi: '0.54',
@@ -358,9 +356,9 @@ export const MAP_WARDS = [
     shape: 3,
   },
   {
-    id: 'ward-9',
-    name: 'Ward 9',
-    zone: 'Shahdara',
+    id: 'district-9',
+    name: 'KR Puram',
+    zone: 'East Bangalore',
     zoneKey: 'east',
     risk: 'moderate',
     riskLabel: 'Moderate Risk',
@@ -376,9 +374,9 @@ export const MAP_WARDS = [
     shape: 1,
   },
   {
-    id: 'ward-30',
-    name: 'Ward 30',
-    zone: 'East Delhi',
+    id: 'district-30',
+    name: 'Marathahalli',
+    zone: 'East Bangalore',
     zoneKey: 'east',
     risk: 'moderate',
     riskLabel: 'Moderate Risk',
@@ -394,9 +392,9 @@ export const MAP_WARDS = [
     shape: 4,
   },
   {
-    id: 'ward-26',
-    name: 'Ward 26',
-    zone: 'South Delhi',
+    id: 'district-26',
+    name: 'BTM Layout',
+    zone: 'South Bangalore',
     zoneKey: 'south',
     risk: 'moderate',
     riskLabel: 'Moderate Risk',
@@ -412,9 +410,9 @@ export const MAP_WARDS = [
     shape: 2,
   },
   {
-    id: 'ward-2',
-    name: 'Ward 2',
-    zone: 'North Delhi',
+    id: 'district-2',
+    name: 'Hebbal',
+    zone: 'North Bangalore',
     zoneKey: 'north',
     risk: 'low',
     riskLabel: 'Low Risk',
@@ -430,9 +428,9 @@ export const MAP_WARDS = [
     shape: 4,
   },
   {
-    id: 'ward-33',
-    name: 'Ward 33',
-    zone: 'West Delhi',
+    id: 'district-33',
+    name: 'Rajajinagar',
+    zone: 'West Bangalore',
     zoneKey: 'west',
     risk: 'low',
     riskLabel: 'Low Risk',
@@ -448,9 +446,9 @@ export const MAP_WARDS = [
     shape: 1,
   },
   {
-    id: 'ward-38',
-    name: 'Ward 38',
-    zone: 'South Delhi',
+    id: 'district-38',
+    name: 'Jayanagar',
+    zone: 'South Bangalore',
     zoneKey: 'south',
     risk: 'low',
     riskLabel: 'Low Risk',
@@ -467,7 +465,10 @@ export const MAP_WARDS = [
   },
 ]
 
-export const DEFAULT_MAP_WARD_ID = 'ward-12'
+export const MAP_WARDS = MAP_DISTRICTS
+
+export const DEFAULT_MAP_DISTRICT_ID = 'district-12'
+export const DEFAULT_MAP_WARD_ID = DEFAULT_MAP_DISTRICT_ID
 
 /** Legend entries for the illustrative map. */
 export const MAP_LEGEND = [
@@ -480,10 +481,12 @@ export const MAP_DISCLAIMER =
   'Illustrative map for demonstration only — not an actual GIS map.'
 
 // ---------------------------------------------------------------------------
-// Legacy placeholders kept so earlier scaffolding imports stay valid.
+// Backward compatibility placeholders
 // ---------------------------------------------------------------------------
 
 export const demoCities = CITY_OPTIONS
-export const demoWards = MAP_WARDS
+export const demoDistricts = MAP_DISTRICTS
+export const demoWards = MAP_DISTRICTS
 export const demoAlerts = RECENT_ALERTS
 export const demoForecasts = []
+

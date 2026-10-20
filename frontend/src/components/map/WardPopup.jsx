@@ -10,7 +10,7 @@ const WardPopup = ({ ward = null, badge = null, metrics = [], action = null, onO
   }
 
   return (
-    <div className="ward-popup" role="dialog" aria-label={`Ward: ${ward.name}`}>
+    <div className="ward-popup" role="dialog" aria-label={`District: ${ward.name}`}>
       <div className="ward-popup__head">
         <h4 className="ward-popup__name">{ward.name}</h4>
         {badge}

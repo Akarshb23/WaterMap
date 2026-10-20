@@ -16,7 +16,7 @@ const WardRecommendations = ({ recommendations = [] }) => (
     <p className="ward-tab-panel__intro">Practical next steps to reduce water stress:</p>
 
     {recommendations.length === 0 ? (
-      <p className="ward-card__empty">No recommendations available for this ward.</p>
+      <p className="ward-card__empty">No recommendations available for this district.</p>
     ) : (
       <ul className="ward-actions ward-actions--divided">
         {recommendations.map((item) => {

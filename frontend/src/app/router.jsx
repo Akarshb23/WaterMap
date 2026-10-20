@@ -13,10 +13,7 @@ import SimulationPage from '../pages/SimulationPage.jsx'
 import WardDetailsPage from '../pages/WardDetailsPage.jsx'
 
 /**
- * Route table for the WaterMap app. Uses the already-installed
- * react-router-dom dependency; no new routing package is introduced.
- * The dashboard is the app's entry page, so `/` redirects to it; the other
- * routes keep their scaffolded pages.
+ * Route table for the WaterMap app.
  */
 const Router = () => (
   <BrowserRouter>
@@ -26,7 +23,9 @@ const Router = () => (
         <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
         <Route path={ROUTES.CITY_MAP} element={<CityMapPage />} />
         <Route path="/city-map" element={<CityMapPage />} />
-        <Route path={ROUTES.WARD_DETAILS} element={<WardDetailsPage />} />
+        <Route path={ROUTES.DISTRICT_DETAILS} element={<WardDetailsPage />} />
+        <Route path="/districts/:districtId" element={<WardDetailsPage />} />
+        <Route path="/wards/:wardId" element={<WardDetailsPage />} />
         <Route path={ROUTES.PREDICTIONS} element={<PredictionsPage />} />
         <Route path={ROUTES.SIMULATION} element={<SimulationPage />} />
         <Route path={ROUTES.RECOMMENDATIONS} element={<RecommendationsPage />} />

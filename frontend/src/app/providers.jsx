@@ -3,7 +3,7 @@ import { CityContext } from '../context/CityContext.jsx'
 import { FilterContext } from '../context/FilterContext.jsx'
 
 const Providers = ({ children }) => {
-  const [selectedCityId, setSelectedCityId] = useState('new-delhi')
+  const [selectedCityId, setSelectedCityId] = useState('bangalore')
 
   const [riskLevel, setRiskLevel] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')

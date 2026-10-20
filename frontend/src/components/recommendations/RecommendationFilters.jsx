@@ -11,24 +11,33 @@ const RecommendationFilters = ({
   onPriorityChange,
   sortBy,
   onSortChange,
+  categoryCounts = {},
 }) => (
   <div className="recommendation-filters-bar" aria-label="Recommendation filters and sorting">
     {/* Category Pills */}
     <div className="recommendation-filters-bar__pills" role="tablist" aria-label="Filter by category">
-      {CATEGORY_FILTERS.map((cat) => (
-        <button
-          key={cat.id}
-          type="button"
-          className={`recommendation-filters-bar__pill${
-            category === cat.id ? ' recommendation-filters-bar__pill--active' : ''
-          }`}
-          onClick={() => onCategoryChange(cat.id)}
-          role="tab"
-          aria-selected={category === cat.id}
-        >
-          {cat.label}
-        </button>
-      ))}
+      {CATEGORY_FILTERS.map((cat) => {
+        const count = categoryCounts[cat.id]
+        return (
+          <button
+            key={cat.id}
+            type="button"
+            className={`recommendation-filters-bar__pill${
+              category === cat.id ? ' recommendation-filters-bar__pill--active' : ''
+            }`}
+            onClick={() => onCategoryChange(cat.id)}
+            role="tab"
+            aria-selected={category === cat.id}
+          >
+            <span>{cat.label}</span>
+            {typeof count === 'number' && (
+              <span className="recommendation-filters-bar__pill-count">
+                ({count})
+              </span>
+            )}
+          </button>
+        )
+      })}
     </div>
 
     {/* Dropdowns on the right */}

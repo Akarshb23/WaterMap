@@ -37,10 +37,19 @@ const PredictionsPage = () => {
 
         <div
           className="predictions-header__banner"
-          style={{ backgroundImage: `url(${predictionBanner})` }}
-          role="img"
-          aria-label="City landscape banner"
+          role="region"
+          aria-label="WaterMap predictive analytics banner"
         >
+          {/* Panoramic landscape backdrop with soft gradient fade & blur from left side */}
+          <div
+            className="predictions-header__banner-bg"
+            style={{
+              backgroundImage: `linear-gradient(90deg, #f8fafc 0%, rgba(248, 250, 252, 0.75) 16%, rgba(248, 250, 252, 0.1) 38%, rgba(248, 250, 252, 0) 55%), url(${predictionBanner})`,
+            }}
+            aria-hidden="true"
+          />
+          <div className="predictions-header__blur-veil" aria-hidden="true" />
+
           <div className="predictions-header__badge">
             <div className="predictions-header__badge-icon">
               <BarChart3 size={17} />

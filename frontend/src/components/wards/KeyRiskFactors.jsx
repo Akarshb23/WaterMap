@@ -13,7 +13,7 @@ const KeyRiskFactors = ({ factors = [] }) => (
     </div>
 
     {factors.length === 0 ? (
-      <p className="ward-card__empty">No risk factor data available for this ward.</p>
+      <p className="ward-card__empty">No risk factor data available for this district.</p>
     ) : (
       <ul className="ward-risk-rows">
         {factors.map((factor) => {

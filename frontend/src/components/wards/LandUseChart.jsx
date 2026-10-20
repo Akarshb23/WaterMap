@@ -17,7 +17,7 @@ const LandUseChart = ({
     </div>
 
     {data.length === 0 ? (
-      <p className="ward-card__empty">No land-use data available for this ward.</p>
+      <p className="ward-card__empty">No land-use data available for this district.</p>
     ) : (
       <>
         <div className="donut-wrap">

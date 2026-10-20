@@ -16,7 +16,7 @@ const WardLayer = ({ features = [], onSelectWard }) => {
       {features.map((feature, index) => (
         <li key={feature?.id ?? index} className="ward-layer__item">
           <button type="button" onClick={() => onSelectWard?.(feature)}>
-            {feature?.properties?.name ?? 'Unnamed ward'}
+            {feature?.properties?.name ?? 'Unnamed district'}
           </button>
         </li>
       ))}

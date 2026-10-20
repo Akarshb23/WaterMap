@@ -24,7 +24,7 @@ export async function fetchWardById(wardId, { signal } = {}) {
       ...WARD_DETAILS,
       ...mapWard,
       id: numericId,
-      name: mapWard.name || `Ward ${numericId}`,
+      name: mapWard.name || `District ${numericId}`,
       kpis: WARD_KPIS,
       landUse: WARD_LAND_USE,
       landUseTotal: WARD_LAND_USE_TOTAL,

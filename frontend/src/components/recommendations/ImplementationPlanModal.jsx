@@ -69,7 +69,7 @@ const ImplementationPlanModal = ({
               <MapPin size={18} className="implementation-modal__metric-icon" />
               <div>
                 <span className="implementation-modal__metric-label">Target Scope</span>
-                <p className="implementation-modal__metric-val">{recommendation.targetWards}</p>
+                <p className="implementation-modal__metric-val">{recommendation.targetDistricts || recommendation.targetWards}</p>
               </div>
             </div>
 
@@ -93,7 +93,7 @@ const ImplementationPlanModal = ({
               <Building2 size={18} className="implementation-modal__metric-icon" />
               <div>
                 <span className="implementation-modal__metric-label">Lead Agency</span>
-                <p className="implementation-modal__metric-val">{recommendation.implementation?.leadAgency || 'Delhi Jal Board'}</p>
+                <p className="implementation-modal__metric-val">{recommendation.implementation?.leadAgency || 'Bangalore Water Supply and Sewerage Board (BWSSB)'}</p>
               </div>
             </div>
           </div>
