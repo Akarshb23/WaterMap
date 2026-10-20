@@ -1,0 +1,883 @@
+/* ==========================================================================
+   Interactive City Map Page Styles
+   Matching User Mockup Pixel-for-Pixel
+   ========================================================================== */
+
+.interactive-city-map-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   1. Header with Foliage Decoration
+   -------------------------------------------------------------------------- */
+
+.city-map-page-header {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 3.4rem;
+}
+
+.city-map-page-header__intro {
+  min-width: 0;
+  flex: 1;
+}
+
+.city-map-page-header__title {
+  font-size: 1.95rem;
+  font-weight: 800;
+  color: var(--wm-color-text, #0f172a);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.city-map-page-header__subtitle {
+  margin-top: 0.2rem;
+  font-size: 0.92rem;
+  color: var(--wm-color-muted, #64748b);
+  font-weight: 500;
+}
+
+.city-map-page-header__foliage {
+  position: absolute;
+  top: -1.2rem;
+  right: -0.5rem;
+  width: 8rem;
+  height: 5.5rem;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* --------------------------------------------------------------------------
+   2. Filter Toolbar
+   -------------------------------------------------------------------------- */
+
+.city-map-filter-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.city-map-filter-bar__left {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.city-map-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.city-map-filter-group__label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.city-map-filter-group__select {
+  padding: 0.38rem 1.85rem 0.38rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--wm-color-text, #0f172a);
+  background-color: #ffffff;
+  border: 1px solid var(--wm-color-border, #e2e8f0);
+  border-radius: var(--wm-radius-sm, 6px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+
+.city-map-filter-bar__right {
+  display: flex;
+  align-items: center;
+}
+
+.city-map-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 17rem;
+}
+
+.city-map-search__icon {
+  position: absolute;
+  left: 0.85rem;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.city-map-search__input {
+  width: 100%;
+  padding: 0.4rem 0.85rem 0.4rem 2.2rem;
+  font-size: 0.82rem;
+  background-color: #ffffff;
+  border: 1px solid var(--wm-color-border, #e2e8f0);
+  border-radius: var(--wm-radius-sm, 6px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.city-map-search__input:focus {
+  border-color: #075d4c;
+  box-shadow: 0 0 0 2px rgba(7, 93, 76, 0.12);
+}
+
+/* --------------------------------------------------------------------------
+   3. Main Layout: Map (Left) + Ward Details (Right)
+   -------------------------------------------------------------------------- */
+
+.city-map-main-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.85fr) minmax(21.5rem, 1fr);
+  gap: 1.15rem;
+  align-items: stretch;
+  height: clamp(520px, calc(100vh - 12.2rem), 640px);
+}
+
+.city-map-main-layout--collapsed {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* --------------------------------------------------------------------------
+   4. Interactive Map Viewport & Canvas
+   -------------------------------------------------------------------------- */
+
+.interactive-map-viewport {
+  position: relative;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--wm-color-border, #e2e8f0);
+  background-color: #f2f6f4;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.interactive-map-viewport--satellite {
+  background-color: #1e293b;
+}
+
+/* Zoom Controls: Grouped pill for + / - and standalone locate */
+.interactive-map-controls {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.interactive-map-ctrl-group {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.interactive-map-ctrl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  background: transparent;
+  border: 0;
+  color: #334155;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.interactive-map-ctrl-btn:hover {
+  background-color: #f8fafc;
+  color: #075d4c;
+}
+
+.interactive-map-ctrl-divider {
+  height: 1px;
+  background-color: #f1f5f9;
+  width: 100%;
+}
+
+.interactive-map-ctrl-btn--standalone {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+/* Floating Legend & Switches Card */
+.interactive-map-legend-card {
+  position: absolute;
+  bottom: 3.25rem;
+  left: 1.15rem;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.75rem 0.95rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  width: 13.2rem;
+}
+
+.interactive-map-legend-card__title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.45rem;
+}
+
+.interactive-map-legend-card__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.interactive-map-legend-card__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.interactive-map-legend-card__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.interactive-map-legend-card__divider {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 0.65rem 0;
+}
+
+/* Layer Switches */
+.interactive-map-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.interactive-map-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.interactive-map-switch__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.interactive-map-switch__slider {
+  position: relative;
+  display: inline-block;
+  width: 2rem;
+  height: 1.15rem;
+  background-color: #cbd5e1;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.interactive-map-switch__slider::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(1.15rem - 4px);
+  height: calc(1.15rem - 4px);
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.interactive-map-switch__input:checked + .interactive-map-switch__slider {
+  background-color: #075d4c;
+}
+
+.interactive-map-switch__input:checked + .interactive-map-switch__slider::after {
+  transform: translateX(0.85rem);
+}
+
+.interactive-map-switch__label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Cartographic Scale Bar */
+.interactive-map-scale-bar {
+  position: absolute;
+  bottom: 1.1rem;
+  left: 1.15rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  pointer-events: none;
+}
+
+.interactive-map-scale-bar__ticks {
+  display: flex;
+  justify-content: space-between;
+  width: 5.8rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.interactive-map-scale-bar__line-container {
+  position: relative;
+  width: 5.8rem;
+  height: 6px;
+}
+
+.interactive-map-scale-bar__rule {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background-color: #0f172a;
+}
+
+.interactive-map-scale-bar__rule::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 2px;
+  height: 6px;
+  background-color: #0f172a;
+}
+
+.interactive-map-scale-bar__rule::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: 0;
+  width: 2px;
+  height: 6px;
+  background-color: #0f172a;
+}
+
+/* Canvas & SVG */
+.interactive-map-canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+.interactive-map-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.interactive-map-poly {
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.interactive-map-poly:hover {
+  filter: brightness(1.08) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+}
+
+.interactive-map-poly--selected {
+  stroke-width: 2.5;
+}
+
+/* Attached Tooltip Card */
+.interactive-map-popup {
+  position: absolute;
+  transform: translate(14px, -50%);
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.interactive-map-popup__inner {
+  position: relative;
+  padding: 0.5rem 0.7rem;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.interactive-map-popup__inner::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -5px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid #ffffff;
+}
+
+.interactive-map-popup__line {
+  display: flex;
+  align-items: center;
+  font-size: 0.74rem;
+}
+
+.interactive-map-popup__dot {
+  width: 0.46rem;
+  height: 0.46rem;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.4rem;
+  flex-shrink: 0;
+}
+
+.interactive-map-popup__name {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.interactive-map-popup__risk {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  color: #ef4444;
+}
+
+.interactive-map-popup__wsi {
+  color: #64748b;
+  font-size: 0.72rem;
+}
+
+.interactive-map-popup__wsi strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   5. Right Ward Details Panel
+   -------------------------------------------------------------------------- */
+
+.interactive-ward-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.95rem 1.15rem;
+  background-color: var(--wm-color-surface, #ffffff);
+  border: 1px solid var(--wm-color-border, #e2e8f0);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  gap: 0.55rem;
+  overflow-y: hidden;
+}
+
+.interactive-ward-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.interactive-ward-panel__title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.interactive-ward-panel__zone {
+  font-size: 0.78rem;
+  color: var(--wm-color-muted, #64748b);
+  margin-top: 0.1rem;
+}
+
+.interactive-ward-panel__head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.interactive-ward-panel__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.interactive-ward-panel__badge--high {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.interactive-ward-panel__badge--moderate {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.interactive-ward-panel__badge--low {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.interactive-ward-panel__close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: 0;
+  background: transparent;
+  color: #94a3b8;
+  border-radius: var(--wm-radius-sm, 6px);
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.interactive-ward-panel__close-btn:hover {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+/* Tab Navigation Strip */
+.interactive-ward-panel__tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--wm-color-border, #e2e8f0);
+  gap: 1.1rem;
+}
+
+.interactive-ward-panel__tab {
+  padding: 0.35rem 0.15rem;
+  border: 0;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s ease;
+}
+
+.interactive-ward-panel__tab:hover {
+  color: #0f172a;
+}
+
+.interactive-ward-panel__tab--active {
+  color: #075d4c;
+  font-weight: 700;
+}
+
+.interactive-ward-panel__tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #075d4c;
+  border-radius: 2px 2px 0 0;
+}
+
+/* Content Container */
+.interactive-ward-panel__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.interactive-ward-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+/* 2x2 Metric Cards Grid */
+.interactive-ward-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.interactive-ward-metric-card {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.48rem 0.65rem;
+  background-color: #ffffff;
+  border: 1px solid var(--wm-color-border, #e2e8f0);
+  border-radius: var(--wm-radius-sm, 6px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.ward-gauge-wrap {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.interactive-ward-metric-card__icon {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: var(--wm-radius-sm, 6px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.interactive-ward-metric-card__icon--green {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+.interactive-ward-metric-card__icon--blue {
+  background-color: #f0f9ff;
+  color: #0284c7;
+}
+
+.interactive-ward-metric-card__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.interactive-ward-metric-card__val {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.interactive-ward-metric-card__lbl {
+  font-size: 0.66rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-top: 0.1rem;
+  white-space: nowrap;
+}
+
+/* Trend Chart Section */
+.interactive-ward-trend-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.interactive-ward-trend-sec__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.interactive-ward-trend-sec__title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.interactive-ward-trend-sec__select {
+  padding: 0.15rem 1.25rem 0.15rem 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: var(--wm-radius-sm, 6px);
+  background-color: #ffffff;
+}
+
+.interactive-ward-trend-sec__chart {
+  width: 100%;
+  height: 92px;
+}
+
+/* Key Insights */
+.interactive-ward-insights-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.interactive-ward-insights-sec__title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.interactive-ward-insights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.interactive-ward-insight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.74rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+.interactive-ward-insight-item__icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.interactive-ward-insight-item__icon--red {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.interactive-ward-insight-item__icon--blue {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.interactive-ward-insight-item__text {
+  flex: 1;
+}
+
+/* Action Buttons */
+.interactive-ward-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.interactive-ward-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--wm-radius-sm, 6px);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.interactive-ward-btn--primary {
+  flex: 1.35;
+  background-color: #075d4c;
+  color: #ffffff;
+  border: 0;
+}
+
+.interactive-ward-btn--primary:hover {
+  background-color: #05483b;
+  transform: translateY(-1px);
+}
+
+.interactive-ward-btn--secondary {
+  flex: 1;
+  background-color: #ffffff;
+  color: #075d4c;
+  border: 1px solid #075d4c;
+}
+
+.interactive-ward-btn--secondary:hover {
+  background-color: #f0fdf4;
+  transform: translateY(-1px);
+}
+
+/* Floating Restore Button when Panel Closed */
+.interactive-map-restore-panel-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.95rem;
+  background: #ffffff;
+  border: 1px solid var(--wm-color-border, #e2e8f0);
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #075d4c;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   6. Responsive Adaptations
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+  .city-map-main-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .interactive-map-viewport {
+    min-height: 400px;
+  }
+
+  .interactive-ward-panel {
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .city-map-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .city-map-search {
+    width: 100%;
+  }
+
+  .interactive-ward-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}

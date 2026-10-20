@@ -25,6 +25,7 @@ const Router = () => (
       <Route element={<AppLayout />}>
         <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
         <Route path={ROUTES.CITY_MAP} element={<CityMapPage />} />
+        <Route path="/city-map" element={<CityMapPage />} />
         <Route path={ROUTES.WARD_DETAILS} element={<WardDetailsPage />} />
         <Route path={ROUTES.PREDICTIONS} element={<PredictionsPage />} />
         <Route path={ROUTES.SIMULATION} element={<SimulationPage />} />

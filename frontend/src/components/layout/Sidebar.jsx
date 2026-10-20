@@ -75,6 +75,7 @@ const Sidebar = ({ isOpen = false, onClose }) => {
                     // the prefix (e.g. any /wards/:wardId details page).
                     const active =
                       isActive ||
+                      (item.path === ROUTES.CITY_MAP && (location.pathname === '/map' || location.pathname === '/city-map')) ||
                       (item.matchPrefix ? location.pathname.startsWith(item.matchPrefix) : false)
                     return `sidebar__link${active ? ' sidebar__link--active' : ''}`
                   }}

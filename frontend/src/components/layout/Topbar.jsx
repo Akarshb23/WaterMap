@@ -9,42 +9,32 @@ const Topbar = () => {
   const { searchQuery, setSearchQuery } = useFilters()
   const { selectedCityId, setSelectedCityId } = useCity()
 
-  const isDistrictView = location.pathname === '/map'
+  const isDistrictView = false
 
   // Keep shared state consistent with the active view.
   useEffect(() => {
-    if (isDistrictView && selectedCityId !== 'karnataka') {
-      setSelectedCityId('karnataka')
-    } else if (
+    if (
       (location.pathname === '/dashboard' ||
+        location.pathname === '/map' ||
+        location.pathname === '/city-map' ||
         location.pathname === '/predictions' ||
+        location.pathname === '/simulation' ||
         location.pathname === '/about' ||
         location.pathname === '/recommendations' ||
         location.pathname === '/data-sources') &&
       selectedCityId !== 'new-delhi'
     ) {
       setSelectedCityId('new-delhi')
-    } else if (
-      !isDistrictView &&
-      location.pathname !== '/dashboard' &&
-      location.pathname !== '/predictions' &&
-      location.pathname !== '/about' &&
-      location.pathname !== '/recommendations' &&
-      location.pathname !== '/data-sources' &&
-      selectedCityId === 'karnataka'
-    ) {
-      setSelectedCityId('bengaluru')
     }
-  }, [isDistrictView, location.pathname, selectedCityId, setSelectedCityId])
+  }, [location.pathname, selectedCityId, setSelectedCityId])
 
-  const city = selectedCityId || (isDistrictView ? 'karnataka' : 'new-delhi')
+  const city = selectedCityId || 'new-delhi'
 
-  const cityOptions = isDistrictView
-    ? [{ label: 'Karnataka', value: 'karnataka' }]
-    : [
-        { label: 'New Delhi', value: 'new-delhi' },
-        { label: 'Bengaluru', value: 'bengaluru' },
-      ]
+  const cityOptions = [
+    { label: 'New Delhi', value: 'new-delhi' },
+    { label: 'Bengaluru', value: 'bengaluru' },
+    { label: 'Mumbai', value: 'mumbai' },
+  ]
 
   return (
     <header className="topbar">
@@ -78,6 +68,8 @@ const Topbar = () => {
           placeholder={
             location.pathname === '/about'
               ? 'Search wards, indicators, methodology...'
+              : location.pathname === '/city-map' || location.pathname === '/map'
+              ? 'Search wards, areas, landmarks...'
               : 'Search wards, areas, indicators...'
           }
           value={searchQuery}
@@ -86,6 +78,8 @@ const Topbar = () => {
           aria-label={
             location.pathname === '/about'
               ? 'Search wards, indicators, methodology'
+              : location.pathname === '/city-map' || location.pathname === '/map'
+              ? 'Search wards, areas, landmarks'
               : 'Search wards, areas, indicators'
           }
         />
