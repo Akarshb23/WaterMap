@@ -1,7 +1,7 @@
 import {
   Database,
   Droplets,
-  FlaskConical,
+  Sprout,
   Info,
   LayoutDashboard,
   Map,
@@ -21,7 +21,7 @@ const NAV_ICONS = {
   [ROUTES.CITY_MAP]: Map,
   [ROUTES.WARD_DETAILS_HOME]: MapPinned,
   [ROUTES.PREDICTIONS]: TrendingUp,
-  [ROUTES.SIMULATION]: FlaskConical,
+  [ROUTES.SIMULATION]: Sprout,
   [ROUTES.RECOMMENDATIONS]: ShieldCheck,
   [ROUTES.DATA_SOURCES]: Database,
   [ROUTES.ABOUT]: Info,

@@ -55,12 +55,11 @@
   flex-shrink: 0;
 }
 
-.about-header__landscape-svg {
+.about-header__cityscape-bg {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  background-size: cover;
+  background-position: right 30%;
   pointer-events: none;
   z-index: 1;
 }
@@ -249,23 +248,23 @@
   text-align: center;
   flex: 1;
   min-width: 0;
-  padding: 0 0.35rem;
+  padding: 0.35rem;
+  border-radius: var(--wm-radius-sm);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
-.about-workflow-step__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.85rem;
-  height: 2.85rem;
-  border-radius: 50%;
-  margin-bottom: 0.75rem;
-  flex-shrink: 0;
-  transition: transform 0.15s ease;
+.about-workflow-step:hover {
+  background-color: var(--wm-color-surface-hover);
 }
 
 .about-workflow-step:hover .about-workflow-step__icon {
-  transform: scale(1.05);
+  transform: scale(1.08);
+}
+
+.about-workflow-step:focus-visible {
+  outline: 2px solid var(--wm-color-primary);
+  outline-offset: 2px;
 }
 
 .about-workflow-step__icon--blue {
@@ -358,6 +357,20 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: var(--wm-radius-sm);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.about-key-component-tile:hover {
+  background-color: var(--wm-color-surface-hover);
+  transform: translateY(-1px);
+}
+
+.about-key-component-tile:focus-visible {
+  outline: 2px solid var(--wm-color-primary);
+  outline-offset: 2px;
 }
 
 .about-key-component-tile__icon {
@@ -522,6 +535,20 @@
   display: flex;
   align-items: flex-start;
   gap: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--wm-radius-sm);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.about-methodology-item:hover {
+  background-color: var(--wm-color-surface-hover);
+  transform: translateX(2px);
+}
+
+.about-methodology-item:focus-visible {
+  outline: 2px solid var(--wm-color-primary);
+  outline-offset: 2px;
 }
 
 .about-methodology-item__icon {
@@ -609,6 +636,20 @@
   display: flex;
   align-items: center;
   gap: 0.85rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: var(--wm-radius-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.about-risk-row:hover {
+  background-color: var(--wm-color-surface-hover);
+  transform: translateX(2px);
+}
+
+.about-risk-row:focus-visible {
+  outline: 2px solid var(--wm-color-primary);
+  outline-offset: 2px;
 }
 
 .about-risk-row__level {
@@ -633,6 +674,7 @@
 }
 
 .about-risk-row__range {
+  width: 4.8rem;
   flex-shrink: 0;
 }
 
@@ -643,6 +685,8 @@
   font-size: 0.74rem;
   font-weight: 700;
   border: 1px solid;
+  text-align: center;
+  width: 100%;
 }
 
 .about-risk-row__desc {
@@ -747,6 +791,12 @@
   border-radius: var(--wm-radius);
   max-width: 22.5rem;
   flex-shrink: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.about-team-banner:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.12);
 }
 
 .about-team-banner__icon {

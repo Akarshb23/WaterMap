@@ -652,7 +652,7 @@
 
 .datasources-bottom-grid {
   display: grid;
-  grid-template-columns: minmax(0, 27fr) minmax(0, 43fr) minmax(0, 30fr);
+  grid-template-columns: minmax(0, 31fr) minmax(0, 43fr) minmax(0, 26fr);
   gap: 1rem;
   align-items: stretch;
 }
@@ -673,7 +673,7 @@
 }
 
 .key-indicators-card__header {
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
 .key-indicators-card__title {
@@ -690,41 +690,29 @@
 
 .key-indicators-card__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.55rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem 0.4rem;
   flex: 1;
+  align-content: center;
 }
 
 .key-indicator-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 0.6rem;
-  background-color: #fafcfd;
-  border: 1px solid #edf2f4;
-  border-radius: var(--wm-radius-sm);
-  cursor: pointer;
-  transition: all 0.15s ease;
+  gap: 0.45rem;
+  padding: 0.15rem 0;
+  background-color: transparent;
+  border: none;
+  cursor: default;
   user-select: none;
-}
-
-.key-indicator-item:hover {
-  background-color: #f1f8f9;
-  border-color: #cbd5e1;
-}
-
-.key-indicator-item--selected {
-  background-color: #e2f6ef;
-  border-color: #45bd9b;
-  box-shadow: 0 0 0 1px #45bd9b;
 }
 
 .key-indicator-item__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.85rem;
-  height: 1.85rem;
+  width: 1.65rem;
+  height: 1.65rem;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -761,18 +749,18 @@
 }
 
 .key-indicator-item__name {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--wm-color-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   line-height: 1.25;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .key-indicator-item__unit {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: var(--wm-color-muted);
+  margin-top: 0.05rem;
 }
 
 /* --- Card 2: Data Trends Chart --- */
@@ -848,19 +836,25 @@
 
 .ds-chart-axis-label {
   position: absolute;
-  top: -2px;
+  top: 48%;
   font-size: 0.65rem;
   font-weight: 600;
   color: var(--wm-color-muted);
   z-index: 2;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .ds-chart-axis-label--left {
-  left: 0;
+  left: -18px;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center center;
 }
 
 .ds-chart-axis-label--right {
-  right: 0;
+  right: -20px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: center center;
 }
 
 /* Chart Tooltip */
@@ -1002,7 +996,7 @@
 .data-quality-card__list {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.65rem;
 }
 
 .data-quality-card__item {
@@ -1050,11 +1044,11 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.65rem 0.8rem;
+  padding: 0.55rem 0.75rem;
   background-color: #e2f6ef;
   border: 1px solid #a7f3d0;
   border-radius: var(--wm-radius-sm);
-  margin-top: 1rem;
+  margin-top: 0.65rem;
 }
 
 .data-quality-card__check-icon {

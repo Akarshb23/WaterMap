@@ -3,6 +3,7 @@ import {
   Database,
   FileText,
   RotateCcw,
+  RotateCw,
 } from 'lucide-react'
 
 const ICON_MAP = {
@@ -10,6 +11,7 @@ const ICON_MAP = {
   FileText,
   Calendar,
   RotateCcw,
+  RotateCw,
 }
 
 /**

@@ -33,6 +33,7 @@ export const DASHBOARD_KPIS = [
     tone: 'blue',
     trend: '12% vs last year',
     trendDirection: 'up',
+    trendTone: 'negative',
     visual: {
       type: 'sparkline',
       color: '#2589E9',
@@ -65,6 +66,7 @@ export const DASHBOARD_KPIS = [
     tone: 'blue',
     trend: '14% vs last year',
     trendDirection: 'up',
+    trendTone: 'positive',
     visual: {
       type: 'bars',
       color: '#2589E9',
@@ -91,6 +93,7 @@ export const DASHBOARD_KPIS = [
     tone: 'green',
     trend: '2.3% vs last year',
     trendDirection: 'up',
+    trendTone: 'positive',
     visual: {
       type: 'sparkline',
       color: '#45BD9B',
@@ -117,22 +120,22 @@ export const RISK_DISTRIBUTION = [
   { name: 'Low Risk', value: 12, percent: '28%', color: '#45BD9B' },
 ]
 
-export const RISK_DISTRIBUTION_TOTAL = { value: 42, label: 'wards' }
+export const RISK_DISTRIBUTION_TOTAL = { value: 42, label: 'Wards' }
 
 /** Monthly average water-stress index (WSI) across a calendar year. */
 export const WATER_STRESS_TREND = [
-  { month: 'Jan', value: 0.51 },
-  { month: 'Feb', value: 0.53 },
-  { month: 'Mar', value: 0.55 },
-  { month: 'Apr', value: 0.56 },
-  { month: 'May', value: 0.58 },
-  { month: 'Jun', value: 0.6 },
-  { month: 'Jul', value: 0.61 },
-  { month: 'Aug', value: 0.63 },
-  { month: 'Sep', value: 0.64 },
-  { month: 'Oct', value: 0.66 },
-  { month: 'Nov', value: 0.67 },
-  { month: 'Dec', value: 0.68 },
+  { month: 'Jan', value: 0.38 },
+  { month: 'Feb', value: 0.37 },
+  { month: 'Mar', value: 0.42 },
+  { month: 'Apr', value: 0.40 },
+  { month: 'May', value: 0.42 },
+  { month: 'Jun', value: 0.48 },
+  { month: 'Jul', value: 0.49 },
+  { month: 'Aug', value: 0.53 },
+  { month: 'Sep', value: 0.55 },
+  { month: 'Oct', value: 0.52 },
+  { month: 'Nov', value: 0.61 },
+  { month: 'Dec', value: 0.62 },
 ]
 
 export const TREND_RANGE_OPTIONS = [
@@ -182,7 +185,7 @@ export const RECENT_ALERTS = [
   {
     id: 'alert-groundwater',
     icon: 'arrow-down',
-    tone: 'moderate',
+    tone: 'positive',
     title: 'Groundwater levels declining',
     description: 'Average decline of 1.2 m in 6 months.',
     timestamp: '2 days ago',

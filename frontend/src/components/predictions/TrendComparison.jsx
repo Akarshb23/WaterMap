@@ -1,73 +1,140 @@
-import { useMemo, useState } from 'react'
-import { isApiMode } from '../../services/apiClient.js'
-import Select from '../common/Select.jsx'
-import ForecastChart from './ForecastChart.jsx'
 import {
-  DEFAULT_TREND_WARD,
-  PREDICTION_DISCLAIMER,
-  TREND_WARD_OPTIONS,
-  TREND_YEARS,
-  WSI_HISTORICAL_SERIES,
-  WSI_PREDICTED_SERIES,
-} from '../../data/predictionsData.js'
+  Area,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
-/** Keep any scaled value inside the valid WSI range and tidy decimals. */
-const clampWsi = (value) => Math.min(1, Math.max(0, Math.round(value * 100) / 100))
+const TREND_DATA = [
+  { year: '2020', historical: 0.48, predicted: null, historicalArea: 0.48, predictedArea: null },
+  { year: '2022', historical: 0.56, predicted: null, historicalArea: 0.56, predictedArea: null },
+  { year: '2024', historical: 0.68, predicted: 0.68, historicalArea: 0.68, predictedArea: 0.68 },
+  { year: '2026', historical: null, predicted: 0.74, historicalArea: null, predictedArea: 0.74 },
+  { year: '2028', historical: null, predicted: 0.78, historicalArea: null, predictedArea: 0.78 },
+  { year: '2030', historical: null, predicted: 0.85, historicalArea: null, predictedArea: 0.85 },
+]
 
-const WARD_SELECT_OPTIONS = TREND_WARD_OPTIONS.map(({ value, label }) => ({ value, label }))
-
-/**
- * Trend Comparison card — blue solid "Historical" line against a red
- * dashed "Predicted" line for the selected ward (defaults to Ward 12).
- * The ward `factor` from the demo data scales both series so switching
- * wards changes the chart deterministically.
- */
 const TrendComparison = ({ forecastSeries }) => {
-  const [ward, setWard] = useState(DEFAULT_TREND_WARD)
-
-  const factor = TREND_WARD_OPTIONS.find((option) => option.value === ward)?.factor ?? 1
-
-  const data = useMemo(
-    () => Array.isArray(forecastSeries) && forecastSeries.length
-      ? forecastSeries
-      : isApiMode() ? [] : TREND_YEARS.map((year, index) => ({
-          year,
-          historical: index < WSI_HISTORICAL_SERIES.length ? clampWsi(WSI_HISTORICAL_SERIES[index] * factor) : null,
-          predicted: WSI_PREDICTED_SERIES[index] != null ? clampWsi(WSI_PREDICTED_SERIES[index] * factor) : null,
-        })),
-    [factor, forecastSeries],
-  )
+  const chartData = Array.isArray(forecastSeries) && forecastSeries.length > 0 ? forecastSeries : TREND_DATA
 
   return (
-    <ForecastChart
-      className="trend-comparison"
-      title="Trend Comparison"
-      subtitle={isApiMode() ? 'Historical series is not available from the current backend.' : 'Historical vs predicted water stress index.'}
-      headerRight={
-        <Select
-          label="Ward"
-          options={WARD_SELECT_OPTIONS}
-          value={ward}
-          onChange={(event) => setWard(event.target.value)}
-        />
-      }
-      legend={[
-        { label: 'Historical', color: '#2589e9' },
-        { label: 'Predicted', color: '#ef4444', dashed: true },
-      ]}
-      data={data}
-      series={[
-        { key: 'historical', label: 'Historical', color: '#2589e9' },
-        { key: 'predicted', label: 'Predicted', color: '#ef4444', dashed: true },
-      ]}
-      yAxis={{
-        label: 'Water Stress Index',
-        domain: [0, 1],
-        tickFormatter: (value) => value.toFixed(1),
-      }}
-      chartHeight={185}
-      note={isApiMode() ? 'The backend currently returns a persistence baseline, not a historical time series.' : PREDICTION_DISCLAIMER}
-    />
+    <section className="card trend-comparison-card" aria-label="Trend Comparison">
+      <div className="card__header trend-comparison-card__header">
+        <h2 className="card__title">Trend Comparison</h2>
+      </div>
+
+      <div className="trend-comparison-legend">
+        <span className="trend-legend-item">
+          <span className="trend-legend-symbol trend-legend-symbol--historical" />
+          <span>Historical</span>
+        </span>
+        <span className="trend-legend-item">
+          <span className="trend-legend-symbol trend-legend-symbol--predicted" />
+          <span>Predicted</span>
+        </span>
+      </div>
+
+      <div className="trend-comparison-chart-wrap" style={{ height: 165 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart
+            data={chartData}
+            margin={{ top: 10, right: 15, left: -20, bottom: 0 }}
+          >
+            <defs>
+              <linearGradient id="histGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#2589e9" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="#2589e9" stopOpacity={0.02} />
+              </linearGradient>
+              <linearGradient id="predGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#ef4444" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="#ef4444" stopOpacity={0.02} />
+              </linearGradient>
+            </defs>
+
+            <CartesianGrid stroke="#f1f5f9" vertical={false} strokeDasharray="3 3" />
+
+            <XAxis
+              dataKey="year"
+              tickLine={false}
+              axisLine={{ stroke: '#e2e8f0' }}
+              tick={{ fontSize: 11, fill: '#64748b' }}
+            />
+            <YAxis
+              domain={[0, 1.0]}
+              ticks={[0.0, 0.5, 1.0]}
+              tickLine={false}
+              axisLine={{ stroke: '#e2e8f0' }}
+              tick={{ fontSize: 11, fill: '#64748b' }}
+              label={{
+                value: 'WSI',
+                angle: -90,
+                position: 'insideLeft',
+                offset: 28,
+                fontSize: 10,
+                fill: '#64748b',
+              }}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '8px',
+                fontSize: '12px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+              }}
+              formatter={(value, name) => [value, name === 'historical' ? 'Historical WSI' : 'Predicted WSI']}
+            />
+
+            {/* Historical Area */}
+            <Area
+              type="monotone"
+              dataKey="historicalArea"
+              fill="url(#histGradient)"
+              stroke="none"
+              isAnimationActive={false}
+            />
+
+            {/* Predicted Area */}
+            <Area
+              type="monotone"
+              dataKey="predictedArea"
+              fill="url(#predGradient)"
+              stroke="none"
+              isAnimationActive={false}
+            />
+
+            {/* Historical Line */}
+            <Line
+              type="monotone"
+              dataKey="historical"
+              name="Historical"
+              stroke="#2589e9"
+              strokeWidth={2.5}
+              dot={{ r: 4, fill: '#2589e9', stroke: '#ffffff', strokeWidth: 1.5 }}
+              connectNulls={false}
+              isAnimationActive={false}
+            />
+
+            {/* Predicted Line */}
+            <Line
+              type="monotone"
+              dataKey="predicted"
+              name="Predicted"
+              stroke="#ef4444"
+              strokeWidth={2.5}
+              strokeDasharray="4 4"
+              dot={{ r: 4, fill: '#ffffff', stroke: '#ef4444', strokeWidth: 2 }}
+              connectNulls={false}
+              isAnimationActive={false}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+    </section>
   )
 }
 

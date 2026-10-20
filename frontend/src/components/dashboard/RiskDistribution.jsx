@@ -13,47 +13,49 @@ const RiskDistribution = ({ data = RISK_DISTRIBUTION, total = RISK_DISTRIBUTION_
       </h2>
     </div>
 
-    <div className="donut-wrap">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            nameKey="name"
-            innerRadius={64}
-            outerRadius={92}
-            paddingAngle={2}
-            startAngle={90}
-            endAngle={-270}
-            stroke="none"
-            isAnimationActive={false}
-          >
-            {data.map((entry) => (
-              <Cell key={entry.name} fill={entry.color} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="donut-center">
-        <span className="donut-center__value">{total.value}</span>
-        <span className="donut-center__label">{total.label}</span>
+    <div className="risk-distribution-content">
+      <div className="donut-wrap">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              innerRadius={52}
+              outerRadius={74}
+              paddingAngle={2}
+              startAngle={90}
+              endAngle={-270}
+              stroke="none"
+              isAnimationActive={false}
+            >
+              {data.map((entry) => (
+                <Cell key={entry.name} fill={entry.color} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+        <div className="donut-center">
+          <span className="donut-center__value">{total.value}</span>
+          <span className="donut-center__label">{total.label}</span>
+        </div>
       </div>
-    </div>
 
-    <ul className="risk-legend">
-      {data.map((entry) => (
-        <li className="risk-legend__item" key={entry.name}>
-          <span
-            className="risk-legend__swatch"
-            style={{ backgroundColor: entry.color }}
-            aria-hidden="true"
-          />
-          <span className="risk-legend__name">{entry.name}</span>
-          <span className="risk-legend__count">{entry.value}</span>
-          <span className="risk-legend__percent">({entry.percent})</span>
-        </li>
-      ))}
-    </ul>
+      <ul className="risk-legend">
+        {data.map((entry) => (
+          <li className="risk-legend__item" key={entry.name}>
+            <span
+              className="risk-legend__swatch"
+              style={{ backgroundColor: entry.color }}
+              aria-hidden="true"
+            />
+            <span className="risk-legend__name">{entry.name}</span>
+            <span className="risk-legend__count">{entry.value}</span>
+            <span className="risk-legend__percent">({entry.percent})</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 )
 

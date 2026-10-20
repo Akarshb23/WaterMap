@@ -103,10 +103,10 @@ const DataTrendsChart = ({
           {activeTab === 'waterDemand' && 'Deficit (%)'}
         </span>
 
-        <ResponsiveContainer width="100%" height={210}>
+        <ResponsiveContainer width="100%" height={185}>
           <ComposedChart
             data={currentData}
-            margin={{ top: 20, right: 10, left: -10, bottom: 0 }}
+            margin={{ top: 20, right: 15, left: 12, bottom: 0 }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#edf2f4" />
             <XAxis

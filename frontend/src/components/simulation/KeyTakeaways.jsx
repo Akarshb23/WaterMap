@@ -1,16 +1,16 @@
-import { MapPin, MapPinned, TrendingDown, Waves } from 'lucide-react'
+import { BarChart3, Droplet, MapPin, Waves } from 'lucide-react'
 
-/** Icon + tone per takeaway id (presentation stays out of the data module). */
 const TAKEAWAY_META = {
-  wards: { icon: MapPinned, tone: 'blue' },
-  wsi: { icon: TrendingDown, tone: 'green' },
-  groundwater: { icon: Waves, tone: 'teal' },
-  impact: { icon: MapPin, tone: 'orange' },
+  wards: { icon: BarChart3, tone: 'green' },
+  wsi: { icon: Droplet, tone: 'blue' },
+  groundwater: { icon: Waves, tone: 'blue' },
+  impact: { icon: MapPin, tone: 'red' },
 }
 
 /**
- * Key Takeaways card: compact insight list derived from the last
- * simulation run. Each item carries a small coloured icon.
+ * Key Takeaways card:
+ * 4 key takeaway bullets with distinct colored circle icon badges.
+ * Matches reference mockup pixel-for-pixel.
  */
 const KeyTakeaways = ({ items = [] }) => (
   <section className="card key-takeaways" aria-label="Key takeaways">
@@ -20,7 +20,7 @@ const KeyTakeaways = ({ items = [] }) => (
 
     <ul className="key-takeaways__list">
       {items.map((item) => {
-        const meta = TAKEAWAY_META[item.id] ?? { icon: MapPin, tone: 'blue' }
+        const meta = TAKEAWAY_META[item.id] ?? { icon: BarChart3, tone: 'blue' }
         const Icon = meta.icon
         return (
           <li key={item.id} className="key-takeaways__item">
@@ -28,15 +28,13 @@ const KeyTakeaways = ({ items = [] }) => (
               className={`key-takeaways__icon key-takeaways__icon--${meta.tone}`}
               aria-hidden="true"
             >
-              <Icon size={13} />
+              <Icon size={14} />
             </span>
             <span className="key-takeaways__text">{item.text}</span>
           </li>
         )
       })}
     </ul>
-
-    <p className="key-takeaways__note">Demonstration insights tied to the last run.</p>
   </section>
 )
 

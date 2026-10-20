@@ -10,55 +10,51 @@ import {
 } from 'recharts'
 import { buildCitywideData, CITYWIDE_METRIC_OPTIONS } from '../../data/simulationData.js'
 
-const AXIS_TICK = { fontSize: 10, fill: '#637783' }
+const AXIS_TICK = { fontSize: 11, fill: '#64748b' }
 const TOOLTIP_STYLE = {
-  borderRadius: 10,
-  border: '1px solid #e2ecef',
+  borderRadius: 8,
+  border: '1px solid #e2e8f0',
   fontSize: 12,
-  boxShadow: '0 6px 18px rgba(20, 46, 59, 0.12)',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
 }
 
-const BASELINE_BLUE = '#2589e9'
-const SIMULATED_GREEN = '#0f9d6e'
+const BASELINE_BLUE = '#93c5fd'
+const SIMULATED_GREEN = '#34d399'
 
-/** Unit-aware value formatting per selectable metric. */
 const formatValue = (metric, value) => {
-  if (metric === 'demand') {
-    return `${Math.round(value)} MLD`
-  }
-  if (metric === 'groundwater') {
-    return `${Number(value).toFixed(1)} m`
-  }
-  return `${value}% of wards`
+  if (metric === 'demand') return `${Math.round(value)} MLD`
+  if (metric === 'groundwater') return `${Number(value).toFixed(1)} m`
+  return `${value} Wards`
 }
 
 /**
- * City-wide Comparison card: grouped bars (Baseline 2024 blue vs
- * Simulated 2030 green) with a working metric selector. Every dataset is
- * derived from the last run, so the chart updates when "Run Simulation"
- * is clicked. Values are illustrative.
+ * City-wide Comparison card:
+ * Side-by-side grouped bars (Baseline 2024 blue vs Simulated 2030 green)
+ * with numbers directly on top of each bar, Y-axis "Number of Wards", and metric dropdown.
  */
 const ScenarioComparison = ({ result }) => {
   const [metric, setMetric] = useState('wsi')
-
   const data = useMemo(() => buildCitywideData(result, metric), [result, metric])
 
   return (
     <section className="card citywide-comparison" aria-label="City-wide comparison">
-      <div className="card__header">
-        <div>
-          <h2 className="card__title">City-wide Comparison</h2>
-          <p className="card__subtitle">Baseline vs simulated outlook across Delhi.</p>
-        </div>
+      <div className="card__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 className="card__title">City-wide Comparison</h2>
         <div className="citywide-comparison__select">
-          <label className="sr-only" htmlFor="citywide-metric-select">
-            Comparison metric
-          </label>
           <select
             id="citywide-metric-select"
             className="native-select"
             value={metric}
             onChange={(event) => setMetric(event.target.value)}
+            style={{
+              padding: '4px 10px',
+              fontSize: '12px',
+              borderRadius: '6px',
+              border: '1px solid #cbd5e1',
+              backgroundColor: '#fff',
+              color: '#334155',
+              cursor: 'pointer',
+            }}
           >
             {CITYWIDE_METRIC_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -69,41 +65,49 @@ const ScenarioComparison = ({ result }) => {
         </div>
       </div>
 
-      <div className="forecast-card__legend">
-        <span className="forecast-card__legend-item">
+      <div className="forecast-card__legend" style={{ display: 'flex', gap: '14px', marginTop: 4, marginBottom: 8 }}>
+        <span className="forecast-card__legend-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '11px', color: '#64748b' }}>
           <span
-            className="forecast-card__legend-swatch"
-            style={{ backgroundColor: BASELINE_BLUE }}
+            style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: BASELINE_BLUE }}
             aria-hidden="true"
           />
           Baseline (2024)
         </span>
-        <span className="forecast-card__legend-item">
+        <span className="forecast-card__legend-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: '11px', color: '#64748b' }}>
           <span
-            className="forecast-card__legend-swatch"
-            style={{ backgroundColor: SIMULATED_GREEN }}
+            style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: SIMULATED_GREEN }}
             aria-hidden="true"
           />
           Simulated (2030)
         </span>
       </div>
 
-      <div className="citywide-comparison__chart" style={{ height: 185 }}>
+      <div className="citywide-comparison__chart" style={{ height: 180 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 10, right: 8, bottom: 0, left: -22 }} barGap={2}>
-            <CartesianGrid stroke="#eef4f6" vertical={false} />
+          <BarChart data={data} margin={{ top: 16, right: 10, bottom: 0, left: -10 }} barGap={3}>
+            <CartesianGrid stroke="#f1f5f9" vertical={false} />
             <XAxis
               dataKey="category"
               tick={AXIS_TICK}
               tickLine={false}
-              axisLine={{ stroke: '#e2ecef' }}
+              axisLine={{ stroke: '#e2e8f0' }}
               interval={0}
-              height={46}
-              tickMargin={6}
             />
-            <YAxis tick={AXIS_TICK} tickLine={false} axisLine={false} domain={[0, 'auto']} />
+            <YAxis
+              tick={AXIS_TICK}
+              tickLine={false}
+              axisLine={false}
+              domain={[0, 60]}
+              ticks={[0, 20, 40, 60]}
+              label={{
+                value: 'Number of Wards',
+                angle: -90,
+                position: 'insideLeft',
+                offset: 2,
+                style: { fontSize: 10, fill: '#64748b' },
+              }}
+            />
             <ChartTooltip
-              cursor={{ fill: 'rgba(37, 137, 233, 0.05)' }}
               contentStyle={TOOLTIP_STYLE}
               formatter={(value, name) => [formatValue(metric, value), name]}
             />
@@ -112,8 +116,8 @@ const ScenarioComparison = ({ result }) => {
               name="Baseline (2024)"
               fill={BASELINE_BLUE}
               radius={[3, 3, 0, 0]}
-              barPercentage={0.72}
-              categoryPercentage={0.66}
+              barSize={20}
+              label={{ position: 'top', fill: '#475569', fontSize: 10.5, fontWeight: 600 }}
               isAnimationActive={false}
             />
             <Bar
@@ -121,15 +125,13 @@ const ScenarioComparison = ({ result }) => {
               name="Simulated (2030)"
               fill={SIMULATED_GREEN}
               radius={[3, 3, 0, 0]}
-              barPercentage={0.72}
-              categoryPercentage={0.66}
+              barSize={20}
+              label={{ position: 'top', fill: '#475569', fontSize: 10.5, fontWeight: 600 }}
               isAnimationActive={false}
             />
           </BarChart>
         </ResponsiveContainer>
       </div>
-
-      <p className="forecast-card__note">Illustrative ward-category distribution for the last run.</p>
     </section>
   )
 }

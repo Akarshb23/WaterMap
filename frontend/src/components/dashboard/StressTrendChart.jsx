@@ -34,18 +34,48 @@ const StressTrendChart = ({ data: trendData = WATER_STRESS_TREND }) => {
       <div className="trend-chart">
         {data.length ? (
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data} margin={{ top: 10, right: 12, bottom: 0, left: -14 }}>
+            <AreaChart data={data} margin={{ top: 10, right: 14, bottom: 0, left: 0 }}>
               <defs>
                 <linearGradient id="stressAreaFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2589E9" stopOpacity={0.24} />
+                  <stop offset="0%" stopColor="#2589E9" stopOpacity={0.22} />
                   <stop offset="100%" stopColor="#2589E9" stopOpacity={0.02} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="#E2ECEF" strokeDasharray="4 4" vertical={false} />
-              <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: '#637783' }} interval="preserveStartEnd" />
-              <YAxis domain={[0, 1]} ticks={[0, 0.5, 1]} tickFormatter={(value) => value.toFixed(1)} tickLine={false} axisLine={false} width={40} tick={{ fontSize: 11, fill: '#637783' }} />
+              <CartesianGrid stroke="#E2ECEF" strokeDasharray="3 3" vertical={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fontSize: 11, fill: '#637783' }}
+                interval="preserveStartEnd"
+              />
+              <YAxis
+                domain={[0, 1]}
+                ticks={[0, 0.5, 1]}
+                tickFormatter={(value) => value.toFixed(1)}
+                tickLine={false}
+                axisLine={false}
+                width={46}
+                tick={{ fontSize: 11, fill: '#637783' }}
+                label={{
+                  value: 'WSI',
+                  angle: -90,
+                  position: 'insideLeft',
+                  offset: 4,
+                  style: { fill: '#637783', fontSize: 11, fontWeight: 600, textAnchor: 'middle' },
+                }}
+              />
               <Tooltip content={<TrendTooltip />} cursor={{ stroke: '#C8DDE3' }} />
-              <Area type="monotone" dataKey="value" stroke="#2589E9" strokeWidth={2.5} fill="url(#stressAreaFill)" dot={{ r: 3.5, fill: '#2589E9', strokeWidth: 0 }} activeDot={{ r: 5 }} isAnimationActive={false} />
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="#2589E9"
+                strokeWidth={2.4}
+                fill="url(#stressAreaFill)"
+                dot={{ r: 3.5, fill: '#2589E9', stroke: '#ffffff', strokeWidth: 1.5 }}
+                activeDot={{ r: 5, fill: '#2589E9' }}
+                isAnimationActive={false}
+              />
             </AreaChart>
           </ResponsiveContainer>
         ) : <p className="dashboard-empty-state">No trend data is available for this period.</p>}

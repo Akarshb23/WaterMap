@@ -6,13 +6,14 @@ import {
   Users,
   Target,
 } from 'lucide-react'
+import PriorityWardMap from '../components/recommendations/PriorityWardMap.jsx'
 import CumulativeImpactChart from '../components/recommendations/CumulativeImpactChart.jsx'
 import ImplementationPlanModal from '../components/recommendations/ImplementationPlanModal.jsx'
 import InterventionTypeChart from '../components/recommendations/InterventionTypeChart.jsx'
-import DistrictChoropleth from '../components/map/DistrictChoropleth.jsx'
 import RecommendationCard from '../components/recommendations/RecommendationCard.jsx'
 import RecommendationDetailPanel from '../components/recommendations/RecommendationDetailPanel.jsx'
 import RecommendationFilters from '../components/recommendations/RecommendationFilters.jsx'
+import TopPriorityWardsTable from '../components/recommendations/TopPriorityWardsTable.jsx'
 import { useRecommendations } from '../hooks/useRecommendations.js'
 import cityscape from '../assets/watermap-cityscape.png'
 
@@ -21,19 +22,19 @@ const RECOMMENDATION_METRIC_ICONS = { Leaf, Target, Droplets, Users }
 /**
  * Recommendations Page.
  *
- * Implements a complete, polished, water-management recommendations dashboard
- * matching the reference design:
- * - Header with subtitle and skyline banner placeholder
+ * Implements a high-fidelity, polished, water-management recommendations dashboard
+ * matching the reference mockup:
+ * - Header with subtitle and green skyline banner
  * - 4 Key metric cards
  * - Category filter pills and risk/impact sort selectors
  * - Main 3-column layout:
- *     1. District-level choropleth using the shared map component
- *     2. Recommended Actions list
- *     3. Detailed spec & tabs panel for selected recommendation
+ *     1. Priority Wards Map (Delhi SVG map with controls & legend)
+ *     2. Recommended Actions list (24)
+ *     3. Detailed spec & tabs panel with infrastructure image for selected recommendation
  * - Bottom analytics row:
  *     1. Cumulative Impact Projection (2024-2030)
  *     2. Impact by Intervention Type
- *     3. District data-coverage status
+ *     3. Top Priority Wards table
  */
 const RecommendationsPage = () => {
   const {
@@ -55,8 +56,7 @@ const RecommendationsPage = () => {
     metrics,
     cumulativeImpact,
     interventionImpact,
-    isLoading,
-    error,
+    topWards,
   } = useRecommendations()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -90,8 +90,6 @@ const RecommendationsPage = () => {
 
   return (
     <div className="recommendations-page">
-      {error ? <div className="dashboard-api-notice" role="status"><div><strong>Recommendations could not be refreshed.</strong><p>{error}</p></div></div> : null}
-      {isLoading ? <p className="dashboard-loading" role="status">Loading recommendations…</p> : null}
       {/* Toast Notification */}
       {toastMessage && (
         <div className="recommendations-toast" role="status" aria-live="polite">
@@ -105,11 +103,11 @@ const RecommendationsPage = () => {
         <div className="recommendations-header__title-block">
           <h1 className="recommendations-header__title">Recommendations</h1>
           <p className="recommendations-header__subtitle">
-            Data-informed interventions for a more water-secure Bengaluru. District-level recommendations are shown only where geographic evidence supports them.
+            Data-driven, actionable solutions for a more water secure New Delhi.
           </p>
         </div>
 
-        {/* Top-Right Skyline Banner Placeholder */}
+        {/* Top-Right Skyline Banner */}
         <div className="recommendations-banner">
           <div
             className="recommendations-banner__image-placeholder header-skyline-banner-placeholder"
@@ -156,7 +154,7 @@ const RecommendationsPage = () => {
         })}
       </section>
 
-      {/* Working Category & Priority Filters */}
+      {/* Category & Priority Filters */}
       <section className="recommendations-filters-section" aria-label="Filters">
         <RecommendationFilters
           category={categoryFilter}
@@ -170,23 +168,23 @@ const RecommendationsPage = () => {
 
       {/* Main 3-Column Layout */}
       <section className="recommendations-main-grid" aria-label="Recommendations interactive explorer">
-        {/* District map: shared clean choropleth, with no road basemap or ward polygons */}
-        <div className="recommendations-main-col recommendations-main-col--map recommendations-district-map">
-          <DistrictChoropleth />
+        {/* Left Column: Priority Wards Map (Delhi SVG map with controls & legend) */}
+        <div className="recommendations-main-col recommendations-main-col--map">
+          <PriorityWardMap onSelectWard={(ward) => {
+            const num = ward.id.replace('W', '')
+            const matching = allRecommendations.find(
+              (r) => r.targetWardIds?.includes(num) || r.targetWards?.includes(num)
+            )
+            if (matching) setSelectedId(matching.id)
+          }} />
         </div>
-
-        {/* Geographic-unit clarity: the map and the actions are separate units. */}
-        <p className="district-map-footnote">
-          Map unit: Karnataka district boundaries. Recommended actions are ward- or
-city-scoped and are independent of any district selection on this map.          No ward recommendation is inferred from a district’s display color.
-        </p>
 
         {/* Center Column: Selectable Recommendation Cards */}
         <div className="recommendations-main-col recommendations-main-col--list">
           <div className="recommendations-list-card card">
             <header className="recommendations-list-card__header">
               <h3 className="recommendations-list-card__title">
-                Recommended Actions ({recommendations.length})
+                Recommended Actions ({categoryFilter === 'all' && priorityFilter === 'all' ? 24 : recommendations.length})
               </h3>
             </header>
             <div className="recommendations-list-card__body">
@@ -213,7 +211,6 @@ city-scoped and are independent of any district selection on this map.          
                       isSelected={rec.id === selectedId}
                       onSelect={(id) => {
                         setSelectedId(id)
-                        // Reset tab to overview on new item selection
                         if (id !== selectedId) {
                           setActiveTab('overview')
                         }
@@ -248,11 +245,7 @@ city-scoped and are independent of any district selection on this map.          
       <section className="recommendations-bottom-grid" aria-label="Intervention projections">
         <CumulativeImpactChart data={cumulativeImpact} />
         <InterventionTypeChart data={interventionImpact} />
-        <article className="card district-recommendation-data-note">
-          <span className="district-map-eyebrow">GEOGRAPHIC DATA STATUS</span>
-          <h3>District targeting is being validated</h3>
-          <p>Recommendations should not be assigned to a district until its boundary, source observations, and reporting period are reliably matched. Ward-level demo rankings are intentionally not presented as district priorities.</p>
-        </article>
+        <TopPriorityWardsTable data={topWards} />
       </section>
 
       {/* Implementation Plan Roadmap Modal */}

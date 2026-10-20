@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Bar,
   CartesianGrid,
@@ -8,100 +9,102 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { RAINFALL_FORECAST } from '../../data/predictionsData.js'
 
-const AXIS_TICK = { fontSize: 11, fill: '#637783' }
-const TOOLTIP_STYLE = {
-  borderRadius: 10,
-  border: '1px solid #e2ecef',
-  fontSize: 12,
-  boxShadow: '0 6px 18px rgba(20, 46, 59, 0.12)',
-}
+const DEFAULT_RAINFALL_YEARS = [
+  { year: '2020', rain: 920, trend: 920 },
+  { year: '2022', rain: 870, trend: 850 },
+  { year: '2024', rain: 780, trend: 780 },
+  { year: '2026', rain: 720, trend: 720 },
+  { year: '2028', rain: 680, trend: 660 },
+  { year: '2030', rain: 610, trend: 610 },
+]
 
-/**
- * Compact monsoon outlook: forecast rainfall bars against the 10-year
- * normal (dashed line). Illustrative demo values in millimetres.
- */
-const RainfallForecast = ({ data = RAINFALL_FORECAST }) => {
+const RainfallForecast = ({ data = DEFAULT_RAINFALL_YEARS }) => {
+  const [selectedArea, setSelectedArea] = useState('City Wide')
   const hasData = Array.isArray(data) && data.length > 0
-  const totalForecastMm = data.reduce((total, month) => total + (Number(month.rain) || 0), 0)
+
   return (
-  <section className="card forecast-card rainfall-card" aria-label="Rainfall forecast">
-    <div className="card__header">
-      <div>
+    <section className="card forecast-card rainfall-card" aria-label="Rainfall Forecast">
+      <div className="card__header rainfall-card__header">
         <h2 className="card__title">Rainfall Forecast</h2>
-        <p className="card__subtitle">Monsoon outlook vs 10-year average.</p>
+        <select
+          className="native-select pred-small-select"
+          value={selectedArea}
+          onChange={(e) => setSelectedArea(e.target.value)}
+          aria-label="Select area for rainfall forecast"
+        >
+          <option value="City Wide">City Wide</option>
+          <option value="North Delhi">North Delhi</option>
+          <option value="South Delhi">South Delhi</option>
+          <option value="Central Delhi">Central Delhi</option>
+        </select>
       </div>
-      {hasData ? (
-        <span className="badge badge--info">{totalForecastMm} mm expected</span>
+
+      {!hasData ? (
+        <div className="forecast-card__chart forecast-card__chart--empty" style={{ height: 165 }}>
+          <p role="status">Not available</p>
+        </div>
       ) : (
-        <span className="badge badge--info" role="status">Not available</span>
+        <div className="forecast-card__chart" style={{ height: 165 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart
+              data={data}
+              margin={{ top: 10, right: 15, left: -10, bottom: 0 }}
+            >
+              <CartesianGrid stroke="#f1f5f9" vertical={false} strokeDasharray="3 3" />
+              <XAxis
+                dataKey={data[0]?.year ? 'year' : 'month'}
+                tickLine={false}
+                axisLine={{ stroke: '#e2e8f0' }}
+                tick={{ fontSize: 11, fill: '#64748b' }}
+              />
+              <YAxis
+                domain={[0, 1200]}
+                ticks={[0, 400, 800, 1200]}
+                tickLine={false}
+                axisLine={{ stroke: '#e2e8f0' }}
+                tick={{ fontSize: 11, fill: '#64748b' }}
+                label={{
+                  value: 'Rainfall (mm)',
+                  angle: -90,
+                  position: 'insideLeft',
+                  offset: 20,
+                  fontSize: 10,
+                  fill: '#64748b',
+                }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                }}
+                formatter={(val) => [`${val} mm`, 'Rainfall']}
+              />
+              <Bar
+                dataKey="rain"
+                name="Rainfall"
+                fill="#86efac"
+                radius={[3, 3, 0, 0]}
+                barSize={18}
+                isAnimationActive={false}
+              />
+              <Line
+                dataKey="trend"
+                name="Trend"
+                stroke="#22c55e"
+                strokeWidth={2}
+                strokeDasharray="4 4"
+                dot={false}
+                isAnimationActive={false}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
       )}
-    </div>
-
-    <div className="forecast-card__legend">
-      <span className="forecast-card__legend-item">
-        <span
-          className="forecast-card__legend-swatch"
-          style={{ backgroundColor: '#2589e9' }}
-          aria-hidden="true"
-        />
-        Forecast
-      </span>
-      <span className="forecast-card__legend-item">
-        <span
-          className="forecast-card__legend-swatch forecast-card__legend-swatch--dashed"
-          style={{ borderTop: '2.5px dashed #8aa6bf' }}
-          aria-hidden="true"
-        />
-        10-yr average
-      </span>
-    </div>
-
-    {/* An axis-only chart would imply a monsoon forecast exists. */}
-    {!hasData ? (
-      <div className="forecast-card__chart forecast-card__chart--empty" style={{ height: 165 }}>
-        <p role="status">Not available</p>
-      </div>
-    ) : (
-    <div className="forecast-card__chart" style={{ height: 165 }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={data} margin={{ top: 8, right: 6, bottom: 0, left: -18 }}>
-          <CartesianGrid stroke="#eef4f6" vertical={false} />
-          <XAxis
-            dataKey="month"
-            tick={AXIS_TICK}
-            tickLine={false}
-            axisLine={{ stroke: '#e2ecef' }}
-          />
-          <YAxis tick={AXIS_TICK} tickLine={false} axisLine={false} />
-          <Tooltip
-            cursor={{ fill: 'rgba(37, 137, 233, 0.06)' }}
-            contentStyle={TOOLTIP_STYLE}
-            formatter={(value, name) => [`${value} mm`, name]}
-          />
-          <Bar
-            dataKey="rain"
-            name="Forecast"
-            fill="#2589e9"
-            radius={[4, 4, 0, 0]}
-            barSize={20}
-            isAnimationActive={false}
-          />
-          <Line
-            dataKey="normal"
-            name="10-yr average"
-            stroke="#8aa6bf"
-            strokeWidth={2}
-            strokeDasharray="5 4"
-            dot={false}
-            isAnimationActive={false}
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
-    </div>
-    )}
-  </section>
+    </section>
   )
 }
 

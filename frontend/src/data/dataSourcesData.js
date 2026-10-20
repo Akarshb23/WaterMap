@@ -43,7 +43,7 @@ export const DATA_SOURCES_SUMMARY_METRICS = [
     label: 'Last Updated',
     value: 'Oct 15, 2026',
     subtitle: 'All sources synchronized',
-    iconName: 'RotateCcw',
+    iconName: 'RotateCw',
     tone: 'mint',
   },
 ]
@@ -63,8 +63,6 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     status: 'Active',
     iconName: 'Building2',
     iconTone: 'blue',
-    frequency: 'Daily Telemetry & Monthly Reports',
-    resolution: 'Ward & Pumping Station Level',
   },
   {
     id: 'imd',
@@ -80,8 +78,6 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     status: 'Active',
     iconName: 'CloudRain',
     iconTone: 'blue',
-    frequency: 'Daily AWS Sensor Readings',
-    resolution: 'District Grid (0.25° x 0.25°)',
   },
   {
     id: 'cgwb',
@@ -97,8 +93,6 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     status: 'Active',
     iconName: 'Droplet',
     iconTone: 'blue',
-    frequency: 'Quarterly Hydrograph Network',
-    resolution: 'Ward Piezometer Wells',
   },
   {
     id: 'sentinel',
@@ -114,8 +108,6 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     status: 'Active',
     iconName: 'Compass',
     iconTone: 'cyan',
-    frequency: '5-Day Orbital Revisit',
-    resolution: '10m Multi-spectral Bands',
   },
   {
     id: 'census',
@@ -131,8 +123,6 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     status: 'Active',
     iconName: 'Users',
     iconTone: 'green',
-    frequency: 'Decennial with Annual Growth Model',
-    resolution: 'Ward Demographics & Household Surveys',
   },
   {
     id: 'lulc',
@@ -146,10 +136,8 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     coverageKey: 'city',
     lastUpdated: 'Sep 28, 2026',
     status: 'Active',
-    iconName: 'Layers',
+    iconName: 'BookOpen',
     iconTone: 'green',
-    frequency: 'Bi-annual Normalized Land Cover',
-    resolution: '1:50,000 Vector Polygons',
   },
   {
     id: 'osm',
@@ -165,8 +153,6 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     status: 'Active',
     iconName: 'ShieldCheck',
     iconTone: 'green',
-    frequency: 'Continuous Community Validation',
-    resolution: 'Centimeter Precision Road Vectors',
   },
   {
     id: 'cmip6',
@@ -182,8 +168,6 @@ export const DATA_SOURCES_TABLE_RECORDS = [
     status: 'Active',
     iconName: 'TrendingUp',
     iconTone: 'blue',
-    frequency: 'SSP2-4.5 Multi-model Ensemble',
-    resolution: 'Downscaled Regional Climate Grid',
   },
 ]
 
@@ -209,7 +193,7 @@ export const COVERAGE_MAP_LEGEND = [
   { id: 'cgwb', label: 'Groundwater (Wards)', color: '#34d399' },
   { id: 'imd', label: 'Rainfall (District)', color: '#38bdf8' },
   { id: 'lulc', label: 'Land Use (City)', color: '#fbbf24' },
-  { id: 'census', label: 'Population (Wards)', color: '#f87171' },
+  { id: 'census', label: 'Population (Wards)', color: '#6ee7b7' },
 ]
 
 export const KEY_INDICATORS = [
@@ -219,15 +203,13 @@ export const KEY_INDICATORS = [
     unit: '(mm)',
     iconName: 'Droplet',
     tone: 'blue',
-    description: 'Precipitation depth and frequency across monsoon and non-monsoon periods',
   },
   {
     id: 'groundwater',
     name: 'Groundwater Level',
     unit: '(m)',
     iconName: 'Activity',
-    tone: 'cyan',
-    description: 'Depth to water table in meters below ground level (m bgl)',
+    tone: 'blue',
   },
   {
     id: 'population',
@@ -235,7 +217,6 @@ export const KEY_INDICATORS = [
     unit: '(count)',
     iconName: 'Users',
     tone: 'green',
-    description: 'Residential census counts, floating population and ward density',
   },
   {
     id: 'water-supply',
@@ -243,7 +224,6 @@ export const KEY_INDICATORS = [
     unit: '(MLD)',
     iconName: 'Building2',
     tone: 'blue',
-    description: 'Treated bulk potable supply pumped from WTPs and ranney wells',
   },
   {
     id: 'water-demand',
@@ -251,7 +231,6 @@ export const KEY_INDICATORS = [
     unit: '(MLD)',
     iconName: 'Droplets',
     tone: 'blue',
-    description: 'Aggregated domestic, commercial, industrial and institutional demand',
   },
   {
     id: 'land-use',
@@ -259,7 +238,6 @@ export const KEY_INDICATORS = [
     unit: '(%)',
     iconName: 'Leaf',
     tone: 'green',
-    description: 'Ratio of permeable surfaces, urban green canopy and water bodies',
   },
   {
     id: 'temperature',
@@ -267,7 +245,6 @@ export const KEY_INDICATORS = [
     unit: '(°C)',
     iconName: 'Thermometer',
     tone: 'coral',
-    description: 'Mean ambient surface temperature and urban heat island intensity',
   },
   {
     id: 'impervious-area',
@@ -275,7 +252,6 @@ export const KEY_INDICATORS = [
     unit: '(%)',
     iconName: 'Layers',
     tone: 'purple',
-    description: 'Paved, asphalt and built-up land preventing natural aquifer infiltration',
   },
 ]
 

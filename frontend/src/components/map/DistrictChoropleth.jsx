@@ -28,7 +28,9 @@ function FitDistricts({ data }) {
     const bounds = L.geoJSON(data).getBounds()
 
     if (bounds.isValid()) {
-      map.invalidateSize({ pan: false })
+      if (typeof map.invalidateSize === 'function') {
+        map.invalidateSize({ pan: false })
+      }
       map.fitBounds(bounds, {
         padding: [45, 45],
         maxZoom: 7,
@@ -314,7 +316,7 @@ export default function DistrictChoropleth() {
       )}
 
       {data && !loading && !error && (
-        <section className="district-map-detail" aria-live="polite">
+        <aside className="district-map-detail" aria-live="polite">
           {selectedProperties ? (
             <>
               <div className="district-map-detail__top">
@@ -341,7 +343,7 @@ export default function DistrictChoropleth() {
                   <strong>
                     {scoreIsAvailable
                       ? formatValue(selectedProperties.water_stress_index)
-                      : 'N/A'}
+                      : 'Insufficient data'}
                   </strong>
 
                   <small>
@@ -373,25 +375,30 @@ export default function DistrictChoropleth() {
 
               <div className="district-map-detail__meta">
                 <MetadataCard label="Risk classification">
-                  {normalizeRisk(selectedProperties.risk_category) ??
-                    'Insufficient data'}
+                  {scoreIsVerified
+                    ? (normalizeRisk(selectedProperties.risk_category) ?? 'Insufficient data')
+                    : 'Insufficient data'}
                 </MetadataCard>
 
-                <MetadataCard label="Indicator families populated">
-                  {selectedProperties.data_coverage != null
+                <MetadataCard label="Data coverage">
+                  {scoreIsVerified && selectedProperties.data_coverage != null
                     ? `${selectedProperties.data_coverage}%`
-                    : 'Not available'}
+                    : 'Insufficient data'}
                 </MetadataCard>
 
                 <MetadataCard label="Observation date">
-                  {selectedProperties.data_date || 'Not available'}
+                  {scoreIsVerified && selectedProperties.data_date
+                    ? selectedProperties.data_date
+                    : 'Insufficient data'}
                 </MetadataCard>
 
                 <MetadataCard
                   label="Data source"
                   className="district-map-meta-card--source"
                 >
-                  {selectedProperties.data_source || 'Not available'}
+                  {scoreIsVerified && selectedProperties.data_source
+                    ? selectedProperties.data_source
+                    : 'Insufficient data'}
                 </MetadataCard>
 
                 <MetadataCard label="Verified / estimated indicators">
@@ -457,14 +464,13 @@ export default function DistrictChoropleth() {
               <div>
                 <h3>Select a district</h3>
                 <p>
-                  {districtCount} districts are displayed. Click any district
-                  polygon to view its score, risk category, and available
-                  indicators.
+                  {districtCount} districts are displayed. Click any polygon to
+                  inspect its available information. No district is selected by default.
                 </p>
               </div>
             </div>
           )}
-        </section>
+        </aside>
       )}
 
       <p className="district-map-footnote">

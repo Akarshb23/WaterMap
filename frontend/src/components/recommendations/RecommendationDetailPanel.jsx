@@ -20,6 +20,7 @@ import {
   Wrench,
   X,
 } from 'lucide-react'
+import rainwaterHarvestingImg from '../../assets/images/rainwater-harvesting-concept.jpg'
 
 const ICON_MAP = {
   CloudRain,
@@ -70,36 +71,36 @@ const RecommendationDetailPanel = ({
 
   return (
     <article className="card recommendation-detail-panel" aria-labelledby="detail-panel-title">
-      {/* Panel Header */}
+      {/* Panel Header matching mockup */}
       <header className="recommendation-detail__header">
-        <div className="recommendation-detail__title-wrap">
-          <h3 className="recommendation-detail__title" id="detail-panel-title">
-            {recommendation.shortTitle || recommendation.title}
-          </h3>
-          <span className={`recommendation-detail__priority-pill recommendation-detail__priority-pill--${recommendation.priority}`}>
-            <AlertTriangle size={13} aria-hidden="true" />
-            <span>{recommendation.priorityLabel || `${recommendation.badgeLabel} Priority`}</span>
-          </span>
+        <div className="recommendation-detail__header-left">
+          <div className={`recommendation-detail__icon-badge recommendation-detail__icon-badge--${recommendation.tone}`}>
+            <MainIcon size={20} aria-hidden="true" />
+          </div>
+          <div className="recommendation-detail__title-wrap">
+            <h3 className="recommendation-detail__title" id="detail-panel-title">
+              {recommendation.shortTitle || recommendation.title}
+            </h3>
+            <span className={`recommendation-detail__priority-pill recommendation-detail__priority-pill--${recommendation.priority}`}>
+              <AlertTriangle size={12} aria-hidden="true" />
+              <span>{recommendation.priorityLabel || `${recommendation.badgeLabel} Priority`}</span>
+            </span>
+          </div>
         </div>
-        {onClose ? (
+        {onClose && (
           <button
             type="button"
             className="recommendation-detail__close-btn"
             onClick={onClose}
             aria-label="Close details panel"
           >
-            <X size={18} aria-hidden="true" />
+            <X size={16} aria-hidden="true" />
           </button>
-        ) : null}
+        )}
       </header>
 
-      {/* Summary Row */}
-      <div className="recommendation-detail__summary-row">
-        <div className={`recommendation-detail__icon-badge recommendation-detail__icon-badge--${recommendation.tone}`}>
-          <MainIcon size={22} aria-hidden="true" />
-        </div>
-        <p className="recommendation-detail__summary-text">{recommendation.summary}</p>
-      </div>
+      {/* Subtitle description */}
+      <p className="recommendation-detail__subtitle-text">{recommendation.summary}</p>
 
       {/* Navigation Tabs */}
       <nav className="recommendation-detail__tabs" aria-label="Recommendation details navigation">
@@ -153,21 +154,13 @@ const RecommendationDetailPanel = ({
                 </div>
               </div>
 
-              {/* Right Detail Image Placeholder */}
-              <div
-                className="recommendation-detail__image-placeholder"
-                role="img"
-                aria-label={`Visual concept illustration placeholder for ${recommendation.shortTitle}`}
-              >
-                <div className="recommendation-detail__image-inner" aria-hidden="true">
-                  <FileImage size={24} className="recommendation-detail__image-icon" />
-                  <span className="recommendation-detail__image-tag">
-                    {recommendation.shortTitle} Concept
-                  </span>
-                  <span className="recommendation-detail__image-hint">
-                    Image placeholder reserved for blueprint render
-                  </span>
-                </div>
+              {/* Right Detail Image */}
+              <div className="recommendation-detail__image-box">
+                <img
+                  src={rainwaterHarvestingImg}
+                  alt={`${recommendation.shortTitle} system`}
+                  className="recommendation-detail__image"
+                />
               </div>
             </div>
 

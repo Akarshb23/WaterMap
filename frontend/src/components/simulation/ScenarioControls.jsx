@@ -54,7 +54,6 @@ const ScenarioControls = ({ value, onChange, onRun, isLoading = false, areaOptio
           <ArrowRight size={15} aria-hidden="true" />
         </button>
       </div>
-      <p className="sim-controls__note">{SIMULATION_NOTE}</p>
     </section>
   )
 }

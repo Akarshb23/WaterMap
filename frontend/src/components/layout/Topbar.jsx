@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { MapPin } from 'lucide-react'
+import { Bell, ChevronDown, MapPin, Search } from 'lucide-react'
 import { useFilters } from '../../context/FilterContext.jsx'
 import { useCity } from '../../context/CityContext.jsx'
 
@@ -9,50 +9,52 @@ const Topbar = () => {
   const { searchQuery, setSearchQuery } = useFilters()
   const { selectedCityId, setSelectedCityId } = useCity()
 
-  const isDistrictView =
-    location.pathname === '/dashboard' ||
-    location.pathname === '/map'
+  const isDistrictView = location.pathname === '/map'
 
   // Keep shared state consistent with the active view.
   useEffect(() => {
     if (isDistrictView && selectedCityId !== 'karnataka') {
       setSelectedCityId('karnataka')
-    } else if (!isDistrictView && selectedCityId === 'karnataka') {
+    } else if (
+      (location.pathname === '/dashboard' ||
+        location.pathname === '/predictions' ||
+        location.pathname === '/about' ||
+        location.pathname === '/recommendations' ||
+        location.pathname === '/data-sources') &&
+      selectedCityId !== 'new-delhi'
+    ) {
+      setSelectedCityId('new-delhi')
+    } else if (
+      !isDistrictView &&
+      location.pathname !== '/dashboard' &&
+      location.pathname !== '/predictions' &&
+      location.pathname !== '/about' &&
+      location.pathname !== '/recommendations' &&
+      location.pathname !== '/data-sources' &&
+      selectedCityId === 'karnataka'
+    ) {
       setSelectedCityId('bengaluru')
     }
-  }, [isDistrictView, selectedCityId, setSelectedCityId])
+  }, [isDistrictView, location.pathname, selectedCityId, setSelectedCityId])
 
-  const city = isDistrictView ? 'karnataka' : selectedCityId || 'bengaluru'
+  const city = selectedCityId || (isDistrictView ? 'karnataka' : 'new-delhi')
 
   const cityOptions = isDistrictView
     ? [{ label: 'Karnataka', value: 'karnataka' }]
-    : [{ label: 'Bengaluru', value: 'bengaluru' }]
+    : [
+        { label: 'New Delhi', value: 'new-delhi' },
+        { label: 'Bengaluru', value: 'bengaluru' },
+      ]
 
   return (
     <header className="topbar">
       <div className="topbar__left">
-        <h1 className="topbar__title">WaterMap</h1>
-      </div>
-
-      <div className="topbar__search">
-        <input
-          type="search"
-          placeholder="Search districts, wards, or metrics..."
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.target.value)}
-          className="search-bar"
-          aria-label="Search districts, wards, or metrics"
-        />
-      </div>
-
-      <div className="topbar__actions">
         <div className="topbar__city">
           <MapPin
             className="topbar__city-icon"
             size={16}
             aria-hidden="true"
           />
-
           <select
             id="city-select"
             className="native-select topbar__city-select"
@@ -66,6 +68,43 @@ const Topbar = () => {
               </option>
             ))}
           </select>
+        </div>
+      </div>
+
+      <div className="topbar__search">
+        <Search className="topbar__search-icon" size={16} aria-hidden="true" />
+        <input
+          type="search"
+          placeholder={
+            location.pathname === '/about'
+              ? 'Search wards, indicators, methodology...'
+              : 'Search wards, areas, indicators...'
+          }
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+          className="search-bar"
+          aria-label={
+            location.pathname === '/about'
+              ? 'Search wards, indicators, methodology'
+              : 'Search wards, areas, indicators'
+          }
+        />
+      </div>
+
+      <div className="topbar__actions">
+        <button
+          type="button"
+          className="topbar__bell"
+          aria-label="Notifications"
+        >
+          <Bell size={18} />
+          <span className="topbar__bell-dot" />
+        </button>
+
+        <div className="topbar__profile" tabIndex={0} role="button" aria-label="User profile Akarsh">
+          <span className="topbar__avatar">A</span>
+          <span className="topbar__profile-name">Akarsh</span>
+          <ChevronDown size={14} className="topbar__profile-chevron" />
         </div>
       </div>
     </header>

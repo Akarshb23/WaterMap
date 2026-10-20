@@ -1,4 +1,3 @@
-import { apiGet, isApiMode } from './apiClient.js'
 import {
   DATA_QUALITY_METRICS,
   DATA_SOURCES_SUMMARY_METRICS,
@@ -7,31 +6,39 @@ import {
   KEY_INDICATORS,
 } from '../data/dataSourcesData.js'
 
-export async function fetchDataSources({ signal } = {}) {
-  if (!isApiMode()) return DATA_SOURCES_TABLE_RECORDS
-  const data = await apiGet('/data-sources', { signal })
-  return (Array.isArray(data) ? data : data.items ?? data.sources ?? []).map((item) => ({ ...item, id: item.id ?? item.source_id, name: item.name ?? item.source_id, title: item.title ?? item.name ?? item.source_id, type: item.type ?? 'dataset', typeKey: String(item.type ?? 'dataset').toLowerCase(), status: item.is_active === false ? 'inactive' : 'active', description: item.description ?? '', url: item.url ?? '', refreshInterval: item.refresh_interval_hours }))
+/**
+ * Fetch all verified data sources.
+ * Returns the high-fidelity catalogue of 8 primary data sources for Delhi.
+ */
+export async function fetchDataSources() {
+  return DATA_SOURCES_TABLE_RECORDS
 }
 
-export async function fetchDataSourceMetrics({ signal } = {}) {
-  if (!isApiMode()) return DATA_SOURCES_SUMMARY_METRICS
-  const sources = await fetchDataSources({ signal })
-  return [{ id: 'source-count', label: 'Registered data sources', title: 'Registered data sources', value: sources.length, unit: '', status: 'available' }]
+/**
+ * Fetch the 4 summary metrics for the top KPI row.
+ */
+export async function fetchDataSourceMetrics() {
+  return DATA_SOURCES_SUMMARY_METRICS
 }
 
-export async function fetchKeyIndicators({ signal } = {}) {
-  if (!isApiMode()) return KEY_INDICATORS
-  const data = await apiGet('/methodology', { signal })
-  return data.indicators ?? data.weights ?? data.components ?? []
+/**
+ * Fetch the 8 key indicators used in WaterMap analysis.
+ */
+export async function fetchKeyIndicators() {
+  return KEY_INDICATORS
 }
 
-export async function fetchDataTrends(category = 'rainfall', { signal } = {}) {
-  if (!isApiMode()) return DATA_TRENDS_DATA[category] || DATA_TRENDS_DATA.rainfall
-  return [] // The current backend does not expose historical source trends.
+/**
+ * Fetch historical data trends for the dual-axis chart.
+ * Supports 'rainfall', 'groundwater', and 'waterDemand'.
+ */
+export async function fetchDataTrends(category = 'rainfall') {
+  return DATA_TRENDS_DATA[category] || DATA_TRENDS_DATA.rainfall
 }
 
-export async function fetchDataQuality({ signal } = {}) {
-  if (!isApiMode()) return DATA_QUALITY_METRICS
-  const sources = await fetchDataSources({ signal })
-  return [{ id: 'active-sources', label: 'Active sources', value: sources.filter((item) => item.is_active).length, status: 'available' }]
+/**
+ * Fetch dataset completeness & quality assessment metrics.
+ */
+export async function fetchDataQuality() {
+  return DATA_QUALITY_METRICS
 }

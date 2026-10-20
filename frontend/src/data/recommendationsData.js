@@ -95,14 +95,14 @@ export const RECOMMENDATIONS_LIST = [
     wsiReductionNum: 0.18,
     annualWaterSavings: '45 – 90 MLD',
     savingsNum: 67,
-    impactScore: 94,
+    impactScore: 96,
     iconName: 'CloudRain',
     tone: 'blue',
     keyBenefits: [
       { id: 'b1', iconName: 'Droplets', text: 'Reduces dependence on groundwater' },
       { id: 'b2', iconName: 'Sprout', text: 'Increases local water resilience' },
       { id: 'b3', iconName: 'Users', text: 'Engages communities' },
-      { id: 'b4', iconName: 'Coins', text: 'Cost-effective and scalable' },
+      { id: 'b4', iconName: 'Leaf', text: 'Cost-effective and scalable' },
     ],
     overview: {
       description:
@@ -193,7 +193,7 @@ export const RECOMMENDATIONS_LIST = [
     wsiReductionNum: 0.15,
     annualWaterSavings: '70 – 110 MLD',
     savingsNum: 90,
-    impactScore: 89,
+    impactScore: 90,
     iconName: 'RotateCcw',
     tone: 'purple',
     keyBenefits: [
@@ -285,7 +285,7 @@ export const RECOMMENDATIONS_LIST = [
     wsiReductionNum: 0.12,
     annualWaterSavings: '30 – 50 MLD',
     savingsNum: 40,
-    impactScore: 78,
+    impactScore: 85,
     iconName: 'Sprout',
     tone: 'green',
     keyBenefits: [
@@ -377,7 +377,7 @@ export const RECOMMENDATIONS_LIST = [
     wsiReductionNum: 0.11,
     annualWaterSavings: '40 – 65 MLD',
     savingsNum: 52,
-    impactScore: 84,
+    impactScore: 80,
     iconName: 'Wrench',
     tone: 'blue',
     keyBenefits: [
@@ -469,7 +469,7 @@ export const RECOMMENDATIONS_LIST = [
     wsiReductionNum: 0.09,
     annualWaterSavings: '35 – 55 MLD',
     savingsNum: 45,
-    impactScore: 72,
+    impactScore: 75,
     iconName: 'FileText',
     tone: 'amber',
     keyBenefits: [
@@ -561,7 +561,7 @@ export const RECOMMENDATIONS_LIST = [
     wsiReductionNum: 0.06,
     annualWaterSavings: '20 – 35 MLD',
     savingsNum: 27,
-    impactScore: 65,
+    impactScore: 70,
     iconName: 'Users',
     tone: 'coral',
     keyBenefits: [
@@ -635,12 +635,12 @@ export const RECOMMENDATIONS_LIST = [
 
 export const CUMULATIVE_IMPACT_PROJECTION = [
   { year: '2024', withoutInterventions: 0.65, withInterventions: 0.65 },
-  { year: '2025', withoutInterventions: 0.70, withInterventions: 0.58 },
-  { year: '2026', withoutInterventions: 0.72, withInterventions: 0.52 },
-  { year: '2027', withoutInterventions: 0.75, withInterventions: 0.48 },
-  { year: '2028', withoutInterventions: 0.76, withInterventions: 0.44 },
-  { year: '2029', withoutInterventions: 0.78, withInterventions: 0.42 },
-  { year: '2030', withoutInterventions: 0.80, withInterventions: 0.40 },
+  { year: '2025', withoutInterventions: 0.71, withInterventions: 0.54 },
+  { year: '2026', withoutInterventions: 0.74, withInterventions: 0.46 },
+  { year: '2027', withoutInterventions: 0.77, withInterventions: 0.41 },
+  { year: '2028', withoutInterventions: 0.79, withInterventions: 0.38 },
+  { year: '2029', withoutInterventions: 0.81, withInterventions: 0.36 },
+  { year: '2030', withoutInterventions: 0.84, withInterventions: 0.34 },
 ]
 
 export const INTERVENTION_TYPE_IMPACT = [
@@ -682,7 +682,7 @@ export const TOP_PRIORITY_WARDS_DATA = [
     wardId: '4',
     currentWsi: 0.73,
     projectedWsi: 0.48,
-    keyActions: 'Recycled Water, Supply Network',
+    keyActions: 'Recycled Water, Green Infrastructure',
   },
   {
     rank: 5,

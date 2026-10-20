@@ -4,6 +4,18 @@ import { ROUTES } from '../../constants/routes.js'
 import { TOP_HIGH_RISK_WARDS } from '../../data/demoData.js'
 import Badge from '../common/Badge.jsx'
 
+const SparklineTrend = () => (
+  <svg width="48" height="18" viewBox="0 0 48 18" fill="none" aria-hidden="true">
+    <path
+      d="M2 13 C 8 7, 14 16, 20 10 C 26 4, 32 14, 38 8 C 42 5, 45 4, 46 3"
+      stroke="#ef4444"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
 /**
  * Ranked table of the highest water-stress wards with WSI badges and
  * red trend indicators.
@@ -40,10 +52,8 @@ const HighRiskWards = ({ wards = TOP_HIGH_RISK_WARDS }) => (
               </td>
               <td>{ward.population}</td>
               <td>
-                <span className="ward-trend">
-                  <TrendingUp size={13} aria-hidden="true" />
-                  {ward.trend}
-                  <span className="sr-only"> increase</span>
+                <span className="ward-trend" title={`${ward.trend} increase`}>
+                  <SparklineTrend />
                 </span>
               </td>
             </tr>
@@ -52,7 +62,7 @@ const HighRiskWards = ({ wards = TOP_HIGH_RISK_WARDS }) => (
       </table>
     </div>
 
-    <div className="dashboard-card__footer">
+    <div className="dashboard-card__footer dashboard-card__footer--left">
       <Link className="link-action" to={ROUTES.CITY_MAP}>
         View All Wards
         <ArrowRight size={14} aria-hidden="true" />

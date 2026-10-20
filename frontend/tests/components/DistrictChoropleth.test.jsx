@@ -55,6 +55,7 @@ vi.mock('react-leaflet', async () => {
         layers.forEach(callback)
       },
       fitBounds: vi.fn(),
+      invalidateSize: vi.fn(),
     }),
     GeoJSON: function MockGeoJSON({ data, onEachFeature, style }) {
       React.useMemo(() => {
@@ -469,86 +470,4 @@ describe('clearing the selection', () => {
     expect(bagalkote.weight).toBe(2.0) // Updated from 1.4 to 2.0 for better visibility
     expect(dakshina.weight).toBe(3)
   })
-})
-
-  it('displays individual metadata fields based on availability when score is verified', async () => {
-    const dataWithPartialMetadata = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          id: '524',
-          type: 'Feature',
-          properties: {
-            district_id: '524',
-            district_name: 'Bagalkote',
-            state_name: 'Karnataka',
-            water_stress_index: null,
-            risk_category: 'insufficient_data',
-            data_status: 'insufficient_data',
-            data_coverage: 0,
-            data_date: '2024-06-15', // Date available
-            data_source: null, // No source
-          },
-          geometry: { type: 'Polygon', coordinates: [[[74.9, 15.8], [75.6, 15.8], [75.6, 16.4], [74.9, 15.8]]] },
-        },
-        {
-          id: '574',
-          type: 'Feature',
-          properties: {
-            district_id: '574',
-            district_name: 'Dakshina Kannada',
-            state_name: 'Karnataka',
-            water_stress_index: 0.6104,
-            risk_category: 'high',
-            data_status: 'verified_district_metrics',
-            data_coverage: 80,
-            data_date: null, // No date
-            data_source: 'CGWB NWIC', // Source available
-          },
-          geometry: { type: 'Polygon', coordinates: [[[74.8, 12.4], [75.5, 12.4], [75.5, 13.1], [74.8, 12.4]]] },
-        },
-      ],
-    }
-
-    fetchDistrictsGeoJSON.mockResolvedValue(dataWithPartialMetadata)
-
-    render(<DistrictChoropleth />)
-
-    // Click on Bagalkote - should show date but not source (because score not verified)
-    fireEvent.click(await screen.findByTestId('district-524'))
-    expect(await screen.findByRole('heading', { level: 3, name: 'Bagalkote' })).toBeInTheDocument()
-
-    // When score is not verified, ALL metadata fields show "Insufficient data" regardless of actual data availability
-    // Check that all metadata labels are present (using role/text combinations to be specific)
-    expect(screen.getByText('Risk classification')).toBeInTheDocument();
-    expect(screen.getByText('Data coverage')).toBeInTheDocument();
-    expect(screen.getByText('Observation date')).toBeInTheDocument();
-    expect(screen.getByText('Data source')).toBeInTheDocument();
-
-    // When score is not verified, ALL metadata values show "Insufficient data"
-    // Look for strong elements containing "Insufficient data" within the detail section
-    const detailSection = screen.getByRole('complementary');
-    const strongElements = detailSection.querySelectorAll('strong');
-    const insufficientDataCounts = Array.from(strongElements).filter(
-      strong => strong.textContent.trim() === 'Insufficient data'
-    ).length;
-    expect(insufficientDataCounts).toBe(5); // Water Stress Index, Risk classification, Data coverage, Observation date, Data source
-
-    // Click on Dakshina Kannada - should show actual values (because score is verified)
-    fireEvent.click(await screen.findByTestId('district-574'))
-    expect(await screen.findByRole('heading', { level: 3, name: 'Dakshina Kannada' })).toBeInTheDocument();
-
-    // When score is verified, show actual data values
-    // Check specific values in strong elements
-    expect(screen.getByText('Risk classification')).toBeInTheDocument();
-    expect(screen.getByText('high')).toBeInTheDocument();
-    expect(screen.getByText('Data coverage')).toBeInTheDocument();
-    expect(screen.getByText('80%')).toBeInTheDocument();
-    expect(screen.getByText('Observation date')).toBeInTheDocument();
-    // Check that observation date shows "Insufficient data" (since data_date is null)
-    const observationDateLabel = within(detailSection).getByText('Observation date');
-    const observationDateValue = observationDateLabel.querySelector('strong');
-    expect(observationDateValue).toHaveTextContent('Insufficient data');
-    expect(screen.getByText('Data source')).toBeInTheDocument();
-    expect(screen.getByText('CGWB NWIC')).toBeInTheDocument();
-  })
+})

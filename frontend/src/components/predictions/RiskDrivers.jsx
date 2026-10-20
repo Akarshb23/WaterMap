@@ -1,46 +1,40 @@
-/**
- * "Key Drivers" card on the predictions page: ranked drivers behind the
- * projected risk change.
- * `drivers` is `[{ id, label, detail, share, color }]` where `share` is the
- * driver's illustrative contribution in percent (shares sum to 100).
- */
-const RiskDrivers = ({ title = 'Key Drivers', subtitle, drivers = [], note }) => (
-  <section className="card risk-drivers" aria-label={title}>
-    <div className="card__header">
-      <div>
-        <h2 className="card__title">{title}</h2>
-        {subtitle ? <p className="card__subtitle">{subtitle}</p> : null}
-      </div>
-    </div>
+const DEFAULT_DRIVERS = [
+  { id: 'population', label: 'Population Growth', share: 32 },
+  { id: 'climate', label: 'Climate Change (Lower Rainfall)', share: 24 },
+  { id: 'demand', label: 'Increasing Water Demand', share: 18 },
+  { id: 'groundwater', label: 'Declining Groundwater Levels', share: 16 },
+  { id: 'urbanization', label: 'Urbanization', share: 10 },
+]
 
-    {drivers.length === 0 ? (
-      <p className="risk-drivers__empty">No driver data yet.</p>
-    ) : (
-      <ul className="risk-drivers__list">
-        {drivers.map((driver) => (
-          <li key={driver.id} className="risk-drivers__item">
-            <div className="risk-drivers__row">
-              <span className="risk-drivers__label">{driver.label}</span>
-              <span className="risk-drivers__strength">{driver.share}%</span>
-            </div>
-            {driver.detail ? <p className="risk-drivers__detail">{driver.detail}</p> : null}
-            <div
-              className="risk-drivers__bar"
-              role="img"
-              aria-label={`${driver.label}: ${driver.share} percent contribution`}
-            >
+const RiskDrivers = ({ title = 'Key Drivers (2030)', drivers = DEFAULT_DRIVERS }) => {
+  const driverList = drivers && drivers.length > 0 ? drivers : DEFAULT_DRIVERS
+
+  return (
+    <section className="card risk-drivers-card" aria-label={title}>
+      <div className="card__header risk-drivers-card__header">
+        <h2 className="card__title">{title}</h2>
+      </div>
+
+      <div className="risk-drivers-list">
+        {driverList.map((driver) => (
+          <div key={driver.id || driver.label} className="risk-driver-row">
+            <span className="risk-driver-label">{driver.label}</span>
+            <div className="risk-driver-bar-track">
               <div
-                className="risk-drivers__bar-fill"
-                style={{ width: `${driver.share}%`, backgroundColor: driver.color }}
+                className="risk-driver-bar-fill"
+                style={{ width: `${driver.share}%` }}
+                role="progressbar"
+                aria-valuenow={driver.share}
+                aria-valuemin="0"
+                aria-valuemax="100"
               />
             </div>
-          </li>
+            <span className="risk-driver-value">{driver.share}%</span>
+          </div>
         ))}
-      </ul>
-    )}
-
-    {note ? <p className="risk-drivers__note">{note}</p> : null}
-  </section>
-)
+      </div>
+    </section>
+  )
+}
 
 export default RiskDrivers

@@ -60,9 +60,11 @@ const RecentAlerts = ({ alerts = RECENT_ALERTS }) => {
                 <Icon size={16} aria-hidden="true" />
               </span>
               <div className="alert-item__body">
-                <p className="alert-item__title">{alert.title}</p>
+                <div className="alert-item__top">
+                  <p className="alert-item__title">{alert.title}</p>
+                  <span className="alert-item__time">{alert.timestamp}</span>
+                </div>
                 <p className="alert-item__description">{alert.description}</p>
-                <span className="alert-item__time">{alert.timestamp}</span>
               </div>
             </li>
           )

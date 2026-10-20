@@ -332,29 +332,29 @@ export function buildKeyTakeaways(result) {
       id: 'wards',
       text:
         wardsMoved > 0
-          ? `${wardsMoved} more ward${wardsMoved === 1 ? '' : 's'} move to low risk category.`
-          : 'No wards shift risk category at this level.',
+          ? `${wardsMoved} more ward${wardsMoved === 1 ? '' : 's'} move to low risk category`
+          : 'No wards shift risk category at this level',
     },
     {
       id: 'wsi',
       text:
         result.cityReductionPct > 0
-          ? `Overall city WSI reduces by ${result.cityReductionPct}%.`
-          : 'Overall city WSI is essentially unchanged.',
+          ? `Overall city WSI reduces by ${result.cityReductionPct}%`
+          : 'Overall city WSI is essentially unchanged',
     },
     {
       id: 'groundwater',
       text:
         groundwaterShare > 0
-          ? `Groundwater levels improve in ${groundwaterShare}% of wards.`
-          : 'No measurable groundwater improvement at this level.',
+          ? `Groundwater levels improve in ${groundwaterShare}% of wards`
+          : 'No measurable groundwater improvement at this level',
     },
     {
       id: 'impact',
       text:
         k >= 0.5 && wardsMoved > 0
-          ? 'Greatest impact in central and east Delhi.'
-          : 'Impact remains limited at this implementation level.',
+          ? 'Greatest impact in central and east Delhi'
+          : 'Impact remains limited at this implementation level',
     },
   ]
 

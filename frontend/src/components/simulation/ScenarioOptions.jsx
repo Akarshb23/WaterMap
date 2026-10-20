@@ -1,38 +1,39 @@
-import { CloudRain, Gauge, Leaf, Recycle, Waves } from 'lucide-react'
+import { BarChart3, Droplet, Gauge, Leaf, Waves } from 'lucide-react'
 
-/** Lucide icon per scenario id. */
 const SCENARIO_ICONS = {
-  rainwater: CloudRain,
-  recycled: Recycle,
+  rainwater: BarChart3,
+  recycled: Droplet,
   demand: Gauge,
   green: Leaf,
   supply: Waves,
 }
 
+const BADGE_THEMES = {
+  rainwater: { bg: '#e8f8f0', color: '#10b981' },
+  recycled: { bg: '#f3e8ff', color: '#8b5cf6' },
+  demand: { bg: '#fef3c7', color: '#f59e0b' },
+  green: { bg: '#dcfce7', color: '#16a34a' },
+  supply: { bg: '#e2e8f0', color: '#64748b' },
+}
+
 /**
- * "Try Different Scenarios" card: radio-style options with icon, title
- * and description. Selecting an option calls `onSelect(scenarioId)`,
- * which the page feeds back into the main Select Scenario control so
- * both stay synchronised through shared React state.
+ * "Try Different Scenarios" card:
+ * Radio list with 5 options, colored badge icons, bold titles, and subtitles.
  */
 const ScenarioOptions = ({ scenarios = [], selected, onSelect }) => (
   <section className="card scenario-options" aria-label="Try different scenarios">
     <div className="card__header">
-      <div>
-        <h2 className="card__title">Try Different Scenarios</h2>
-        <p className="card__subtitle">Updates the Select Scenario control above.</p>
-      </div>
+      <h2 className="card__title">Try Different Scenarios</h2>
     </div>
 
     <ul className="scenario-options__list">
       {scenarios.map((scenario) => {
         const Icon = SCENARIO_ICONS[scenario.id] ?? Leaf
+        const theme = BADGE_THEMES[scenario.id] ?? { bg: '#f1f5f9', color: '#64748b' }
         const active = scenario.id === selected
         return (
           <li key={scenario.id}>
-            <label
-              className={`scenario-options__item${active ? ' scenario-options__item--active' : ''}`}
-            >
+            <label className={`scenario-options__item${active ? ' scenario-options__item--active' : ''}`}>
               <input
                 type="radio"
                 name="scenario-quick-pick"
@@ -43,10 +44,10 @@ const ScenarioOptions = ({ scenarios = [], selected, onSelect }) => (
               />
               <span
                 className="scenario-options__icon"
-                style={{ backgroundColor: `${scenario.color}22`, color: scenario.color }}
+                style={{ backgroundColor: theme.bg, color: theme.color }}
                 aria-hidden="true"
               >
-                <Icon size={15} />
+                <Icon size={16} />
               </span>
               <span className="scenario-options__body">
                 <span className="scenario-options__label">{scenario.label}</span>
