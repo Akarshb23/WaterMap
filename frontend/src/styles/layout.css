@@ -610,24 +610,6 @@
   margin-top: 0.45rem;
 }
 
-.topbar__notif-footer {
-  padding: 0.65rem 1rem;
-  border-top: 1px solid #f1f5f9;
-  background-color: #fafbfc;
-  text-align: center;
-}
-
-.topbar__notif-view-all {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--wm-color-primary, #075d4c);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  transition: all 0.15s ease;
-}
 
 .topbar__notif-remove-btn {
   display: inline-flex;

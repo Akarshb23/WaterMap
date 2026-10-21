@@ -25,7 +25,6 @@ import PlannerProfileModal from './modals/PlannerProfileModal.jsx'
 import PreferencesModal from './modals/PreferencesModal.jsx'
 import ExportReportModal from './modals/ExportReportModal.jsx'
 import SignOutModal from './modals/SignOutModal.jsx'
-import AlertLogsModal from './modals/AlertLogsModal.jsx'
 
 const DEFAULT_NOTIFICATIONS = [
   {
@@ -106,7 +105,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const [isPreferencesModalOpen, setIsPreferencesModalOpen] = useState(false)
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false)
-  const [isLogsModalOpen, setIsLogsModalOpen] = useState(false)
 
   // User Profile / Auth State
   const [user, setUser] = useState(() => {
@@ -187,7 +185,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
       }
       return updated
     })
-    showToast('All notifications marked as read')
   }
 
   const handleNotificationClick = (id) => {
@@ -212,7 +209,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
       }
       return updated
     })
-    showToast('Notification removed')
   }
 
   const handleClearAllNotifications = () => {
@@ -222,7 +218,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
     } catch {
       // storage fallback
     }
-    showToast('All notification logs cleared')
   }
 
   const handleRestoreDefaultNotifications = () => {
@@ -232,7 +227,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
     } catch {
       // storage fallback
     }
-    showToast('Default notification logs restored')
   }
 
   const isDistrictView = false
@@ -362,7 +356,7 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                     className="topbar__notif-clear-btn"
                     onClick={handleMarkAllRead}
                   >
-                    Mark all as read
+                    Mark as read
                   </button>
                 )}
               </header>
@@ -410,19 +404,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                   ))
                 )}
               </div>
-
-              <footer className="topbar__notif-footer">
-                <button
-                  type="button"
-                  className="topbar__notif-view-all"
-                  onClick={() => {
-                    setIsNotifOpen(false)
-                    setIsLogsModalOpen(true)
-                  }}
-                >
-                  View all logs ({notifications.length})
-                </button>
-              </footer>
             </div>
           )}
         </div>
@@ -562,17 +543,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
       <ExportReportModal
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
-        onShowToast={showToast}
-      />
-
-      <AlertLogsModal
-        isOpen={isLogsModalOpen}
-        onClose={() => setIsLogsModalOpen(false)}
-        notifications={notifications}
-        onRemoveNotification={handleRemoveNotification}
-        onClearAll={handleClearAllNotifications}
-        onMarkAllRead={handleMarkAllRead}
-        onRestoreDefaults={handleRestoreDefaultNotifications}
         onShowToast={showToast}
       />
 
