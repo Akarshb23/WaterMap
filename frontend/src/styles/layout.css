@@ -270,116 +270,532 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
   margin-inline-start: auto;
 }
 
+.topbar__action-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ---------------------------------------------------------------------------
+ * Notification Icon Button (no rectangle, ultra-clean modern design)
+ * ------------------------------------------------------------------------ */
+
 .topbar__bell {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.45rem;
+  height: 2.45rem;
+  padding: 0;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #4b6371;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.topbar__bell:hover {
+  background-color: rgba(7, 93, 76, 0.08);
+  color: var(--wm-color-primary, #075d4c);
+  transform: translateY(-1px);
+}
+
+.topbar__bell:active,
+.topbar__bell--active {
+  background-color: rgba(7, 93, 76, 0.12);
+  color: var(--wm-color-primary, #075d4c);
+  transform: translateY(0);
+}
+
+.topbar__bell-icon {
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.topbar__bell:hover .topbar__bell-icon {
+  animation: wm-bell-swing 0.6s ease-in-out;
+}
+
+@keyframes wm-bell-swing {
+  0% { transform: rotate(0); }
+  20% { transform: rotate(-14deg); }
+  40% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(4deg); }
+  100% { transform: rotate(0); }
 }
 
 .topbar__bell-dot {
   position: absolute;
   top: 0.35rem;
-  inset-inline-end: 0.4rem;
-  width: 0.5rem;
-  height: 0.5rem;
+  inset-inline-end: 0.35rem;
+  width: 0.55rem;
+  height: 0.55rem;
   border-radius: 50%;
-  background-color: var(--wm-color-danger);
-  border: 2px solid var(--wm-color-surface);
+  background-color: #ef4444;
+  border: 2px solid var(--wm-color-surface, #ffffff);
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.65);
+  animation: wm-pulse-badge 2s infinite ease-in-out;
 }
+
+@keyframes wm-pulse-badge {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 4px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    transform: scale(1.18);
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.85);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * User Profile Pill Button
+ * ------------------------------------------------------------------------ */
 
 .topbar__profile {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0.35rem 0.25rem 0.25rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: none;
+  gap: 0.55rem;
+  padding: 0.2rem 0.65rem 0.2rem 0.2rem;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 9999px;
+  background-color: #f8fafc;
   cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
 }
 
-.topbar__profile:hover,
-.topbar__profile[aria-expanded='true'] {
-  background-color: #f2f8f9;
-  border-color: var(--wm-color-border);
+.topbar__profile:hover {
+  background-color: #ffffff;
+  border-color: rgba(7, 93, 76, 0.3);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  transform: translateY(-1px);
+}
+
+.topbar__profile--active {
+  background-color: #ffffff;
+  border-color: var(--wm-color-primary, #075d4c);
+  box-shadow: 0 0 0 2px rgba(7, 93, 76, 0.12), 0 2px 8px rgba(15, 23, 42, 0.08);
+  transform: translateY(0);
 }
 
 .topbar__avatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.1rem;
-  height: 2.1rem;
+  width: 2.15rem;
+  height: 2.15rem;
   border-radius: 50%;
-  background-color: var(--wm-color-primary);
+  background: linear-gradient(135deg, #075d4c 0%, #0d9488 100%);
   color: #ffffff;
   font-size: 0.85rem;
   font-weight: 700;
+  box-shadow: 0 2px 6px rgba(7, 93, 76, 0.28);
+  flex-shrink: 0;
 }
 
 .topbar__profile-name {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--wm-color-text);
+  color: #0f2937;
+  letter-spacing: -0.01em;
 }
 
 .topbar__profile-chevron {
-  color: var(--wm-color-muted);
+  color: #64748b;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Popovers */
-.topbar__popover {
+.topbar__profile-chevron--open {
+  transform: rotate(180deg);
+  color: var(--wm-color-primary, #075d4c);
+}
+
+/* ---------------------------------------------------------------------------
+ * Notifications Dropdown Popover
+ * ------------------------------------------------------------------------ */
+
+.topbar__notifications-popover {
   position: absolute;
   top: calc(100% + 0.65rem);
   inset-inline-end: 0;
-  z-index: 50;
-  width: 20rem;
+  z-index: 60;
+  width: 24rem;
   max-width: calc(100vw - 2rem);
-  padding: 0.5rem;
-  background: var(--wm-color-surface);
-  border: 1px solid var(--wm-color-border);
-  border-radius: var(--wm-radius);
-  box-shadow: var(--wm-shadow-lg);
-  animation: wm-fade-in 0.15s ease-out;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 8px 18px -4px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  animation: wm-popover-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.topbar__popover-title {
-  padding: 0.4rem 0.6rem 0.5rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--wm-color-muted);
+@keyframes wm-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.topbar__popover-item {
+.topbar__notif-header {
   display: flex;
-  gap: 0.6rem;
-  padding: 0.55rem 0.6rem;
-  border-radius: var(--wm-radius-sm);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.15rem 0.8rem;
+  border-bottom: 1px solid #f1f5f9;
+  background-color: #fafbfc;
 }
 
-.topbar__popover-item:hover {
-  background-color: #f5fafb;
+.topbar__notif-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
 }
 
-.topbar__popover-item-title {
-  font-size: 0.82rem;
-  font-weight: 600;
+.topbar__notif-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f2937;
+  letter-spacing: -0.015em;
 }
 
-.topbar__popover-item-text,
-.topbar__popover-item-time {
+.topbar__notif-count-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.12rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.topbar__notif-clear-btn {
   font-size: 0.76rem;
-  color: var(--wm-color-muted);
+  font-weight: 600;
+  color: var(--wm-color-primary, #075d4c);
+  background: none;
+  border: none;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.topbar__popover-empty {
-  padding: 0.75rem 0.6rem;
+.topbar__notif-clear-btn:hover {
+  background-color: rgba(7, 93, 76, 0.08);
+  text-decoration: underline;
+}
+
+.topbar__notif-list {
+  max-height: 21rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.topbar__notif-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.topbar__notif-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+
+.topbar__notif-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1.15rem;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.topbar__notif-item:last-child {
+  border-bottom: none;
+}
+
+.topbar__notif-item:hover {
+  background-color: #f8fafc;
+}
+
+.topbar__notif-item--unread {
+  background-color: rgba(7, 93, 76, 0.03);
+}
+
+.topbar__notif-item--unread:hover {
+  background-color: rgba(7, 93, 76, 0.06);
+}
+
+.topbar__notif-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.topbar__notif-icon-wrap--alert {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.topbar__notif-icon-wrap--success {
+  background: #ccfbf1;
+  color: #0d9488;
+}
+
+.topbar__notif-icon-wrap--info {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.topbar__notif-icon-wrap--system {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.topbar__notif-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar__notif-item-title {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #0f2937;
+  line-height: 1.35;
+  margin-bottom: 0.2rem;
+}
+
+.topbar__notif-item-desc {
+  font-size: 0.77rem;
+  color: #64748b;
+  line-height: 1.4;
+  margin-bottom: 0.35rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.topbar__notif-item-time {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.topbar__notif-unread-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #0d9488;
+  flex-shrink: 0;
+  margin-top: 0.45rem;
+}
+
+.topbar__notif-footer {
+  padding: 0.65rem 1rem;
+  border-top: 1px solid #f1f5f9;
+  background-color: #fafbfc;
+  text-align: center;
+}
+
+.topbar__notif-view-all {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--wm-color-primary, #075d4c);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.topbar__notif-view-all:hover {
+  background-color: rgba(7, 93, 76, 0.08);
+}
+
+/* ---------------------------------------------------------------------------
+ * Profile Dropdown Popover
+ * ------------------------------------------------------------------------ */
+
+.topbar__profile-popover {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  inset-inline-end: 0;
+  z-index: 60;
+  width: 19rem;
+  max-width: calc(100vw - 2rem);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16), 0 8px 18px -4px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  animation: wm-popover-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.topbar__profile-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  background: linear-gradient(to bottom, #f8fafc, #ffffff);
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.topbar__profile-avatar-large {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #075d4c 0%, #0d9488 100%);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(7, 93, 76, 0.25);
+  flex-shrink: 0;
+}
+
+.topbar__profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar__profile-user-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f2937;
+  letter-spacing: -0.01em;
+}
+
+.topbar__profile-user-role {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #0d9488;
+  margin-top: 0.1rem;
+}
+
+.topbar__profile-user-email {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 0.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar__profile-menu {
+  padding: 0.45rem 0.5rem;
+}
+
+.topbar__profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: none;
+  background: none;
+  border-radius: 10px;
   font-size: 0.82rem;
-  color: var(--wm-color-muted);
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.topbar__profile-menu-item:hover {
+  background-color: #f1f5f9;
+  color: #0f2937;
+}
+
+.topbar__profile-menu-item svg {
+  color: #64748b;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.topbar__profile-menu-item:hover svg {
+  color: var(--wm-color-primary, #075d4c);
+}
+
+.topbar__profile-divider {
+  height: 1px;
+  background-color: #f1f5f9;
+  margin: 0.35rem 0.5rem;
+}
+
+.topbar__profile-menu-item--danger {
+  color: #dc2626;
+}
+
+.topbar__profile-menu-item--danger:hover {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.topbar__profile-menu-item--danger svg,
+.topbar__profile-menu-item--danger:hover svg {
+  color: #dc2626;
+}
+
+/* ---------------------------------------------------------------------------
+ * Floating Toast Notification
+ * ------------------------------------------------------------------------ */
+
+.topbar__toast {
+  position: fixed;
+  top: 1.15rem;
+  inset-inline-end: 1.5rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem 0.55rem 0.85rem;
+  border-radius: 9999px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  animation: wm-toast-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.topbar__toast-icon {
+  color: #2dd4bf;
+}
+
+@keyframes wm-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ---------------------------------------------------------------------------

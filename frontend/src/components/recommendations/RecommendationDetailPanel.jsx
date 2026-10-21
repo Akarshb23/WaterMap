@@ -1,10 +1,14 @@
+import { Fragment, useState } from 'react'
 import {
   Activity,
   AlertTriangle,
   ArrowRight,
   Bookmark,
   Building2,
+  Calendar,
   Check,
+  ChevronDown,
+  ChevronUp,
   CloudRain,
   Coins,
   Droplets,
@@ -13,11 +17,14 @@ import {
   Filter,
   Gauge,
   Heart,
+  Info,
   Layers,
   Leaf,
+  MapPin,
   RotateCcw,
   Scale,
   ShieldCheck,
+  Sparkles,
   Sprout,
   TrendingUp,
   Users,
@@ -70,6 +77,13 @@ const RecommendationDetailPanel = ({
   onViewPlan,
   onClose,
 }) => {
+  const [tableMode, setTableMode] = useState('specs') // 'specs' | 'environment'
+  const [expandedRow, setExpandedRow] = useState(null)
+
+  const toggleRow = (id) => {
+    setExpandedRow((prev) => (prev === id ? null : id))
+  }
+
   if (!recommendation) {
     return (
       <div className="card recommendation-detail-panel recommendation-detail-panel--empty">
@@ -79,6 +93,70 @@ const RecommendationDetailPanel = ({
   }
 
   const MainIcon = ICON_MAP[recommendation.iconName] || ShieldCheck
+
+  const specsData = [
+    {
+      id: 'target-districts',
+      icon: MapPin,
+      label: 'Target Districts',
+      value: recommendation.targetDistricts || recommendation.targetWards,
+      badge: '3 Priority Zones',
+      badgeTone: 'blue',
+      detail: `Catchment Connectivity: ${recommendation.overview?.targetSectors?.join(' • ') || 'Key urban corridors across high-stress zones'} with direct link to local drainage valleys and lakes.`,
+    },
+    {
+      id: 'implementation-level',
+      icon: Layers,
+      label: 'Implementation Level',
+      value: recommendation.implementationLevel || 'Moderate',
+      badge: 'Mandated Retrofit',
+      badgeTone: 'purple',
+      detail: 'Institutional buildings, commercial IT parks, and residential complexes with rooftop surface >250 sq.m.',
+    },
+    {
+      id: 'time-horizon',
+      icon: Calendar,
+      label: 'Time Horizon',
+      value: recommendation.timeHorizon || '2025 – 2028',
+      badge: '3-Year Horizon',
+      badgeTone: 'neutral',
+      detail: 'Phase 1: DPR & institutional retrofits (Y1). Phase 2: Commercial hubs (Y2). Phase 3: Community mandates (Y3).',
+    },
+    {
+      id: 'estimated-cost',
+      icon: Coins,
+      label: 'Estimated Cost',
+      value: recommendation.estimatedCost,
+      badge: 'Capital Outlay',
+      badgeTone: 'green',
+      detail: `Financial Profile: ${recommendation.cost?.total || recommendation.estimatedCost} funded via BBMP Urban Green Infrastructure Fund & PPP co-finance.`,
+    },
+    {
+      id: 'potential-wsi-reduction',
+      icon: TrendingUp,
+      label: 'Potential WSI Reduction',
+      value: recommendation.potentialWsiReduction,
+      badge: 'High Impact',
+      badgeTone: 'green',
+      detail: 'Lowers baseline Water Stress Index by 0.12–0.25 points and curtails peak monsoon urban flooding.',
+    },
+    {
+      id: 'annual-water-savings',
+      icon: Droplets,
+      label: 'Annual Water Savings',
+      value: recommendation.annualWaterSavings,
+      badge: 'Direct Recharge',
+      badgeTone: 'teal',
+      detail: 'Captures and recharges 45–90 MLD, equivalent to replacing 32,000 commercial water tanker trips annually.',
+    },
+  ]
+
+  const nearbyDistricts = recommendation.expectedImpact?.districtBreakdown || [
+    { district: 'Koramangala', current: 0.87, projected: 0.46, reduction: '-47%', zone: 'Valley Catchment' },
+    { district: 'Bellandur', current: 0.71, projected: 0.44, reduction: '-38%', zone: 'Lake Drainage Basin' },
+    { district: 'Indiranagar', current: 0.76, projected: 0.45, reduction: '-41%', zone: 'Commercial Ridge' },
+    { district: 'Electronic City', current: 0.88, projected: 0.49, reduction: '-44%', zone: 'South Tech Corridor' },
+  ]
 
   return (
     <article className="card recommendation-detail-panel" aria-labelledby="detail-panel-title">
@@ -134,45 +212,162 @@ const RecommendationDetailPanel = ({
         {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
           <div className="recommendation-detail__overview-tab" role="tabpanel">
-            <div className="recommendation-detail__overview-grid">
-              {/* Left Specifications List */}
-              <div className="recommendation-detail__specs">
-                <div className="recommendation-detail__spec-row">
-                  <span className="recommendation-detail__spec-label">Target Districts</span>
-                  <span className="recommendation-detail__spec-value">{recommendation.targetDistricts || recommendation.targetWards}</span>
-                </div>
-                <div className="recommendation-detail__spec-row">
-                  <span className="recommendation-detail__spec-label">Implementation Level</span>
-                  <span className="recommendation-detail__spec-value">{recommendation.implementationLevel}</span>
-                </div>
-                <div className="recommendation-detail__spec-row">
-                  <span className="recommendation-detail__spec-label">Time Horizon</span>
-                  <span className="recommendation-detail__spec-value">{recommendation.timeHorizon}</span>
-                </div>
-                <div className="recommendation-detail__spec-row">
-                  <span className="recommendation-detail__spec-label">Estimated Cost</span>
-                  <span className="recommendation-detail__spec-value recommendation-detail__spec-value--cost">
-                    {recommendation.estimatedCost}
+            {/* Visual Concept Banner */}
+            <div className="recommendation-detail__hero-banner">
+              <img
+                src={rainwaterHarvestingImg}
+                alt={`${recommendation.shortTitle} system`}
+                className="recommendation-detail__hero-image"
+              />
+              <div className="recommendation-detail__hero-overlay">
+                <span className="recommendation-detail__hero-tag">
+                  <CloudRain size={13} aria-hidden="true" />
+                  <span>{recommendation.shortTitle} Concept System</span>
+                </span>
+                <span className="recommendation-detail__hero-subtag">
+                  {recommendation.category === 'nature' ? 'Nature-Based Solution' : 'Resilience Infrastructure'} • Decentralized Storage
+                </span>
+              </div>
+            </div>
+
+            {/* Interactive Table Section */}
+            <div className="rec-interactive-table-card">
+              <div className="rec-table-toolbar">
+                <div className="rec-table-toolbar__title">
+                  <Sparkles size={13} className="rec-table-toolbar__sparkle" aria-hidden="true" />
+                  <span>
+                    {tableMode === 'specs'
+                      ? 'Implementation Specifications'
+                      : 'Nearby Environment & Basin Impact'}
                   </span>
                 </div>
-                <div className="recommendation-detail__spec-row">
-                  <span className="recommendation-detail__spec-label">Potential WSI Reduction</span>
-                  <span className="recommendation-detail__spec-value">{recommendation.potentialWsiReduction}</span>
-                </div>
-                <div className="recommendation-detail__spec-row">
-                  <span className="recommendation-detail__spec-label">Annual Water Savings</span>
-                  <span className="recommendation-detail__spec-value">{recommendation.annualWaterSavings}</span>
+                <div className="rec-table-toolbar__toggle" role="tablist" aria-label="Table view selector">
+                  <button
+                    type="button"
+                    className={`rec-table-toggle-btn${tableMode === 'specs' ? ' rec-table-toggle-btn--active' : ''}`}
+                    onClick={() => setTableMode('specs')}
+                    role="tab"
+                    aria-selected={tableMode === 'specs'}
+                  >
+                    Specifications
+                  </button>
+                  <button
+                    type="button"
+                    className={`rec-table-toggle-btn${tableMode === 'environment' ? ' rec-table-toggle-btn--active' : ''}`}
+                    onClick={() => setTableMode('environment')}
+                    role="tab"
+                    aria-selected={tableMode === 'environment'}
+                  >
+                    Nearby Environment
+                  </button>
                 </div>
               </div>
 
-              {/* Right Detail Image */}
-              <div className="recommendation-detail__image-box">
-                <img
-                  src={rainwaterHarvestingImg}
-                  alt={`${recommendation.shortTitle} system`}
-                  className="recommendation-detail__image"
-                />
-              </div>
+              {tableMode === 'specs' ? (
+                <div className="rec-table-wrapper">
+                  <table className="rec-interactive-table">
+                    <thead>
+                      <tr>
+                        <th scope="col" style={{ width: '42%' }}>Parameter</th>
+                        <th scope="col" style={{ width: '48%' }}>Target Value</th>
+                        <th scope="col" style={{ width: '10%', textAlign: 'center' }}>
+                          <span className="sr-only">Details</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {specsData.map((row) => {
+                        const Icon = row.icon
+                        const isExpanded = expandedRow === row.id
+                        return (
+                          <Fragment key={row.id}>
+                            <tr
+                              className={`rec-interactive-row${isExpanded ? ' rec-interactive-row--expanded' : ''}`}
+                              onClick={() => toggleRow(row.id)}
+                              role="button"
+                              tabIndex={0}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault()
+                                  toggleRow(row.id)
+                                }
+                              }}
+                              aria-expanded={isExpanded}
+                            >
+                              <td className="rec-interactive-td rec-interactive-td--param">
+                                <span className="rec-interactive-icon-wrap">
+                                  <Icon size={13} aria-hidden="true" />
+                                </span>
+                                <span className="rec-interactive-label">{row.label}</span>
+                              </td>
+                              <td className="rec-interactive-td rec-interactive-td--value">
+                                <div className="rec-interactive-val-box">
+                                  <span className={`rec-interactive-val-text${row.id === 'estimated-cost' ? ' rec-interactive-val-text--cost' : ''}`}>
+                                    {row.value}
+                                  </span>
+                                  <span className={`rec-interactive-badge rec-interactive-badge--${row.badgeTone}`}>
+                                    {row.badge}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="rec-interactive-td rec-interactive-td--action">
+                                {isExpanded ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}
+                              </td>
+                            </tr>
+                            {isExpanded && (
+                              <tr className="rec-interactive-drawer-row">
+                                <td colSpan={3} className="rec-interactive-drawer-cell">
+                                  <div className="rec-interactive-drawer-content">
+                                    <Info size={13} className="rec-interactive-drawer-icon" aria-hidden="true" />
+                                    <span>{row.detail}</span>
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </Fragment>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="rec-table-wrapper">
+                  <table className="rec-interactive-table">
+                    <thead>
+                      <tr>
+                        <th scope="col" style={{ width: '42%' }}>District / Catchment</th>
+                        <th scope="col" style={{ width: '32%', textAlign: 'center' }}>WSI Change</th>
+                        <th scope="col" style={{ width: '26%', textAlign: 'right' }}>Net Delta</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {nearbyDistricts.map((item) => (
+                        <tr key={item.district} className="rec-interactive-row rec-interactive-row--env">
+                          <td className="rec-interactive-td rec-interactive-td--param">
+                            <span className="rec-interactive-icon-wrap rec-interactive-icon-wrap--pin">
+                              <MapPin size={12} aria-hidden="true" />
+                            </span>
+                            <div className="rec-interactive-district-info">
+                              <span className="rec-interactive-district-title">{item.district}</span>
+                              <span className="rec-interactive-district-sub">{item.zone || 'Catchment Basin'}</span>
+                            </div>
+                          </td>
+                          <td className="rec-interactive-td rec-interactive-td--wsi">
+                            <div className="rec-interactive-wsi-flow">
+                              <span className="badge-wsi-curr">{item.current?.toFixed(2) || '0.82'}</span>
+                              <span className="rec-interactive-arrow">→</span>
+                              <span className="badge-wsi-proj">{item.projected?.toFixed(2) || '0.45'}</span>
+                            </div>
+                          </td>
+                          <td className="rec-interactive-td rec-interactive-td--delta">
+                            <span className="rec-interactive-delta-badge">{item.reduction || '-42%'}</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* Key Benefits */}
