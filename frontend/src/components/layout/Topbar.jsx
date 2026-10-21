@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import {
   Bell,
   Check,
@@ -7,7 +7,6 @@ import {
   CloudRain,
   Database,
   Download,
-  HelpCircle,
   LogIn,
   LogOut,
   MapPin,
@@ -23,7 +22,6 @@ import { useCity } from '../../context/CityContext.jsx'
 import PlannerProfileModal from './modals/PlannerProfileModal.jsx'
 import PreferencesModal from './modals/PreferencesModal.jsx'
 import ExportReportModal from './modals/ExportReportModal.jsx'
-import DocumentationModal from './modals/DocumentationModal.jsx'
 import SignOutModal from './modals/SignOutModal.jsx'
 
 const DEFAULT_NOTIFICATIONS = [
@@ -63,7 +61,6 @@ const DEFAULT_NOTIFICATIONS = [
 
 const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const location = useLocation()
-  const navigate = useNavigate()
   const { searchQuery, setSearchQuery } = useFilters()
   const { selectedCityId, setSelectedCityId } = useCity()
 
@@ -76,7 +73,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const [isPreferencesModalOpen, setIsPreferencesModalOpen] = useState(false)
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
-  const [isDocModalOpen, setIsDocModalOpen] = useState(false)
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false)
 
   // User Profile / Auth State
@@ -400,18 +396,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                   <span>Export Resilience Report</span>
                 </button>
 
-                <button
-                  type="button"
-                  className="topbar__profile-menu-item"
-                  onClick={() => {
-                    setIsProfileOpen(false)
-                    setIsDocModalOpen(true)
-                  }}
-                >
-                  <HelpCircle size={15} />
-                  <span>Platform Documentation</span>
-                </button>
-
                 <div className="topbar__profile-divider" />
 
                 {user.isGuest ? (
@@ -478,12 +462,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
       <ExportReportModal
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
-        onShowToast={showToast}
-      />
-
-      <DocumentationModal
-        isOpen={isDocModalOpen}
-        onClose={() => setIsDocModalOpen(false)}
         onShowToast={showToast}
       />
 
