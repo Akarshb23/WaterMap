@@ -1,80 +1,208 @@
-import { useState } from 'react'
-import { Locate, Minus, Plus } from 'lucide-react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { Locate, Maximize2, Minimize2, Minus, Plus } from 'lucide-react'
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
 import { COVERAGE_MAP_LEGEND, DATA_COVERAGE_SOURCES } from '../../data/dataSourcesData.js'
+import { fetchDistrictsGeoJSON } from '../../services/districtMapService.js'
+import { fetchWardsGeoJSON } from '../../services/mapService.js'
 
-// Polygons tessellating the geographical boundary of Bangalore
-// Colored in greens (North/West) and blues (Central/East/South) matching the mockup
-const BANGALORE_COVERAGE_DISTRICTS = [
-  // Northern Region - Mint & Light Green tones (BWSSB & Groundwater)
-  { id: 'D01', name: 'Yelahanka', region: 'North', source: 'bwssb', fill: '#34d399', shape: '272,42 334,36 346,84 286,88' },
-  { id: 'D02', name: 'Hebbal', region: 'North', source: 'bwssb', fill: '#6ee7b7', shape: '334,36 384,48 380,100 338,92' },
-  { id: 'D03', name: 'Thanisandra', region: 'North', source: 'cgwb', fill: '#10b981', shape: '212,62 272,42 284,92 222,118' },
-  { id: 'D04', name: 'Vidyaranyapura', region: 'North', source: 'cgwb', fill: '#34d399', shape: '254,122 296,118 298,155 258,158' },
-  { id: 'D05', name: 'Kodigehalli', region: 'North', source: 'bwssb', fill: '#86efac', shape: '346,84 402,96 392,138 342,128' },
-  { id: 'D06', name: 'Peenya', region: 'North', source: 'cgwb', fill: '#34d399', shape: '296,118 342,112 338,150 298,155' },
-  { id: 'D07', name: 'Jalahalli', region: 'North', source: 'bwssb', fill: '#6ee7b7', shape: '342,112 384,120 374,158 338,150' },
-  { id: 'D08', name: 'RT Nagar', region: 'North', source: 'bwssb', fill: '#10b981', shape: '298,155 338,150 330,180 298,185' },
+// Deterministic source mapping based on ward ID or index
+const SOURCES = ['bwssb', 'cgwb', 'imd', 'census']
+const SOURCE_COLORS = {
+  bwssb: '#34d399',
+  cgwb: '#10b981',
+  imd: '#60a5fa',
+  census: '#86efac',
+}
 
-  // Western Region - Green to Cyan Transition (Population & Groundwater)
-  { id: 'D09', name: 'Rajajinagar', region: 'West', source: 'census', fill: '#6ee7b7', shape: '168,148 216,160 210,210 162,198' },
-  { id: 'D10', name: 'Malleshwaram', region: 'West', source: 'cgwb', fill: '#34d399', shape: '216,160 258,158 258,198 214,196' },
-  { id: 'D11', name: 'Vijayanagar', region: 'West', source: 'census', fill: '#86efac', shape: '214,196 258,198 252,234 210,230' },
-  { id: 'D16', name: 'Basaveshwaranagar', region: 'West', source: 'census', fill: '#6ee7b7', shape: '162,204 210,210 204,256 156,246' },
-  { id: 'D17', name: 'Kengeri', region: 'West', source: 'cgwb', fill: '#34d399', shape: '246,236 278,236 284,270 248,268' },
-  { id: 'D18', name: 'Nagarbhavi', region: 'West', source: 'census', fill: '#86efac', shape: '156,252 204,258 196,304 150,296' },
-  { id: 'D19', name: 'Mahalakshmi Layout', region: 'West', source: 'bwssb', fill: '#34d399', shape: '150,300 196,306 188,352 144,342' },
-  { id: 'D40', name: 'Yeshwanthpur', region: 'West', source: 'cgwb', fill: '#10b981', shape: '206,230 248,236 244,268 202,264' },
+const getFeatureSource = (feature, index) => {
+  const p = feature.properties || {}
+  const idStr = String(p.id || p.district_id || p.ward_id || p.name || index)
+  let hash = 0
+  for (let i = 0; i < idStr.length; i++) {
+    hash = (hash << 5) - hash + idStr.charCodeAt(i)
+    hash |= 0
+  }
+  return SOURCES[Math.abs(hash) % SOURCES.length]
+}
 
-  // Central Region - Blue shades (Rainfall & IMD)
-  { id: 'D12', name: 'Koramangala', region: 'Central', source: 'imd', fill: '#60a5fa', shape: '298,185 330,180 342,212 308,218 296,200' },
-  { id: 'D13', name: 'Indiranagar', region: 'Central', source: 'imd', fill: '#38bdf8', shape: '268,202 296,200 306,232 278,236' },
-  { id: 'D14', name: 'Shanthi Nagar', region: 'Central', source: 'imd', fill: '#60a5fa', shape: '296,200 326,196 332,228 306,232' },
-  { id: 'D15', name: 'Shivaji Nagar', region: 'Central', source: 'imd', fill: '#93c5fd', shape: '326,196 358,190 366,220 332,228' },
-  { id: 'D25', name: 'Richmond Town', region: 'Central', source: 'imd', fill: '#3b82f6', shape: '278,236 306,232 312,266 284,270' },
-  { id: 'D26', name: 'Domlur', region: 'Central', source: 'imd', fill: '#60a5fa', shape: '306,232 342,228 348,266 312,266' },
-
-  // Eastern Region - Blue / Sky shades (Rainfall & Land Use)
-  { id: 'D20', name: 'Whitefield', region: 'East', source: 'imd', fill: '#38bdf8', shape: '368,172 402,168 412,198 376,204' },
-  { id: 'D21', name: 'Bellandur', region: 'East', source: 'imd', fill: '#60a5fa', shape: '376,204 412,198 420,232 382,238' },
-  { id: 'D22', name: 'Marathahalli', region: 'East', source: 'imd', fill: '#93c5fd', shape: '352,228 382,238 388,272 356,268' },
-  { id: 'D24', name: 'Varthur', region: 'East', source: 'imd', fill: '#38bdf8', shape: '382,238 426,234 432,274 388,272' },
-  { id: 'D23', name: 'Mahadevapura', region: 'East', source: 'imd', fill: '#60a5fa', shape: '388,272 432,274 424,312 378,308' },
-  { id: 'D41', name: 'CV Raman Nagar', region: 'East', source: 'imd', fill: '#93c5fd', shape: '374,308 418,306 410,348 368,348' },
-
-  // Southern Region - Blue & Cyan Shades (Rainfall & BWSSB)
-  { id: 'D27', name: 'Electronic City', region: 'South', source: 'cgwb', fill: '#34d399', shape: '244,268 284,270 278,312 236,306' },
-  { id: 'D28', name: 'HSR Layout', region: 'South', source: 'imd', fill: '#60a5fa', shape: '284,270 306,300 298,338 274,318' },
-  { id: 'D29', name: 'BTM Layout', region: 'South', source: 'imd', fill: '#3b82f6', shape: '312,266 348,266 342,302 306,300' },
-  { id: 'D30', name: 'Jayanagar', region: 'South', source: 'imd', fill: '#60a5fa', shape: '348,266 384,264 378,308 342,302' },
-  { id: 'D31', name: 'JP Nagar', region: 'South', source: 'cgwb', fill: '#34d399', shape: '212,324 262,336 250,388 200,372' },
-  { id: 'D32', name: 'Basavanagudi', region: 'South', source: 'imd', fill: '#38bdf8', shape: '274,318 316,334 310,374 266,364' },
-  { id: 'D33', name: 'Banashankari', region: 'South', source: 'imd', fill: '#60a5fa', shape: '316,334 356,334 350,374 310,374' },
-  { id: 'D34', name: 'Padmanabhanagar', region: 'South', source: 'imd', fill: '#93c5fd', shape: '356,334 396,330 390,370 350,374' },
-  { id: 'D35', name: 'Bommanahalli', region: 'South', source: 'imd', fill: '#60a5fa', shape: '378,308 418,306 412,350 374,352' },
-  { id: 'D36', name: 'Uttarahalli', region: 'South', source: 'cgwb', fill: '#10b981', shape: '254,398 300,412 288,454 242,438' },
-  { id: 'D37', name: 'Arekere', region: 'South', source: 'cgwb', fill: '#34d399', shape: '300,412 352,408 342,458 288,454' },
-  { id: 'D38', name: 'Gottigere', region: 'South', source: 'cgwb', fill: '#10b981', shape: '352,408 408,402 398,452 342,458' },
-  { id: 'D39', name: 'Begur', region: 'South', source: 'imd', fill: '#38bdf8', shape: '390,370 432,364 424,408 382,410' },
-  { id: 'D42', name: 'Hulimavu', region: 'South', source: 'imd', fill: '#60a5fa', shape: '266,364 310,374 300,412 254,398' },
-]
+function FitDistrictsBounds({ data }) {
+  const map = useMap()
+  useEffect(() => {
+    if (!data || !data.features || data.features.length === 0) return
+    try {
+      const geoLayer = L.geoJSON(data)
+      const bounds = geoLayer.getBounds()
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [25, 25], maxZoom: 7, animate: false })
+      }
+    } catch (e) {
+      console.warn('Could not fit bounds:', e)
+    }
+  }, [data, map])
+  return null
+}
 
 /**
  * Data Coverage Map showing spatial coverage of different data sources across Bangalore.
- * Matches the reference mockup with zoom controls, dropdown, region labels, and legend.
+ * Uses interactive Leaflet GeoJSON polygons, maintaining exact existing UI typography,
+ * controls, and surrounding layout cards.
  */
 const DataCoverageMap = ({
   coverageSource = 'all',
   onCoverageSourceChange,
 }) => {
-  const [zoom, setZoom] = useState(1)
+  const [geoJsonData, setGeoJsonData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [selectedDistrict, setSelectedDistrict] = useState(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const mapRef = useRef(null)
 
-  const handleZoomIn = () => setZoom((z) => Math.min(1.8, +(z + 0.15).toFixed(2)))
-  const handleZoomOut = () => setZoom((z) => Math.max(0.85, +(z - 0.15).toFixed(2)))
-  const handleResetZoom = () => {
-    setZoom(1)
-    setSelectedDistrict(null)
+  const toggleFullscreen = () => {
+    setIsFullscreen((prev) => {
+      const next = !prev
+      setTimeout(() => {
+        if (mapRef.current) {
+          mapRef.current.invalidateSize()
+        }
+      }, 100)
+      return next
+    })
   }
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function loadData() {
+      setLoading(true)
+      setError(null)
+      try {
+        const data = await fetchDistrictsGeoJSON()
+
+        if (isMounted) {
+          if (data && data.features && data.features.length > 0) {
+            setGeoJsonData(data)
+          } else {
+            setError('No Karnataka boundary polygons found.')
+          }
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err?.message || 'Failed to load spatial boundaries')
+        }
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+
+    loadData()
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const handleZoomIn = () => {
+    if (mapRef.current) mapRef.current.zoomIn()
+  }
+
+  const handleZoomOut = () => {
+    if (mapRef.current) mapRef.current.zoomOut()
+  }
+
+  const handleResetZoom = () => {
+    setSelectedDistrict(null)
+    if (mapRef.current && geoJsonData) {
+      try {
+        const geoLayer = L.geoJSON(geoJsonData)
+        const bounds = geoLayer.getBounds()
+        if (bounds.isValid()) {
+          mapRef.current.fitBounds(bounds, { padding: [16, 16], maxZoom: 13 })
+        }
+      } catch (e) {
+        console.warn(e)
+      }
+    }
+  }
+
+  const featureStyle = useCallback(
+    (feature) => {
+      const idx = geoJsonData?.features ? geoJsonData.features.indexOf(feature) : 0
+      const source = getFeatureSource(feature, idx)
+      const isMatched = coverageSource === 'all' || source === coverageSource
+      const color = SOURCE_COLORS[source] || '#60a5fa'
+      const p = feature.properties || {}
+      const id = p.id || p.district_id || p.name
+      const isSelected = selectedDistrict?.id === id
+
+      return {
+        fillColor: color,
+        fillOpacity: isMatched ? (isSelected ? 0.9 : 0.65) : 0.15,
+        color: isSelected ? '#0f172a' : '#ffffff',
+        weight: isSelected ? 2.5 : 1.2,
+        dashArray: isSelected ? '' : '2, 2',
+      }
+    },
+    [coverageSource, selectedDistrict, geoJsonData]
+  )
+
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      const p = feature.properties || {}
+      const name = p.name || p.district_name || p.ward_name || 'Bangalore District'
+      const idx = geoJsonData?.features ? geoJsonData.features.indexOf(feature) : 0
+      const source = getFeatureSource(feature, idx)
+      const sourceName = source.toUpperCase()
+
+      layer.bindTooltip(
+        `<div style="font-family: inherit; font-size: 11px; padding: 2px 4px;">
+          <strong style="color: #0f172a;">${name}</strong><br/>
+          <span style="color: #475569;">Coverage: <strong>${sourceName}</strong></span>
+        </div>`,
+        { sticky: true, direction: 'auto', opacity: 0.95 }
+      )
+
+      layer.on({
+        click: () => {
+          setSelectedDistrict({
+            id: p.id || p.district_id || p.name,
+            name,
+            source,
+          })
+        },
+        mouseover: (e) => {
+          const l = e.target
+          l.setStyle({
+            weight: 2,
+            color: '#0f172a',
+            fillOpacity: 0.85,
+          })
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            l.bringToFront()
+          }
+        },
+        mouseout: (e) => {
+          const l = e.target
+          const isMatched = coverageSource === 'all' || source === coverageSource
+          const isSelected = selectedDistrict?.id === (p.id || p.district_id || p.name)
+          l.setStyle({
+            fillColor: SOURCE_COLORS[source] || '#60a5fa',
+            fillOpacity: isMatched ? (isSelected ? 0.9 : 0.65) : 0.15,
+            color: isSelected ? '#0f172a' : '#ffffff',
+            weight: isSelected ? 2.5 : 1.2,
+            dashArray: isSelected ? '' : '2, 2',
+          })
+        },
+      })
+    },
+    [coverageSource, selectedDistrict, geoJsonData]
+  )
+
+  const geoJsonKey = useMemo(() => {
+    return `cov-map-${coverageSource}-${selectedDistrict?.id || 'none'}-${geoJsonData ? geoJsonData.features?.length : 0}`
+  }, [coverageSource, selectedDistrict, geoJsonData])
 
   return (
     <article className="card data-coverage-map-card" aria-labelledby="coverage-map-title">
@@ -107,9 +235,9 @@ const DataCoverageMap = ({
         </div>
       </header>
 
-      <div className="data-coverage-map__canvas" role="region" aria-label="Data coverage map">
+      <div className={`data-coverage-map__canvas ${isFullscreen ? 'map-viewport--fullscreen' : ''}`} role="region" aria-label="Data coverage map" style={{ position: 'relative' }}>
         {/* Floating Controls (top-left) */}
-        <div className="data-coverage-map__controls" role="toolbar" aria-label="Map navigation controls">
+        <div className="data-coverage-map__controls" role="toolbar" aria-label="Map navigation controls" style={{ zIndex: 1000 }}>
           <button
             type="button"
             className="data-coverage-map__ctrl-btn"
@@ -137,10 +265,19 @@ const DataCoverageMap = ({
           >
             <Locate size={16} />
           </button>
+          <button
+            type="button"
+            className="data-coverage-map__ctrl-btn"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Exit full screen' : 'Full screen view'}
+            title={isFullscreen ? 'Exit full screen' : 'Full screen view'}
+          >
+            {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </button>
         </div>
 
         {/* Floating Legend Overlay (top-right) */}
-        <div className="data-coverage-map__legend" aria-label="Data coverage layers legend">
+        <div className="data-coverage-map__legend" aria-label="Data coverage layers legend" style={{ zIndex: 1000 }}>
           <ul className="data-coverage-map__legend-list">
             {COVERAGE_MAP_LEGEND.map((item) => (
               <li
@@ -160,90 +297,78 @@ const DataCoverageMap = ({
           </ul>
         </div>
 
-        {/* Interactive SVG Canvas */}
-        <div
-          className="data-coverage-map__viewport"
-          style={{
-            transform: `scale(${zoom})`,
-            transformOrigin: 'center center',
-            transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          <svg
-            viewBox="130 20 320 450"
-            className="data-coverage-map__svg"
-            role="img"
-            aria-label="Map of Bangalore showing spatial data coverage by source"
+        {/* Leaflet GeoJSON Polygon Map Container */}
+        <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
+          {loading && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1000,
+                background: 'rgba(255, 255, 255, 0.95)',
+                padding: '10px 18px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: '#075d4c',
+              }}
+            >
+              Loading Bangalore boundaries…
+            </div>
+          )}
+
+          {error && !loading && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 20,
+                left: 20,
+                right: 20,
+                zIndex: 1000,
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                color: '#991b1b',
+                padding: '10px 14px',
+                borderRadius: '6px',
+                fontSize: '12px',
+              }}
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          <MapContainer
+            ref={mapRef}
+            center={[14.8, 76.2]}
+            zoom={6}
+            minZoom={5}
+            maxZoom={12}
+            scrollWheelZoom
+            zoomControl={false}
+            preferCanvas
+            style={{ width: '100%', height: '100%', background: '#f0f7f8' }}
           >
-            {/* Background canvas */}
-            <rect x="130" y="20" width="320" height="450" fill="#f4f7f6" />
-
-            {/* Subtle arterial roads */}
-            <g stroke="#ffffff" strokeWidth="2.5" fill="none" opacity="0.9" strokeLinecap="round">
-              <path d="M 140 180 Q 280 190 440 175" />
-              <path d="M 140 310 Q 280 290 440 315" />
-              <path d="M 310 25 Q 320 240 325 465" />
-              <path d="M 230 70 Q 240 260 220 420" />
-              <path d="M 390 60 Q 380 250 400 440" />
-            </g>
-
-            {/* Subtle Vrishabhavathi Valley / Bellandur Lake System along East Bangalore */}
-            <path
-              d="M 358 20 Q 380 90 370 150 Q 365 200 376 250 Q 385 300 420 370 Q 435 410 445 465"
-              fill="none"
-              stroke="#b9dff2"
-              strokeWidth="5"
-              opacity="0.75"
-              strokeLinecap="round"
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* Regional Name Labels */}
-            <g fill="#4b5563" fontSize="9.5" fontWeight="700" letterSpacing="0.9">
-              <text x="290" y="60" textAnchor="middle">NORTH BANGALORE</text>
-              <text x="195" y="210" textAnchor="middle">WEST BANGALORE</text>
-              <text x="402" y="235" textAnchor="middle">EAST BANGALORE</text>
-              <text x="315" y="445" textAnchor="middle">SOUTH BANGALORE</text>
-            </g>
-
-            {/* District Polygons */}
-            <g className="data-coverage-map__polygons">
-              {BANGALORE_COVERAGE_DISTRICTS.map((d) => {
-                const isMatched = coverageSource === 'all' || d.source === coverageSource
-                const isSelected = selectedDistrict?.id === d.id
-
-                return (
-                  <polygon
-                    key={d.id}
-                    points={d.shape}
-                    fill={d.fill}
-                    stroke={isSelected ? '#0f172a' : '#ffffff'}
-                    strokeWidth={isSelected ? 2.2 : 1.2}
-                    className={`ds-map-poly ${!isMatched ? 'ds-map-poly--muted' : ''}`}
-                    opacity={isMatched ? (isSelected ? 1 : 0.9) : 0.3}
-                    onClick={() => setSelectedDistrict(d)}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`${d.name}: ${d.source}`}
-                    style={{ cursor: 'pointer', transition: 'all 0.15s ease' }}
-                  />
-                )
-              })}
-            </g>
-
-            {/* Active Selection Pin */}
-            {selectedDistrict && (
-              <circle
-                cx={selectedDistrict.shape.split(' ')[0].split(',')[0]}
-                cy={selectedDistrict.shape.split(' ')[0].split(',')[1]}
-                r="4.5"
-                fill="#ffffff"
-                stroke="#0f172a"
-                strokeWidth="2"
-              />
+            {geoJsonData && (
+              <>
+                <FitDistrictsBounds data={geoJsonData} />
+                <GeoJSON
+                  key={geoJsonKey}
+                  data={geoJsonData}
+                  style={featureStyle}
+                  onEachFeature={onEachFeature}
+                />
+              </>
             )}
-          </svg>
+          </MapContainer>
         </div>
       </div>
     </article>

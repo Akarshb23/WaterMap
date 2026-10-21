@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Droplets } from 'lucide-react'
 import { GeoJSON, MapContainer, useMap } from 'react-leaflet'
 import L from 'leaflet'
@@ -35,6 +35,18 @@ function FitDistricts({ data }) {
         padding: [45, 45],
         maxZoom: 7,
       })
+
+      const timer = setTimeout(() => {
+        if (typeof map.invalidateSize === 'function') {
+          map.invalidateSize({ pan: false })
+        }
+        map.fitBounds(bounds, {
+          padding: [45, 45],
+          maxZoom: 7,
+        })
+      }, 150)
+
+      return () => clearTimeout(timer)
     }
   }, [data, map])
 
@@ -140,6 +152,11 @@ export default function DistrictChoropleth() {
   }, [])
 
   const selectedDistrictId = getSelectedDistrictId(selected)
+  const selectedDistrictIdRef = useRef(selectedDistrictId)
+
+  useEffect(() => {
+    selectedDistrictIdRef.current = selectedDistrictId
+  }, [selectedDistrictId])
 
   const selectedFeature = useMemo(() => {
     if (selectedDistrictId === null || !data?.features?.length) {
@@ -217,6 +234,25 @@ export default function DistrictChoropleth() {
         }
 
         setSelected({ districtId })
+      },
+      mouseover: (e) => {
+        const l = e.target
+        if (districtId !== null && districtId !== selectedDistrictIdRef.current) {
+          l.setStyle({
+            weight: 2.8,
+            color: '#075f50',
+            fillOpacity: 0.98,
+          })
+          if (typeof l.bringToFront === 'function') {
+            l.bringToFront()
+          }
+        }
+      },
+      mouseout: (e) => {
+        const l = e.target
+        if (districtId !== null && districtId !== selectedDistrictIdRef.current) {
+          l.setStyle(styleFeature(feature, selectedDistrictIdRef.current))
+        }
       },
     })
   }, [])
@@ -375,19 +411,19 @@ export default function DistrictChoropleth() {
 
               <div className="district-map-detail__meta">
                 <MetadataCard label="Risk classification">
-                  {scoreIsVerified
+                  {scoreIsAvailable
                     ? (normalizeRisk(selectedProperties.risk_category) ?? 'Insufficient data')
                     : 'Insufficient data'}
                 </MetadataCard>
 
                 <MetadataCard label="Data coverage">
-                  {scoreIsVerified && selectedProperties.data_coverage != null
+                  {scoreIsAvailable && selectedProperties.data_coverage != null
                     ? `${selectedProperties.data_coverage}%`
                     : 'Insufficient data'}
                 </MetadataCard>
 
                 <MetadataCard label="Observation date">
-                  {scoreIsVerified && selectedProperties.data_date
+                  {scoreIsAvailable && selectedProperties.data_date
                     ? selectedProperties.data_date
                     : 'Insufficient data'}
                 </MetadataCard>
@@ -396,7 +432,7 @@ export default function DistrictChoropleth() {
                   label="Data source"
                   className="district-map-meta-card--source"
                 >
-                  {scoreIsVerified && selectedProperties.data_source
+                  {scoreIsAvailable && selectedProperties.data_source
                     ? selectedProperties.data_source
                     : 'Insufficient data'}
                 </MetadataCard>

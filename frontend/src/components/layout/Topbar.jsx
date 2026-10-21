@@ -40,10 +40,10 @@ const DEFAULT_NOTIFICATIONS = [
     id: 'notif-2',
     type: 'success',
     title: 'Resilience Plan Updated',
-    description: 'Rooftop and community rainwater harvesting system committed to Bangalore Urban roadmap.',
+    description: 'Rooftop and community rainwater harvesting system committed to Karnataka roadmap.',
     time: '42m ago',
     unread: true,
-    source: 'Bangalore Resilience Authority',
+    source: 'Karnataka Resilience Authority',
   },
   {
     id: 'notif-3',
@@ -251,7 +251,7 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const city = selectedCityId || 'bangalore'
 
   const cityOptions = [
-    { label: 'Bangalore', value: 'bangalore' },
+    { label: 'Karnataka', value: 'bangalore' },
     { label: 'Bengaluru Urban', value: 'bengaluru-urban' },
     { label: 'Bengaluru Rural', value: 'bengaluru-rural' },
   ]

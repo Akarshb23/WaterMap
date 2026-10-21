@@ -10,7 +10,7 @@
 
 export const CITY_DASHBOARD_HEADER = {
   title: 'City Dashboard',
-  subtitle: 'An overview of urban water stress and key insights for Bangalore.',
+  subtitle: 'An overview of urban water stress and key insights for Karnataka.',
   dateRanges: [
     { value: '12m', label: 'Last 12 months' },
     { value: '6m', label: 'Last 6 months' },

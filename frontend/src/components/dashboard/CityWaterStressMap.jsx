@@ -1,7 +1,17 @@
-import { useState } from 'react'
-import { ArrowRight, Droplet, Locate, Minus, Plus, Users } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ArrowRight, Locate, Maximize2, Minimize2, Minus, Plus } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import { GeoJSON, MapContainer, TileLayer, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import cityscape from '../../assets/watermap-cityscape.png'
+import { fetchDistrictsGeoJSON } from '../../services/districtMapService.js'
+import { fetchWardsGeoJSON } from '../../services/mapService.js'
+import {
+  RISK_COLORS,
+  getDistrictId,
+  styleFeature as getFeatureStyle,
+} from '../map/districtMap.js'
 import {
   BANGALORE_DASHBOARD_REGIONS,
   BANGALORE_DASHBOARD_DISTRICTS,
@@ -30,45 +40,282 @@ const MAP_DISTRICT_FILTER_OPTIONS = [
   { value: 'low', label: 'Low Risk Districts' },
 ]
 
+function FitDistrictsBounds({ data }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!data?.features?.length) return
+
+    try {
+      const bounds = L.geoJSON(data).getBounds()
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, {
+          padding: [25, 25],
+          maxZoom: 7,
+        })
+      }
+    } catch {
+      // Keep initial view if geometry is invalid
+    }
+  }, [data, map])
+
+  return null
+}
+
+function SelectionSynchronizer({ selectedDistrictId }) {
+  const map = useMap()
+
+  useEffect(() => {
+    map.eachLayer((layer) => {
+      if (
+        layer.feature &&
+        typeof layer.setStyle === 'function' &&
+        getDistrictId(layer.feature) !== null
+      ) {
+        layer.setStyle(getFeatureStyle(layer.feature, selectedDistrictId))
+      }
+    })
+  }, [map, selectedDistrictId])
+
+  return null
+}
+
 /**
  * Interactive Water Stress Map component matching the Bangalore city dashboard:
  * - Top-right filter dropdowns (Metric, Zone, District)
- * - Map canvas with lake valleys, Outer Ring Road, region names, colored interlocking district polygons, and scale bar
+ * - Map canvas rendering real Leaflet GeoJSON polygons
  * - Floating top-left zoom controls (+, -, locate)
  * - Floating bottom-left risk legend
- * - Interactive Koramangala concentric pin & attached popup card
  * - Right-hand District details panel with photographic hero and "View Full Details →" button
  */
 const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
   const navigate = useNavigate()
   const handleSelect = onSelectDistrict || onSelectWard
   const [selectedDistrictId, setSelectedDistrictId] = useState('district-12')
-  const [zoom, setZoom] = useState(1)
   const [metric, setMetric] = useState('wsi')
   const [zone, setZone] = useState('all')
   const [districtFilter, setDistrictFilter] = useState('all')
 
-  const selectedDistrict =
-    BANGALORE_DASHBOARD_DISTRICTS.find((w) => w.id === selectedDistrictId || w.legacyId === selectedDistrictId) ||
-    BANGALORE_DASHBOARD_DISTRICTS[0]
+  const [geoJsonData, setGeoJsonData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const mapRef = useRef(null)
 
-  const handleZoomIn = () => setZoom((z) => Math.min(1.5, +(z + 0.15).toFixed(2)))
-  const handleZoomOut = () => setZoom((z) => Math.max(0.85, +(z - 0.15).toFixed(2)))
+  const toggleFullscreen = () => {
+    setIsFullscreen((prev) => {
+      const next = !prev
+      setTimeout(() => {
+        if (mapRef.current) {
+          mapRef.current.invalidateSize()
+        }
+      }, 100)
+      return next
+    })
+  }
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function loadGeoJSON() {
+      setLoading(true)
+      setError('')
+
+      try {
+        const result = await fetchDistrictsGeoJSON({ signal: controller.signal })
+
+        if (controller.signal.aborted) return
+
+        if (
+          !result ||
+          result.type !== 'FeatureCollection' ||
+          !Array.isArray(result.features) ||
+          result.features.length === 0
+        ) {
+          throw new Error('The boundary endpoint returned no usable polygons.')
+        }
+
+        setGeoJsonData(result)
+      } catch (err) {
+        if (controller.signal.aborted) return
+        setError(err?.userMessage || err?.message || 'District boundaries could not be loaded.')
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadGeoJSON()
+    return () => controller.abort()
+  }, [])
+
+  const filteredData = useMemo(() => {
+    if (!geoJsonData?.features) return null
+
+    const features = geoJsonData.features.filter((f) => {
+      const props = f.properties || {}
+      const zName = (props.zone || props.state_name || '').toLowerCase()
+      const risk = (props.risk_category || 'moderate').toLowerCase()
+
+      if (zone && zone !== 'all') {
+        const targetZone = zone.toLowerCase().replace(' zone', '').trim()
+        if (!zName.includes(targetZone)) return false
+      }
+
+      if (districtFilter !== 'all') {
+        if (risk !== districtFilter) return false
+      }
+
+      return true
+    })
+
+    return { ...geoJsonData, features: features.length > 0 ? features : geoJsonData.features }
+  }, [geoJsonData, zone, districtFilter])
+
+  const selectedDistrict = useMemo(() => {
+    if (geoJsonData?.features?.length) {
+      const match = geoJsonData.features.find((f) => {
+        const dId = String(getDistrictId(f))
+        const pName = (f.properties?.name || f.properties?.district_name || '').toLowerCase()
+        return (
+          dId === String(selectedDistrictId) ||
+          pName === String(selectedDistrictId).toLowerCase() ||
+          (pName.includes('koramangala') && String(selectedDistrictId) === 'district-12')
+        )
+      })
+
+      if (match) {
+        const p = match.properties || {}
+        const name = p.name || p.district_name || 'Koramangala'
+        const risk = (p.risk_category || 'high').toLowerCase()
+        const wsi = Number(p.water_stress_index ?? 0.87)
+
+        return {
+          id: getDistrictId(match),
+          districtNumber: p.ward_id || p.district_id || 12,
+          wardNumber: p.ward_id || 12,
+          name,
+          zone: p.zone ? `${p.zone} Bangalore` : 'Central Bangalore',
+          risk,
+          riskLabel: `${risk[0].toUpperCase()}${risk.slice(1)} Risk`,
+          wsi,
+          population: p.population ? Number(p.population).toLocaleString('en-IN') : '240,000',
+          rainfall: p.indicators?.rainfall_deficit_pct?.raw_value
+            ? `${Math.abs(p.indicators.rainfall_deficit_pct.raw_value)} mm`
+            : '520 mm',
+          demand: p.indicators?.piped_water_supply_lpcd?.raw_value
+            ? `${Math.round(p.indicators.piped_water_supply_lpcd.raw_value)} MLD`
+            : '124 MLD',
+          groundwater: p.indicators?.groundwater_depth_mbgl?.raw_value
+            ? `-${p.indicators.groundwater_depth_mbgl.raw_value} m`
+            : '-18.4 m',
+        }
+      }
+    }
+
+    return (
+      BANGALORE_DASHBOARD_DISTRICTS.find((w) => w.id === selectedDistrictId || w.legacyId === selectedDistrictId) ||
+      BANGALORE_DASHBOARD_DISTRICTS[0]
+    )
+  }, [geoJsonData, selectedDistrictId])
+
+  const handleZoomIn = () => {
+    if (mapRef.current) mapRef.current.zoomIn()
+  }
+
+  const handleZoomOut = () => {
+    if (mapRef.current) mapRef.current.zoomOut()
+  }
+
   const handleResetZoom = () => {
-    setZoom(1)
     setSelectedDistrictId('district-12')
+    if (mapRef.current) {
+      if (filteredData) {
+        const bounds = L.geoJSON(filteredData).getBounds()
+        if (bounds.isValid()) {
+          mapRef.current.fitBounds(bounds, { padding: [20, 20], maxZoom: 12 })
+        }
+      } else {
+        mapRef.current.setView([12.97, 77.59], 11)
+      }
+    }
   }
 
-  const handleDistrictClick = (district) => {
-    setSelectedDistrictId(district.id)
-    handleSelect?.(district)
-  }
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      const props = feature.properties || {}
+      const dId = getDistrictId(feature)
+      const name = props.name || props.district_name || 'Unnamed District'
+      const wsi = props.water_stress_index != null ? Number(props.water_stress_index).toFixed(2) : '0.50'
+      const risk = props.risk_category || 'Moderate'
 
-  const isDistrictVisible = (district) => {
-    if (zone !== 'all' && district.zoneKey !== zone) return false
-    if (districtFilter !== 'all' && district.risk !== districtFilter) return false
-    return true
-  }
+      layer.bindTooltip(
+        `<div style="font-weight:700;font-size:12px;color:#0f172a">${name}</div><div style="font-size:11px;color:#475569">WSI: ${wsi} · ${risk}</div>`,
+        {
+          sticky: true,
+          direction: 'auto',
+          className: 'district-map-tooltip',
+        }
+      )
+
+      layer.on({
+        click: () => {
+          setSelectedDistrictId(dId)
+          const districtObj = {
+            id: dId,
+            district_id: dId,
+            name,
+            district_name: name,
+            risk: String(risk).toLowerCase(),
+            riskLabel: `${risk[0].toUpperCase()}${risk.slice(1)} Risk`,
+            wsi: Number(props.water_stress_index ?? 0.5),
+            water_stress_index: props.water_stress_index,
+            zone: props.zone || 'Bangalore Region',
+            properties: props,
+          }
+          handleSelect?.(districtObj)
+        },
+        mouseover: (e) => {
+          const l = e.target
+          if (dId !== String(selectedDistrictId)) {
+            l.setStyle({
+              weight: 2.8,
+              color: '#075f50',
+              fillOpacity: 0.95,
+            })
+            if (typeof l.bringToFront === 'function') {
+              l.bringToFront()
+            }
+          }
+        },
+        mouseout: (e) => {
+          const l = e.target
+          if (dId !== String(selectedDistrictId)) {
+            l.setStyle(getFeatureStyle(feature, selectedDistrictId))
+          }
+        },
+      })
+    },
+    [selectedDistrictId, handleSelect]
+  )
+
+  const featureStyle = useCallback(
+    (feature) => {
+      const base = getFeatureStyle(feature, selectedDistrictId)
+      return {
+        ...base,
+        stroke: true,
+        weight: String(getDistrictId(feature)) === String(selectedDistrictId) ? 3 : 1.5,
+        fillOpacity: 0.85,
+      }
+    },
+    [selectedDistrictId]
+  )
+
+  const geoJsonKey = useMemo(() => {
+    return (filteredData?.features ?? []).map((f) => getDistrictId(f)).join('-')
+  }, [filteredData])
 
   return (
     <article className="card city-map-card" aria-labelledby="city-water-stress-map-title">
@@ -123,7 +370,7 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
 
       <div className="city-map-layout">
         {/* Main Map Viewport */}
-        <div className="city-map-viewport" role="region" aria-label="Interactive water stress map of Bangalore">
+        <div className={`city-map-viewport ${isFullscreen ? 'map-viewport--fullscreen' : ''}`} role="region" aria-label="Interactive water stress map of Karnataka">
           {/* Controls: Top-Left */}
           <div className="city-map-controls" role="toolbar" aria-label="Map zoom controls">
             <button
@@ -152,6 +399,15 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
               title="Reset view"
             >
               <Locate size={16} />
+            </button>
+            <button
+              type="button"
+              className="city-map-ctrl-btn"
+              onClick={toggleFullscreen}
+              aria-label={isFullscreen ? 'Exit full screen' : 'Full screen view'}
+              title={isFullscreen ? 'Exit full screen' : 'Full screen view'}
+            >
+              {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
             </button>
           </div>
 
@@ -184,151 +440,78 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
             <div className="city-map-scale-bar__rule" />
           </div>
 
-          {/* SVG Map Canvas */}
-          <div
-            className="city-map-canvas"
-            style={{
-              transform: `scale(${zoom})`,
-              transformOrigin: 'center center',
-              transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-          >
-            <svg
-              viewBox="120 20 340 450"
-              className="city-map-svg"
-              role="img"
-              aria-label="Map of Bangalore districts showing water stress index"
-            >
-              {/* Basemap Canvas Background */}
-              <rect x="120" y="20" width="340" height="450" fill="#f4f7f6" />
-
-              {/* Arterial Road Network & Highways */}
-              <g stroke="#ffffff" strokeWidth="2.8" fill="none" opacity="0.95" strokeLinecap="round">
-                {/* Outer Ring Road loop */}
-                <ellipse cx="270" cy="230" rx="115" ry="135" strokeDasharray="none" />
-                {/* Inner Ring Road loop */}
-                <ellipse cx="285" cy="225" rx="72" ry="78" strokeDasharray="none" />
-                {/* Major Highways */}
-                <path d="M 130 180 Q 280 190 450 175" />
-                <path d="M 130 310 Q 280 290 450 315" />
-                <path d="M 310 25 Q 320 240 325 465" />
-                <path d="M 220 70 Q 240 260 215 425" />
-                <path d="M 390 60 Q 375 250 405 440" />
-                {/* Secondary connecting streets */}
-                <path d="M 160 120 Q 260 140 360 110" strokeWidth="1.5" strokeDasharray="3 3" />
-                <path d="M 170 380 Q 290 360 410 390" strokeWidth="1.5" strokeDasharray="3 3" />
-              </g>
-
-              {/* Yamuna River (Light blue wide ribbon + ripple line) */}
-              <path
-                d="M 345 20 Q 365 110 360 160 Q 375 215 382 280 Q 410 360 435 460"
-                fill="none"
-                stroke="#a0d2eb"
-                strokeWidth="12"
-                opacity="0.88"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 345 20 Q 365 110 360 160 Q 375 215 382 280 Q 410 360 435 460"
-                fill="none"
-                stroke="#7bc5eb"
-                strokeWidth="4.5"
-                opacity="0.9"
-                strokeLinecap="round"
-              />
-
-              {/* Regional Geographic Labels */}
-              <g fill="#4b5563" fontSize="8.5" fontWeight="700" letterSpacing="0.8" opacity="0.8">
-                {BANGALORE_DASHBOARD_REGIONS.map((r) => (
-                  <text key={r.id} x={r.x} y={r.y} textAnchor="middle">
-                    {r.label}
-                  </text>
-                ))}
-              </g>
-
-              {/* All 42 Seamless Interlocking District Polygons */}
-              <g className="city-map-polygons">
-                {BANGALORE_DASHBOARD_DISTRICTS.map((w) => {
-                  const visible = isDistrictVisible(w)
-                  const isSelected = selectedDistrict.id === w.id
-
-                  return (
-                    <polygon
-                      key={w.id}
-                      points={w.shape}
-                      fill={w.fill}
-                      stroke={isSelected ? '#0f172a' : '#ffffff'}
-                      strokeWidth={isSelected ? 2.5 : 1.2}
-                      strokeLinejoin="round"
-                      opacity={visible ? 1 : 0.22}
-                      className={`city-map-poly ${isSelected ? 'city-map-poly--selected' : ''}`}
-                      onClick={() => handleDistrictClick(w)}
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`${w.name}: ${w.riskLabel}, WSI ${w.wsi}`}
-                      style={{ cursor: 'pointer', transition: 'all 0.15s ease' }}
-                    />
-                  )
-                })}
-              </g>
-
-              {/* Selected District Concentric Marker on Koramangala */}
-              <g
-                className="city-map-pin"
-                transform={`translate(${selectedDistrict.center[0]}, ${selectedDistrict.center[1]})`}
-                pointerEvents="none"
+          <div className="city-map-canvas" style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
+            {loading && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 1000,
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  padding: '10px 18px',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: '#075d4c',
+                }}
               >
-                <circle r="12" fill="none" stroke="#ffffff" strokeWidth="2.8" opacity="0.95" />
-                <circle r="7.5" fill="none" stroke="#0f172a" strokeWidth="2.2" />
-                <circle r="3.2" fill="#ffffff" />
-                <circle r="1.6" fill="#0f172a" />
-              </g>
-            </svg>
-
-            {/* Attached District Interactive Popup Card */}
-            <div
-              className="city-map-popup"
-              style={{
-                left: `${((selectedDistrict.center[0] - 120) / 340) * 100}%`,
-                top: `${((selectedDistrict.center[1] - 20) / 450) * 100}%`,
-              }}
-            >
-              <div className="city-map-popup__inner">
-                <div className="city-map-popup__top">
-                  <span className="city-map-popup__name">
-                    <span className="city-map-popup__dot" style={{ backgroundColor: '#10b981' }} />
-                    {selectedDistrict.name}
-                  </span>
-                  <span className={`city-map-popup__badge city-map-popup__badge--${selectedDistrict.risk}`}>
-                    ● {selectedDistrict.riskLabel}
-                  </span>
-                </div>
-
-                <div className="city-map-popup__metrics">
-                  <div className="city-map-popup__metric-row">
-                    <span className="city-map-popup__metric-label">
-                      <Droplet size={12} className="city-map-popup__metric-icon" />
-                      WSI
-                    </span>
-                    <strong className="city-map-popup__metric-val">{selectedDistrict.wsi.toFixed(2)}</strong>
-                  </div>
-                  <div className="city-map-popup__metric-row">
-                    <span className="city-map-popup__metric-label">
-                      <Users size={12} className="city-map-popup__metric-icon" />
-                      Population
-                    </span>
-                    <strong className="city-map-popup__metric-val">{selectedDistrict.population}</strong>
-                  </div>
-                </div>
-
-                <Link
-                  to={`/districts/${selectedDistrict.districtNumber || selectedDistrict.wardNumber || 12}`}
-                  className="city-map-popup__link"
-                >
-                  View Details <ArrowRight size={13} aria-hidden="true" />
-                </Link>
+                Loading Bangalore boundaries…
               </div>
-            </div>
+            )}
+
+            {error && !loading && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 20,
+                  left: 20,
+                  right: 20,
+                  zIndex: 1000,
+                  background: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  color: '#991b1b',
+                  padding: '10px 14px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                }}
+                role="alert"
+              >
+                {error}
+              </div>
+            )}
+
+            <MapContainer
+              ref={mapRef}
+              center={[14.8, 76.2]}
+              zoom={6}
+              minZoom={5}
+              maxZoom={12}
+              scrollWheelZoom
+              zoomControl={false}
+              preferCanvas
+              style={{ width: '100%', height: '100%', background: '#f2f6f4' }}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              {filteredData && (
+                <>
+                  <FitDistrictsBounds data={filteredData} />
+                  <GeoJSON
+                    key={geoJsonKey}
+                    data={filteredData}
+                    style={featureStyle}
+                    onEachFeature={onEachFeature}
+                  />
+                  <SelectionSynchronizer selectedDistrictId={selectedDistrictId} />
+                </>
+              )}
+            </MapContainer>
           </div>
         </div>
 

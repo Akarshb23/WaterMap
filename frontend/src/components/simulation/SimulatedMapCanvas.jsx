@@ -1,5 +1,20 @@
-import { useState } from 'react'
-import { Plus, Minus, Crosshair } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Plus, Minus, Crosshair, Maximize2, Minimize2 } from 'lucide-react'
+import { GeoJSON, MapContainer, TileLayer, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
+import { fetchDistrictsGeoJSON } from '../../services/districtMapService.js'
+import { fetchWardsGeoJSON } from '../../services/mapService.js'
+import {
+  RISK_COLORS,
+  getDistrictId,
+  styleFeature as getFeatureStyle,
+} from '../map/districtMap.js'
+import {
+  BANGALORE_DASHBOARD_REGIONS,
+  BANGALORE_DASHBOARD_DISTRICTS,
+} from '../../data/bangaloreDashboardData.js'
 
 const MAP_LEGEND_ITEMS = [
   { label: 'Low (0 – 0.3)', color: '#34d399' },
@@ -7,57 +22,44 @@ const MAP_LEGEND_ITEMS = [
   { label: 'High (0.6 – 1.0)', color: '#f87171' },
 ]
 
-/**
- * Contiguous polygon definitions for Bangalore districts cluster.
- * Centered on Central Bangalore with the Bellandur lake valley system running along eastern corridor.
- */
-const BANGALORE_DISTRICT_POLYGONS = [
-  // North Bangalore (Greens & Yellows)
-  { id: 'd1', name: 'Yelahanka', points: '270,180 320,170 345,210 310,240 260,220', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd2', name: 'Hebbal', points: '320,170 380,165 410,205 375,235 345,210', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'd3', name: 'Thanisandra', points: '380,165 435,175 445,225 410,245 410,205', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'd4', name: 'Vidyaranyapura', points: '260,220 310,240 300,290 240,280 235,240', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd5', name: 'Kodigehalli', points: '310,240 375,235 370,285 300,290', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'd6', name: 'Peenya', points: '375,235 410,245 425,290 370,285', baselineRisk: 'moderate', simRisk: 'low' },
+function FitDistrictsBounds({ data }) {
+  const map = useMap()
 
-  // West & Central Bangalore (Yellows, Oranges & Reds)
-  { id: 'd7', name: 'Rajajinagar', points: '240,280 300,290 290,340 220,330', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd8', name: 'Malleshwaram', points: '300,290 370,285 360,335 290,340', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'd9', name: 'Vijayanagar', points: '370,285 425,290 420,335 360,335', baselineRisk: 'moderate', simRisk: 'moderate' },
-  { id: 'd10', name: 'Kengeri', points: '220,330 290,340 280,390 205,380', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd11', name: 'Yeshwanthpur', points: '290,340 360,335 350,385 280,390', baselineRisk: 'moderate', simRisk: 'low' },
+  useEffect(() => {
+    if (!data?.features?.length) return
 
-  // KORAMANGALA (Target Area - Central Core along lake corridor)
-  { id: 'district-12', name: 'Koramangala', points: '360,335 420,335 440,365 415,395 350,385', baselineRisk: 'high', simRisk: 'simulated-target', isTarget: true },
+    try {
+      const bounds = L.geoJSON(data).getBounds()
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, {
+          padding: [25, 25],
+          maxZoom: 7,
+        })
+      }
+    } catch {
+      // Keep initial view if geometry is invalid
+    }
+  }, [data, map])
 
-  // Central Core High Risk Districts (Surrounding Koramangala)
-  { id: 'd13', name: 'Indiranagar', points: '420,335 455,330 475,370 440,365', baselineRisk: 'high', simRisk: 'high' },
-  { id: 'd14', name: 'Shanthi Nagar', points: '415,395 440,365 475,370 470,415 410,430', baselineRisk: 'high', simRisk: 'high' },
-  { id: 'd15', name: 'Domlur', points: '350,385 415,395 410,430 360,435', baselineRisk: 'high', simRisk: 'moderate' },
-  { id: 'd16', name: 'Ulsoor', points: '280,390 350,385 360,435 300,445', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'd17', name: 'Basavanagudi', points: '205,380 280,390 300,445 230,440', baselineRisk: 'low', simRisk: 'low' },
+  return null
+}
 
-  // East Bangalore (Across the Bellandur Lake Valley)
-  { id: 'd18', name: 'Whitefield', points: '495,300 550,290 565,340 510,350', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'd19', name: 'Bellandur', points: '510,350 565,340 580,390 520,405', baselineRisk: 'high', simRisk: 'moderate' },
-  { id: 'd20', name: 'Varthur', points: '520,405 580,390 570,450 510,455', baselineRisk: 'moderate', simRisk: 'low' },
+function SelectionSynchronizer({ selectedDistrictId }) {
+  const map = useMap()
 
-  // South Bangalore (Lush Low-Risk Greens)
-  { id: 'd21', name: 'Electronic City', points: '230,440 300,445 290,500 215,490', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd22', name: 'HSR Layout', points: '300,445 360,435 350,495 290,500', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd23', name: 'BTM Layout', points: '360,435 410,430 405,490 350,495', baselineRisk: 'moderate', simRisk: 'low' },
-  { id: 'd24', name: 'Jayanagar', points: '410,430 470,415 460,480 405,490', baselineRisk: 'high', simRisk: 'moderate' },
-  { id: 'd25', name: 'JP Nagar', points: '290,500 350,495 340,555 275,545', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd26', name: 'Banashankari', points: '350,495 405,490 395,550 340,555', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd27', name: 'Padmanabhanagar', points: '405,490 460,480 445,540 395,550', baselineRisk: 'low', simRisk: 'low' },
-  { id: 'd28', name: 'Bommanahalli', points: '340,555 395,550 380,610 320,600', baselineRisk: 'low', simRisk: 'low' },
-]
+  useEffect(() => {
+    map.eachLayer((layer) => {
+      if (
+        layer.feature &&
+        typeof layer.setStyle === 'function' &&
+        getDistrictId(layer.feature) !== null
+      ) {
+        layer.setStyle(getFeatureStyle(layer.feature, selectedDistrictId))
+      }
+    })
+  }, [map, selectedDistrictId])
 
-const RISK_COLOR_MAP = {
-  low: '#4ade80',              // Crisp mint green
-  moderate: '#fbbf24',         // Warm amber
-  high: '#ef4444',             // Vivid coral red
-  'simulated-target': '#f97316' // Orange / improved moderate-high
+  return null
 }
 
 /**
@@ -72,11 +74,164 @@ const SimulatedMapCanvas = ({
   horizon = '2030',
 }) => {
   const [mode, setMode] = useState('simulated')
-  const [zoomLevel, setZoomLevel] = useState(1)
+  const [selectedDistrictId, setSelectedDistrictId] = useState('district-12')
+  const [geoJsonData, setGeoJsonData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const mapRef = useRef(null)
 
-  const handleZoomIn = () => setZoomLevel((z) => Math.min(1.8, Number((z + 0.15).toFixed(2))))
-  const handleZoomOut = () => setZoomLevel((z) => Math.max(0.85, Number((z - 0.15).toFixed(2))))
-  const handleReset = () => setZoomLevel(1)
+  const toggleFullscreen = () => {
+    setIsFullscreen((prev) => {
+      const next = !prev
+      setTimeout(() => {
+        if (mapRef.current) {
+          mapRef.current.invalidateSize()
+        }
+      }, 100)
+      return next
+    })
+  }
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function loadGeoJSON() {
+      setLoading(true)
+      setError('')
+
+      try {
+        const result = await fetchDistrictsGeoJSON({ signal: controller.signal })
+
+        if (controller.signal.aborted) return
+
+        if (
+          !result ||
+          result.type !== 'FeatureCollection' ||
+          !Array.isArray(result.features) ||
+          result.features.length === 0
+        ) {
+          throw new Error('The boundary endpoint returned no usable polygons.')
+        }
+
+        setGeoJsonData(result)
+      } catch (err) {
+        if (controller.signal.aborted) return
+        setError(err?.userMessage || err?.message || 'District boundaries could not be loaded.')
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadGeoJSON()
+    return () => controller.abort()
+  }, [])
+
+  const handleZoomIn = () => {
+    if (mapRef.current) mapRef.current.zoomIn()
+  }
+
+  const handleZoomOut = () => {
+    if (mapRef.current) mapRef.current.zoomOut()
+  }
+
+  const handleReset = () => {
+    setSelectedDistrictId('district-12')
+    if (mapRef.current) {
+      if (geoJsonData) {
+        const bounds = L.geoJSON(geoJsonData).getBounds()
+        if (bounds.isValid()) {
+          mapRef.current.fitBounds(bounds, { padding: [20, 20], maxZoom: 12 })
+        }
+      } else {
+        mapRef.current.setView([12.97, 77.59], 11)
+      }
+    }
+  }
+
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      const props = feature.properties || {}
+      const dId = getDistrictId(feature)
+      const name = props.name || props.district_name || 'Unnamed District'
+      const isTarget = name.toLowerCase().includes('koramangala') || dId === 'district-12' || dId === 'W001'
+
+      const effectiveWsi = isTarget
+        ? (mode === 'simulated' ? simulatedWsi : currentWsi)
+        : Number(props.water_stress_index ?? 0.5)
+
+      layer.bindTooltip(
+        `<div style="font-weight:700;font-size:12px;color:#0f172a">${name} (${mode === 'simulated' ? horizon : '2024'})</div><div style="font-size:11px;color:#475569">WSI: ${Number(effectiveWsi).toFixed(2)}${isTarget && mode === 'simulated' ? ` (↓ ${reductionPct}%)` : ''}</div>`,
+        {
+          sticky: true,
+          direction: 'auto',
+          className: 'district-map-tooltip',
+        }
+      )
+
+      layer.on({
+        click: () => {
+          setSelectedDistrictId(dId)
+        },
+        mouseover: (e) => {
+          const l = e.target
+          if (dId !== String(selectedDistrictId)) {
+            l.setStyle({
+              weight: 2.8,
+              color: '#075f50',
+              fillOpacity: 0.95,
+            })
+            if (typeof l.bringToFront === 'function') {
+              l.bringToFront()
+            }
+          }
+        },
+        mouseout: (e) => {
+          const l = e.target
+          if (dId !== String(selectedDistrictId)) {
+            l.setStyle(getFeatureStyle(feature, selectedDistrictId))
+          }
+        },
+      })
+    },
+    [selectedDistrictId, mode, simulatedWsi, currentWsi, reductionPct, horizon]
+  )
+
+  const featureStyle = useCallback(
+    (feature) => {
+      const props = feature.properties || {}
+      const name = props.name || props.district_name || ''
+      const dId = getDistrictId(feature)
+      const isTarget = name.toLowerCase().includes('koramangala') || dId === 'district-12' || dId === 'W001'
+
+      let fillColor = '#10b981'
+      if (isTarget) {
+        fillColor = mode === 'simulated' ? '#f59e0b' : '#ef4444'
+      } else {
+        const wsi = Number(props.water_stress_index ?? 0.5)
+        fillColor = wsi >= 0.6 ? RISK_COLORS.high : wsi >= 0.3 ? RISK_COLORS.moderate : RISK_COLORS.low
+      }
+
+      const isSelected = String(dId) === String(selectedDistrictId)
+
+      return {
+        color: isSelected ? '#075f50' : '#ffffff',
+        weight: isSelected ? 3 : 1.5,
+        opacity: 1,
+        fillColor,
+        fillOpacity: isSelected ? 0.98 : 0.85,
+        lineJoin: 'round',
+        lineCap: 'round',
+      }
+    },
+    [selectedDistrictId, mode]
+  )
+
+  const geoJsonKey = useMemo(() => {
+    return `${(geoJsonData?.features ?? []).map((f) => getDistrictId(f)).join('-')}-${mode}`
+  }, [geoJsonData, mode])
 
   return (
     <section className="card sim-map" aria-labelledby="sim-map-title">
@@ -118,14 +273,14 @@ const SimulatedMapCanvas = ({
         </div>
       </div>
 
-      <div className="sim-map-canvas" style={{ position: 'relative', width: '100%', height: '415px', overflow: 'hidden', backgroundColor: '#eef5f3' }}>
+      <div className={`sim-map-canvas ${isFullscreen ? 'map-viewport--fullscreen' : ''}`} style={{ position: 'relative', width: '100%', height: isFullscreen ? '100vh' : '415px', overflow: 'hidden', backgroundColor: '#eef5f3' }}>
         {/* Zoom & Navigation Controls (top-left) */}
         <div
           style={{
             position: 'absolute',
             top: 14,
             left: 14,
-            zIndex: 10,
+            zIndex: 1000,
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: '#ffffff',
@@ -155,134 +310,95 @@ const SimulatedMapCanvas = ({
             type="button"
             onClick={handleReset}
             title="Center map"
-            style={{ width: 30, height: 30, border: 'none', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ width: 30, height: 30, border: 'none', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #f1f5f9' }}
           >
             <Crosshair size={14} color="#475569" />
           </button>
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            title={isFullscreen ? 'Exit full screen' : 'Full screen view'}
+            style={{ width: 30, height: 30, border: 'none', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            {isFullscreen ? <Minimize2 size={15} color="#475569" /> : <Maximize2 size={15} color="#475569" />}
+          </button>
         </div>
 
-        {/* SVG Map Canvas */}
-        <svg
-          viewBox="0 0 700 680"
-          style={{
-            width: '100%',
-            height: '100%',
-            transform: `scale(${zoomLevel})`,
-            transformOrigin: '50% 50%',
-            transition: 'transform 0.2s ease',
-          }}
-        >
-          <defs>
-            {/* Grid pattern representing city streets */}
-            <pattern id="streetGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <rect width="40" height="40" fill="#f4f7f4" />
-              <line x1="0" y1="0" x2="40" y2="0" stroke="#e6ede6" strokeWidth="1.2" />
-              <line x1="0" y1="0" x2="0" y2="40" stroke="#e6ede6" strokeWidth="1.2" />
-              <line x1="20" y1="0" x2="20" y2="40" stroke="#edf3ed" strokeWidth="0.8" />
-              <line x1="0" y1="20" x2="40" y2="20" stroke="#edf3ed" strokeWidth="0.8" />
-            </pattern>
-            {/* Soft valley gradient */}
-            <linearGradient id="valleyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#93c5fd" />
-              <stop offset="100%" stopColor="#60a5fa" />
-            </linearGradient>
-          </defs>
+        {/* Leaflet GeoJSON Map Container */}
+        <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
+          {loading && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1000,
+                background: 'rgba(255, 255, 255, 0.95)',
+                padding: '10px 18px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: '#075d4c',
+              }}
+            >
+              Loading Karnataka boundaries…
+            </div>
+          )}
 
-          {/* Background Map Tiles / Grid */}
-          <rect width="700" height="680" fill="url(#streetGrid)" />
+          {error && !loading && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 20,
+                left: 20,
+                right: 20,
+                zIndex: 1000,
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                color: '#991b1b',
+                padding: '10px 14px',
+                borderRadius: '6px',
+                fontSize: '12px',
+              }}
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
 
-          {/* Road Network Overlays */}
-          <g stroke="#ffffff" strokeWidth="3" opacity="0.9" fill="none">
-            <path d="M-20,150 Q200,120 400,140 T720,130" />
-            <path d="M-20,270 Q250,260 500,280 T720,290" />
-            <path d="M-20,440 Q300,430 550,460 T720,450" />
-            <path d="M180,-20 Q160,250 190,500 T210,700" strokeWidth="4" />
-            <path d="M350,-20 Q330,300 370,550 T390,700" strokeWidth="4" />
-            <path d="M530,-20 Q500,200 520,500 T510,700" strokeWidth="3" />
-          </g>
+          <MapContainer
+            ref={mapRef}
+            center={[14.8, 76.2]}
+            zoom={6}
+            minZoom={5}
+            maxZoom={12}
+            scrollWheelZoom
+            zoomControl={false}
+            preferCanvas
+            style={{ width: '100%', height: '100%', background: '#f2f6f4' }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
 
-          {/* Bellandur / Vrishabhavathi Lake Valley System (Flowing North to South-East) */}
-          <path
-            d="M450,-30 C430,90 495,170 470,260 S495,350 480,440 S530,550 540,710 L575,710 C565,550 525,440 535,350 S505,260 540,170 S475,90 495,-30 Z"
-            fill="url(#valleyGradient)"
-            opacity="0.95"
-          />
-          <path
-            d="M472,-30 C452,90 517,170 492,260 S517,350 502,440 S552,550 562,710"
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="1.5"
-            opacity="0.6"
-          />
-
-          {/* Contiguous District Polygons */}
-          <g stroke="#ffffff" strokeWidth="1.8" strokeLinejoin="round">
-            {BANGALORE_DISTRICT_POLYGONS.map((district) => {
-              const risk = mode === 'simulated' ? district.simRisk : district.baselineRisk
-              const fillColor = RISK_COLOR_MAP[risk] || '#fbbf24'
-              return (
-                <polygon
-                  key={district.id}
-                  points={district.points}
-                  fill={fillColor}
-                  opacity="0.88"
-                  style={{
-                    transition: 'fill 0.3s ease, opacity 0.2s ease',
-                  }}
+            {geoJsonData && (
+              <>
+                <FitDistrictsBounds data={geoJsonData} />
+                <GeoJSON
+                  key={geoJsonKey}
+                  data={geoJsonData}
+                  style={featureStyle}
+                  onEachFeature={onEachFeature}
                 />
-              )
-            })}
-          </g>
-
-          {/* Regional Text Labels */}
-          <g fill="#475569" fontSize="13" fontWeight="800" letterSpacing="1.5" opacity="0.75" pointerEvents="none">
-            <text x="340" y="145" textAnchor="middle">NORTH BANGALORE</text>
-            <text x="210" y="325" textAnchor="middle">WEST BANGALORE</text>
-            <text x="340" y="315" textAnchor="middle">CENTRAL BANGALORE</text>
-            <text x="590" y="320" textAnchor="middle">EAST BANGALORE</text>
-            <text x="365" y="475" textAnchor="middle">SOUTH BANGALORE</text>
-          </g>
-
-          {/* Target Pinpoint on Koramangala (Coordinates at x=395, y=360) */}
-          <g>
-            {/* Outer Target Circle */}
-            <circle cx="395" cy="360" r="7.5" fill="#0f172a" stroke="#ffffff" strokeWidth="2.5" />
-            <circle cx="395" cy="360" r="3" fill="#ffffff" />
-
-            {/* Tooltip Callout Box */}
-            <g>
-              {/* Pointer Triangle connecting to pin */}
-              <polygon points="405,338 395,360 422,338" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1" />
-              {/* Tooltip Card Rect */}
-              <rect
-                x="405"
-                y="298"
-                width="142"
-                height="46"
-                rx="6"
-                fill="#ffffff"
-                stroke="#cbd5e1"
-                strokeWidth="1"
-                filter="drop-shadow(0 4px 10px rgba(0,0,0,0.12))"
-              />
-              {/* Tooltip Content */}
-              <text x="418" y="316" fill="#0f172a" fontSize="12" fontWeight="700">
-                {areaLabel}
-              </text>
-              <text x="418" y="333" fill="#334155" fontSize="11" fontWeight="600">
-                WSI:{' '}
-                {mode === 'simulated' ? (
-                  <>
-                    <tspan fill="#0f172a">{Number(simulatedWsi).toFixed(2)} </tspan>
-                    <tspan fill="#10b981" fontWeight="700">(↓ {reductionPct}%)</tspan>
-                  </>
-                ) : (
-                  <tspan fill="#ef4444" fontWeight="700">{Number(currentWsi).toFixed(2)}</tspan>
-                )}
-              </text>
-            </g>
-          </g>
-        </svg>
+                <SelectionSynchronizer selectedDistrictId={selectedDistrictId} />
+              </>
+            )}
+          </MapContainer>
+        </div>
+        
 
         {/* Floating Legend (Bottom-Left) */}
         <div
@@ -290,7 +406,7 @@ const SimulatedMapCanvas = ({
             position: 'absolute',
             bottom: 14,
             left: 14,
-            zIndex: 10,
+            zIndex: 1000,
             backgroundColor: '#ffffff',
             padding: '8px 12px',
             borderRadius: 6,
@@ -315,7 +431,7 @@ const SimulatedMapCanvas = ({
             position: 'absolute',
             bottom: 14,
             right: 14,
-            zIndex: 10,
+            zIndex: 1000,
             backgroundColor: '#ffffff',
             padding: '6px 10px',
             borderRadius: 4,

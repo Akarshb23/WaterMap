@@ -121,7 +121,7 @@ const PreferencesModal = ({ isOpen, onClose, onShowToast }) => {
 
             <div className="wm-pref-options-grid">
               {[
-                { id: 'bangalore', label: 'Bangalore (Urban Core)', sub: '198 Wards • 8 BBMP Zones' },
+                { id: 'bangalore', label: 'Karnataka', sub: '31 Administrative Districts • State-wide Basin' },
                 { id: 'bengaluru-urban', label: 'Bengaluru Urban District', sub: 'Extended Metropolitan Area' },
                 { id: 'bengaluru-rural', label: 'Bengaluru Rural Catchments', sub: 'Peri-urban Agro-Hydrology' },
               ].map((opt) => (

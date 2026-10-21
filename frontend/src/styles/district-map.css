@@ -111,6 +111,12 @@
   transition: fill-opacity 140ms ease, stroke-width 140ms ease;
 }
 
+.district-map-leaflet .leaflet-interactive:hover {
+  fill-opacity: 0.98;
+  stroke: #075f50;
+  stroke-width: 2.8px;
+}
+
 .district-map-leaflet .leaflet-interactive:focus {
   outline: none;
 }

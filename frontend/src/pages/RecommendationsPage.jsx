@@ -105,7 +105,7 @@ const RecommendationsPage = () => {
         <div className="recommendations-header__title-block">
           <h1 className="recommendations-header__title">Recommendations</h1>
           <p className="recommendations-header__subtitle">
-            Data-driven, actionable solutions for a more water secure Bangalore.
+            Data-driven, actionable solutions for a more water secure Karnataka.
           </p>
         </div>
 

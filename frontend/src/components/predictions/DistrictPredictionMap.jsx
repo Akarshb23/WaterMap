@@ -146,10 +146,10 @@ const DistrictPredictionMap = () => {
 
       {/* Map note about prediction data availability */}
       <div className="district-prediction-map-note">
-        <strong>Note: Predictions are calibrated for Bangalore Urban districts.</strong>
+        <strong>Note: Predictions are calibrated for Karnataka districts.</strong>
         <p>
           District-level forecasts incorporate localized rainfall, groundwater telemetry, and demand models.
-          The map above displays Bangalore district boundaries for reference.
+          The map above displays Karnataka district boundaries for reference.
         </p>
       </div>
     </div>

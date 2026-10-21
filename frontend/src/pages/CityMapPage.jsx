@@ -73,7 +73,7 @@ export default function CityMapPage() {
               <MapPin size={18} aria-hidden="true" />
             </span>
             <div className="city-map-header__text">
-              <h2 className="city-map-header__heading">Bangalore Urban Basin</h2>
+              <h2 className="city-map-header__heading">Karnataka Urban Basin</h2>
               <p className="city-map-header__caption">High-resolution geospatial water telemetry.</p>
             </div>
           </div>

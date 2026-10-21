@@ -1,81 +1,221 @@
-import { useState } from 'react'
-import { Locate, Minus, Plus } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Locate, Maximize2, Minimize2, Minus, Plus } from 'lucide-react'
+import { GeoJSON, MapContainer, TileLayer, useMap } from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import { fetchDistrictsGeoJSON } from '../../services/districtMapService.js'
+import { fetchWardsGeoJSON } from '../../services/mapService.js'
+import {
+  RISK_COLORS,
+  getDistrictId,
+  styleFeature as getFeatureStyle,
+} from '../map/districtMap.js'
+import {
+  BANGALORE_DASHBOARD_REGIONS,
+  BANGALORE_DASHBOARD_DISTRICTS,
+} from '../../data/bangaloreDashboardData.js'
 
-// 42 District polygons tessellating the geographical boundary of Bangalore
-// Exactly matching the required layout:
-// 12 High Priority (Red), 18 Medium Priority (Orange/Amber), 12 Low Priority (Green)
-export const BANGALORE_PRIORITY_DISTRICTS = [
-  // --- 12 HIGH PRIORITY (Red) - High Stress Core & Tech Corridors ---
-  { id: 'D12', name: 'Koramangala', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.87, shape: '298,185 330,180 342,212 308,218 296,200' },
-  { id: 'D13', name: 'Indiranagar', region: 'Central', priority: 'high', priorityLabel: 'High Priority', wsi: 0.78, shape: '268,202 296,200 306,232 278,236' },
-  { id: 'D14', name: 'Whitefield', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.85, shape: '296,200 326,196 332,228 306,232' },
-  { id: 'D15', name: 'Electronic City', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.88, shape: '326,196 358,190 366,220 332,228' },
-  { id: 'D20', name: 'Bellandur', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.79, shape: '368,172 402,168 412,198 376,204' },
-  { id: 'D21', name: 'HSR Layout', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.76, shape: '376,204 412,198 420,232 382,238' },
-  { id: 'D22', name: 'Marathahalli', region: 'East', priority: 'high', priorityLabel: 'High Priority', wsi: 0.86, shape: '352,228 382,238 388,272 356,268' },
-  { id: 'D25', name: 'BTM Layout', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.83, shape: '278,236 306,232 312,266 284,270' },
-  { id: 'D26', name: 'Jayanagar', region: 'South', priority: 'high', priorityLabel: 'High Priority', wsi: 0.77, shape: '306,232 342,228 348,266 312,266' },
-  { id: 'D08', name: 'Hebbal', region: 'North', priority: 'high', priorityLabel: 'High Priority', wsi: 0.82, shape: '298,155 338,150 330,180 298,185' },
-  { id: 'D17', name: 'Yelahanka', region: 'North', priority: 'high', priorityLabel: 'High Priority', wsi: 0.71, shape: '246,236 278,236 284,270 248,268' },
-  { id: 'D29', name: 'Rajajinagar', region: 'West', priority: 'high', priorityLabel: 'High Priority', wsi: 0.76, shape: '312,266 348,266 342,302 306,300' },
-
-  // --- 18 MEDIUM PRIORITY (Orange/Amber) - Buffer Ring around Urban Core ---
-  { id: 'D04', name: 'Banashankari', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '254,122 296,118 298,155 258,158' },
-  { id: 'D06', name: 'Malleshwaram', region: 'North', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.52, shape: '296,118 342,112 338,150 298,155' },
-  { id: 'D07', name: 'Basavanagudi', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.54, shape: '342,112 384,120 374,158 338,150' },
-  { id: 'D10', name: 'Frazer Town', region: 'Central', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.49, shape: '216,160 258,158 258,198 214,196' },
-  { id: 'D11', name: 'RT Nagar', region: 'North', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '214,196 258,198 252,234 210,230' },
-  { id: 'D24', name: 'Domlur', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.56, shape: '382,238 426,234 432,274 388,272' },
-  { id: 'D23', name: 'Ulsoor', region: 'Central', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.59, shape: '388,272 432,274 424,312 378,308' },
-  { id: 'D27', name: 'Yeshwanthpur', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.45, shape: '244,268 284,270 278,312 236,306' },
-  { id: 'D28', name: 'Peenya', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.51, shape: '284,270 306,300 298,338 274,318' },
-  { id: 'D30', name: 'Kengeri', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.57, shape: '348,266 384,264 378,308 342,302' },
-  { id: 'D32', name: 'Vijayanagar', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.49, shape: '274,318 316,334 310,374 266,364' },
-  { id: 'D33', name: 'Nagarbhavi', region: 'West', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.53, shape: '316,334 356,334 350,374 310,374' },
-  { id: 'D34', name: 'KR Puram', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.58, shape: '356,334 396,330 390,370 350,374' },
-  { id: 'D35', name: 'Mahadevapura', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.52, shape: '378,308 418,306 412,350 374,352' },
-  { id: 'D39', name: 'CV Raman Nagar', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.55, shape: '390,370 432,364 424,408 382,410' },
-  { id: 'D40', name: 'Sarjapur Road', region: 'East', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.51, shape: '206,230 248,236 244,268 202,264' },
-  { id: 'D41', name: 'Bommanahalli', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.53, shape: '374,308 418,306 410,348 368,348' },
-  { id: 'D42', name: 'JP Nagar', region: 'South', priority: 'medium', priorityLabel: 'Medium Priority', wsi: 0.48, shape: '266,364 310,374 300,412 254,398' },
-
-  // --- 12 LOW PRIORITY (Green) - Outer Perimeter & Watershed Districts ---
-  { id: 'D01', name: 'Devanahalli', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '272,42 334,36 346,84 286,88' },
-  { id: 'D02', name: 'Vidyaranyapura', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.25, shape: '334,36 384,48 380,100 338,92' },
-  { id: 'D03', name: 'Thanisandra', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.31, shape: '212,62 272,42 284,92 222,118' },
-  { id: 'D05', name: 'Sahakara Nagar', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.30, shape: '346,84 402,96 392,138 342,128' },
-  { id: 'D09', name: 'Rajarajeshwari Nagar', region: 'West', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.29, shape: '168,148 216,160 210,210 162,198' },
-  { id: 'D16', name: 'Banaswadi', region: 'East', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '162,204 210,210 204,256 156,246' },
-  { id: 'D18', name: 'Kalyan Nagar', region: 'East', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.26, shape: '156,252 204,258 196,304 150,296' },
-  { id: 'D19', name: 'HBR Layout', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.27, shape: '150,300 196,306 188,352 144,342' },
-  { id: 'D31', name: 'Horamavu', region: 'East', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.28, shape: '212,324 262,336 250,388 200,372' },
-  { id: 'D36', name: 'Hennur', region: 'North', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.26, shape: '254,398 300,412 288,454 242,438' },
-  { id: 'D37', name: 'Varthur', region: 'East', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.29, shape: '300,412 352,408 342,458 288,454' },
-  { id: 'D38', name: 'Begur', region: 'South', priority: 'low', priorityLabel: 'Low Priority', wsi: 0.30, shape: '352,408 408,402 398,452 342,458' },
-]
-
+// Priority colors for the recommendations map
 const PRIORITY_COLORS = {
-  high: { fill: '#ef4444', stroke: '#ffffff', label: 'High Priority (12)' },
-  medium: { fill: '#f59e0b', stroke: '#ffffff', label: 'Medium Priority (18)' },
-  low: { fill: '#48bb78', stroke: '#ffffff', label: 'Low Priority (12)' },
+  high: { fill: '#ef4444', label: 'High Priority (12)' },
+  moderate: { fill: '#f59e0b', label: 'Medium Priority (18)' },
+  medium: { fill: '#f59e0b', label: 'Medium Priority (18)' },
+  low: { fill: '#10b981', label: 'Low Priority (12)' },
+}
+
+function FitDistrictsBounds({ data }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!data?.features?.length) return
+
+    try {
+      const bounds = L.geoJSON(data).getBounds()
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, {
+          padding: [25, 25],
+          maxZoom: 7,
+        })
+      }
+    } catch {
+      // Keep initial view if geometry is invalid
+    }
+  }, [data, map])
+
+  return null
+}
+
+function SelectionSynchronizer({ selectedDistrictId }) {
+  const map = useMap()
+
+  useEffect(() => {
+    map.eachLayer((layer) => {
+      if (
+        layer.feature &&
+        typeof layer.setStyle === 'function' &&
+        getDistrictId(layer.feature) !== null
+      ) {
+        layer.setStyle(getFeatureStyle(layer.feature, selectedDistrictId))
+      }
+    })
+  }, [map, selectedDistrictId])
+
+  return null
 }
 
 const PriorityWardMap = ({ onSelectDistrict, onSelectWard }) => {
   const handleSelect = onSelectDistrict || onSelectWard
-  const [zoom, setZoom] = useState(1)
-  const [selectedDistrict, setSelectedDistrict] = useState(null)
+  const [selectedDistrictId, setSelectedDistrictId] = useState('district-12')
+  const [geoJsonData, setGeoJsonData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const mapRef = useRef(null)
 
-  const handleZoomIn = () => setZoom((z) => Math.min(1.8, +(z + 0.15).toFixed(2)))
-  const handleZoomOut = () => setZoom((z) => Math.max(0.85, +(z - 0.15).toFixed(2)))
+  const toggleFullscreen = () => {
+    setIsFullscreen((prev) => {
+      const next = !prev
+      setTimeout(() => {
+        if (mapRef.current) {
+          mapRef.current.invalidateSize()
+        }
+      }, 100)
+      return next
+    })
+  }
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function loadGeoJSON() {
+      setLoading(true)
+      setError('')
+
+      try {
+        const result = await fetchDistrictsGeoJSON({ signal: controller.signal })
+
+        if (controller.signal.aborted) return
+
+        if (
+          !result ||
+          result.type !== 'FeatureCollection' ||
+          !Array.isArray(result.features) ||
+          result.features.length === 0
+        ) {
+          throw new Error('The boundary endpoint returned no usable polygons.')
+        }
+
+        setGeoJsonData(result)
+      } catch (err) {
+        if (controller.signal.aborted) return
+        setError(err?.userMessage || err?.message || 'District boundaries could not be loaded.')
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadGeoJSON()
+    return () => controller.abort()
+  }, [])
+
+  const handleZoomIn = () => {
+    if (mapRef.current) mapRef.current.zoomIn()
+  }
+
+  const handleZoomOut = () => {
+    if (mapRef.current) mapRef.current.zoomOut()
+  }
+
   const handleResetZoom = () => {
-    setZoom(1)
-    setSelectedDistrict(null)
+    setSelectedDistrictId('district-12')
+    if (mapRef.current) {
+      if (geoJsonData) {
+        const bounds = L.geoJSON(geoJsonData).getBounds()
+        if (bounds.isValid()) {
+          mapRef.current.fitBounds(bounds, { padding: [20, 20], maxZoom: 12 })
+        }
+      } else {
+        mapRef.current.setView([12.97, 77.59], 11)
+      }
+    }
   }
 
-  const handleDistrictClick = (district) => {
-    setSelectedDistrict(district)
-    handleSelect?.(district)
-  }
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      const props = feature.properties || {}
+      const dId = getDistrictId(feature)
+      const name = props.name || props.district_name || 'Unnamed District'
+      const wsi = props.water_stress_index != null ? Number(props.water_stress_index).toFixed(2) : '0.50'
+      const risk = props.risk_category || 'Moderate'
+
+      layer.bindTooltip(
+        `<div style="font-weight:700;font-size:12px;color:#0f172a">${name}</div><div style="font-size:11px;color:#475569">Priority: ${risk} · WSI: ${wsi}</div>`,
+        {
+          sticky: true,
+          direction: 'auto',
+          className: 'district-map-tooltip',
+        }
+      )
+
+      layer.on({
+        click: () => {
+          setSelectedDistrictId(dId)
+          const districtObj = {
+            id: dId,
+            district_id: dId,
+            name,
+            district_name: name,
+            risk: String(risk).toLowerCase(),
+            riskLabel: `${risk[0].toUpperCase()}${risk.slice(1)} Priority`,
+            wsi: Number(props.water_stress_index ?? 0.5),
+            water_stress_index: props.water_stress_index,
+            zone: props.zone || 'Karnataka Region',
+            properties: props,
+          }
+          handleSelect?.(districtObj)
+        },
+        mouseover: (e) => {
+          const l = e.target
+          if (dId !== String(selectedDistrictId)) {
+            l.setStyle({
+              weight: 2.8,
+              color: '#075f50',
+              fillOpacity: 0.95,
+            })
+            if (typeof l.bringToFront === 'function') {
+              l.bringToFront()
+            }
+          }
+        },
+        mouseout: (e) => {
+          const l = e.target
+          if (dId !== String(selectedDistrictId)) {
+            l.setStyle(getFeatureStyle(feature, selectedDistrictId))
+          }
+        },
+      })
+    },
+    [selectedDistrictId, handleSelect]
+  )
+
+  const featureStyle = useCallback(
+    (feature) => {
+      const base = getFeatureStyle(feature, selectedDistrictId)
+      return {
+        ...base,
+        stroke: true,
+        weight: String(getDistrictId(feature)) === String(selectedDistrictId) ? 3 : 1.5,
+        fillOpacity: 0.85,
+      }
+    },
+    [selectedDistrictId]
+  )
+
+  const geoJsonKey = useMemo(() => {
+    return (geoJsonData?.features ?? []).map((f) => getDistrictId(f)).join('-')
+  }, [geoJsonData])
 
   return (
     <article className="card priority-wards-map" aria-label="Priority Districts Map">
@@ -86,7 +226,7 @@ const PriorityWardMap = ({ onSelectDistrict, onSelectWard }) => {
         </p>
       </div>
 
-      <div className="priority-wards-map__canvas" role="region" aria-label="Priority districts map">
+      <div className={`priority-wards-map__canvas ${isFullscreen ? 'map-viewport--fullscreen' : ''}`} role="region" aria-label="Priority districts map">
         {/* Floating Controls (top-left) */}
         <div className="priority-wards-map__controls" role="toolbar" aria-label="Map navigation controls">
           <button
@@ -116,96 +256,91 @@ const PriorityWardMap = ({ onSelectDistrict, onSelectWard }) => {
           >
             <Locate size={16} />
           </button>
+          <button
+            type="button"
+            className="priority-wards-map__ctrl-btn"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Exit full screen' : 'Full screen view'}
+            title={isFullscreen ? 'Exit full screen' : 'Full screen view'}
+          >
+            {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </button>
         </div>
 
-        {/* SVG Interactive Bangalore Map */}
-        <div
-          className="priority-wards-map__svg-wrapper"
-          style={{
-            transform: `scale(${zoom})`,
-            transformOrigin: 'center center',
-            transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          <svg
-            viewBox="130 20 320 450"
-            className="priority-wards-map__svg"
-            role="img"
-            aria-label="Map of Bangalore showing priority districts for immediate intervention"
-            style={{ width: '100%', height: '100%', display: 'block' }}
+        {/* Leaflet GeoJSON Map Container */}
+        <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
+          {loading && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1000,
+                background: 'rgba(255, 255, 255, 0.95)',
+                padding: '10px 18px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: '#075d4c',
+              }}
+            >
+              Loading Karnataka boundaries…
+            </div>
+          )}
+
+          {error && !loading && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 20,
+                left: 20,
+                right: 20,
+                zIndex: 1000,
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                color: '#991b1b',
+                padding: '10px 14px',
+                borderRadius: '6px',
+                fontSize: '12px',
+              }}
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          <MapContainer
+            ref={mapRef}
+            center={[14.8, 76.2]}
+            zoom={6}
+            minZoom={5}
+            maxZoom={12}
+            scrollWheelZoom
+            zoomControl={false}
+            preferCanvas
+            style={{ width: '100%', height: '100%', background: '#f2f6f4' }}
           >
-            {/* Soft map canvas background */}
-            <rect x="130" y="20" width="320" height="450" fill="#f1f5f3" />
-
-            {/* Subtle arterial roads behind districts */}
-            <g stroke="#ffffff" strokeWidth="2.5" fill="none" opacity="0.9" strokeLinecap="round">
-              <path d="M 140 180 Q 280 190 440 175" />
-              <path d="M 140 310 Q 280 290 440 315" />
-              <path d="M 310 25 Q 320 240 325 465" />
-              <path d="M 230 70 Q 240 260 220 420" />
-              <path d="M 390 60 Q 380 250 400 440" />
-            </g>
-
-            {/* Faint valley stream corridor along East Bangalore */}
-            <path
-              d="M 358 20 Q 380 90 370 150 Q 365 200 376 250 Q 385 300 420 370 Q 435 410 445 465"
-              fill="none"
-              stroke="#b9dff2"
-              strokeWidth="5"
-              opacity="0.75"
-              strokeLinecap="round"
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* Regional Name Labels */}
-            <g fill="#4b5563" fontSize="9.5" fontWeight="700" letterSpacing="0.9">
-              <text x="290" y="60" textAnchor="middle">NORTH BANGALORE</text>
-              <text x="195" y="210" textAnchor="middle">WEST BANGALORE</text>
-              <text x="312" y="254" textAnchor="middle" fill="#1f2937" fontWeight="800">CENTRAL BANGALORE</text>
-              <text x="402" y="235" textAnchor="middle">EAST BANGALORE</text>
-              <text x="315" y="445" textAnchor="middle">SOUTH BANGALORE</text>
-            </g>
-
-            {/* 42 District Polygons */}
-            <g className="priority-wards-map__polygons">
-              {BANGALORE_PRIORITY_DISTRICTS.map((w) => {
-                const colorInfo = PRIORITY_COLORS[w.priority] || PRIORITY_COLORS.medium
-                const isSelected = selectedDistrict?.id === w.id
-
-                return (
-                  <polygon
-                    key={w.id}
-                    points={w.shape}
-                    fill={colorInfo.fill}
-                    stroke={isSelected ? '#0f172a' : '#ffffff'}
-                    strokeWidth={isSelected ? 2.2 : 1.2}
-                    className="priority-wards-map__poly"
-                    opacity={isSelected ? 1 : 0.9}
-                    onClick={() => handleDistrictClick(w)}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`${w.name}: ${w.priorityLabel}, WSI ${w.wsi}`}
-                    style={{ cursor: 'pointer', transition: 'all 0.15s ease' }}
-                  />
-                )
-              })}
-            </g>
-
-            {/* Selected District Indicator */}
-            {selectedDistrict && (
-              <circle
-                cx={selectedDistrict.shape.split(' ')[0].split(',')[0]}
-                cy={selectedDistrict.shape.split(' ')[0].split(',')[1]}
-                r="4.5"
-                fill="#ffffff"
-                stroke="#0f172a"
-                strokeWidth="2"
-              />
+            {geoJsonData && (
+              <>
+                <FitDistrictsBounds data={geoJsonData} />
+                <GeoJSON
+                  key={geoJsonKey}
+                  data={geoJsonData}
+                  style={featureStyle}
+                  onEachFeature={onEachFeature}
+                />
+                <SelectionSynchronizer selectedDistrictId={selectedDistrictId} />
+              </>
             )}
-          </svg>
+          </MapContainer>
         </div>
-
         {/* Priority Legend Overlay (bottom-left) */}
         <div className="priority-wards-map__legend" aria-label="Priority districts legend">
           <ul className="priority-wards-map__legend-list">

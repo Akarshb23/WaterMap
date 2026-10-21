@@ -58,7 +58,7 @@ const ExportReportModal = ({ isOpen, onClose, onShowToast }) => {
         const encodedUri = encodeURI(csvContent)
         const link = document.createElement('a')
         link.setAttribute('href', encodedUri)
-        link.setAttribute('download', `WaterMap_Bangalore_Resilience_Report_2026.csv`)
+        link.setAttribute('download', `WaterMap_Karnataka_Resilience_Report_2026.csv`)
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
@@ -66,7 +66,7 @@ const ExportReportModal = ({ isOpen, onClose, onShowToast }) => {
       } else if (format === 'json') {
         // Generate JSON file download
         const jsonData = {
-          reportTitle: 'Bangalore Urban Water Resilience Blueprint 2026–2030',
+          reportTitle: 'Karnataka Water Resilience Blueprint 2026–2030',
           generatedAt: new Date().toISOString(),
           jurisdiction: 'Bengaluru Urban Core & Peri-Urban Basins',
           authority: 'BWSSB & BBMP Joint Resilience Taskforce',
