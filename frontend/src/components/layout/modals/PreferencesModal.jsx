@@ -228,9 +228,9 @@ const PreferencesModal = ({ isOpen, onClose, onShowToast }) => {
                     setPreferences({ ...preferences, climateScenario: e.target.value })
                   }
                 >
-                  <option value="ssp126">SSP1-2.6 (Aggressive Climate Mitigation: +1.5°C)</option>
-                  <option value="ssp245">SSP2-4.5 (Moderate Middle-of-the-Road: +2.7°C)</option>
-                  <option value="ssp585">SSP5-8.5 (High Emissions / Severe Drought Risk: +4.4°C)</option>
+                  <option value="ssp126">SSP1-2.6 (Mitigation: +1.5°C)</option>
+                  <option value="ssp245">SSP2-4.5 (Moderate: +2.7°C)</option>
+                  <option value="ssp585">SSP5-8.5 (Extreme Stress: +4.4°C)</option>
                 </select>
               </div>
 
@@ -244,8 +244,8 @@ const PreferencesModal = ({ isOpen, onClose, onShowToast }) => {
                     setPreferences({ ...preferences, units: e.target.value })
                   }
                 >
-                  <option value="metric">Metric (MLD, MCM, mm rainfall, meters bgl)</option>
-                  <option value="imperial">Imperial (MGD, Acre-Feet, inches, feet bgl)</option>
+                  <option value="metric">Metric (MLD, MCM, mm)</option>
+                  <option value="imperial">Imperial (MGD, Acre-Ft, in)</option>
                 </select>
               </div>
             </div>
@@ -277,9 +277,9 @@ const PreferencesModal = ({ isOpen, onClose, onShowToast }) => {
               />
               <div className="wm-slider-control__ticks">
                 <span>0.50 (Moderate)</span>
-                <span>0.70 (High)</span>
+                <span>0.70</span>
                 <span>0.75 (Default)</span>
-                <span>0.85 (Extreme)</span>
+                <span>0.85</span>
                 <span>0.90 (Severe)</span>
               </div>
             </div>
