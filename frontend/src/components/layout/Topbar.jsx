@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   Bell,
   Check,
@@ -8,6 +8,7 @@ import {
   Database,
   Download,
   HelpCircle,
+  LogIn,
   LogOut,
   MapPin,
   Menu,
@@ -19,6 +20,11 @@ import {
 } from 'lucide-react'
 import { useFilters } from '../../context/FilterContext.jsx'
 import { useCity } from '../../context/CityContext.jsx'
+import PlannerProfileModal from './modals/PlannerProfileModal.jsx'
+import PreferencesModal from './modals/PreferencesModal.jsx'
+import ExportReportModal from './modals/ExportReportModal.jsx'
+import DocumentationModal from './modals/DocumentationModal.jsx'
+import SignOutModal from './modals/SignOutModal.jsx'
 
 const DEFAULT_NOTIFICATIONS = [
   {
@@ -57,6 +63,7 @@ const DEFAULT_NOTIFICATIONS = [
 
 const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const location = useLocation()
+  const navigate = useNavigate()
   const { searchQuery, setSearchQuery } = useFilters()
   const { selectedCityId, setSelectedCityId } = useCity()
 
@@ -65,6 +72,46 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const [notifications, setNotifications] = useState(DEFAULT_NOTIFICATIONS)
   const [toastMessage, setToastMessage] = useState(null)
 
+  // Profile Action Modals State
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
+  const [isPreferencesModalOpen, setIsPreferencesModalOpen] = useState(false)
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+  const [isDocModalOpen, setIsDocModalOpen] = useState(false)
+  const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false)
+
+  // User Profile / Auth State
+  const [user, setUser] = useState(() => {
+    try {
+      const isGuest = localStorage.getItem('watermap_auth_state') === 'guest'
+      const saved = localStorage.getItem('watermap_planner_profile')
+      if (saved) {
+        const p = JSON.parse(saved)
+        return {
+          name: isGuest ? 'Guest User' : p.name || 'Akarsh',
+          fullName: isGuest ? 'Guest Municipal Viewer' : p.fullName || 'Akarsh B.',
+          role: isGuest ? 'Public Observer Mode' : p.title || 'City Water Planner • Admin',
+          email: isGuest ? 'guest@watermap.org' : p.email || 'akarsh@watermap.org',
+          isGuest,
+        }
+      }
+      return {
+        name: isGuest ? 'Guest User' : 'Akarsh',
+        fullName: isGuest ? 'Guest Municipal Viewer' : 'Akarsh B.',
+        role: isGuest ? 'Public Observer Mode' : 'City Water Planner • Admin',
+        email: isGuest ? 'guest@watermap.org' : 'akarsh@watermap.org',
+        isGuest,
+      }
+    } catch {
+      return {
+        name: 'Akarsh',
+        fullName: 'Akarsh B.',
+        role: 'City Water Planner • Admin',
+        email: 'akarsh@watermap.org',
+        isGuest: false,
+      }
+    }
+  })
+
   const notifRef = useRef(null)
   const profileRef = useRef(null)
 
@@ -72,7 +119,7 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
 
   const showToast = (msg) => {
     setToastMessage(msg)
-    setTimeout(() => setToastMessage(null), 3000)
+    setTimeout(() => setToastMessage(null), 3500)
   }
 
   // Close dropdowns when clicking outside or pressing Escape
@@ -293,12 +340,12 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
               setIsProfileOpen((prev) => !prev)
               setIsNotifOpen(false)
             }}
-            aria-label="User profile Akarsh"
+            aria-label={`User profile ${user.name}`}
             aria-expanded={isProfileOpen}
             aria-haspopup="true"
           >
-            <span className="topbar__avatar">A</span>
-            <span className="topbar__profile-name">Akarsh</span>
+            <span className="topbar__avatar">{user.name.charAt(0)}</span>
+            <span className="topbar__profile-name">{user.name}</span>
             <ChevronDown
               size={14}
               className={`topbar__profile-chevron${isProfileOpen ? ' topbar__profile-chevron--open' : ''}`}
@@ -308,11 +355,11 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
           {isProfileOpen && (
             <div className="topbar__profile-popover" role="dialog" aria-label="User profile menu">
               <div className="topbar__profile-header">
-                <div className="topbar__profile-avatar-large">A</div>
+                <div className="topbar__profile-avatar-large">{user.name.charAt(0)}</div>
                 <div className="topbar__profile-info">
-                  <div className="topbar__profile-user-name">Akarsh</div>
-                  <div className="topbar__profile-user-role">City Water Planner • Admin</div>
-                  <div className="topbar__profile-user-email">akarsh@watermap.org</div>
+                  <div className="topbar__profile-user-name">{user.fullName || user.name}</div>
+                  <div className="topbar__profile-user-role">{user.role}</div>
+                  <div className="topbar__profile-user-email">{user.email}</div>
                 </div>
               </div>
 
@@ -322,7 +369,7 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                   className="topbar__profile-menu-item"
                   onClick={() => {
                     setIsProfileOpen(false)
-                    showToast('Planner Profile: Bangalore Resilience Authority')
+                    setIsProfileModalOpen(true)
                   }}
                 >
                   <User size={15} />
@@ -334,7 +381,7 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                   className="topbar__profile-menu-item"
                   onClick={() => {
                     setIsProfileOpen(false)
-                    showToast('City Preferences: Bangalore (Urban Core)')
+                    setIsPreferencesModalOpen(true)
                   }}
                 >
                   <Settings size={15} />
@@ -346,7 +393,7 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                   className="topbar__profile-menu-item"
                   onClick={() => {
                     setIsProfileOpen(false)
-                    showToast('Exporting Bangalore Resilience Summary PDF...')
+                    setIsExportModalOpen(true)
                   }}
                 >
                   <Download size={15} />
@@ -358,7 +405,7 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                   className="topbar__profile-menu-item"
                   onClick={() => {
                     setIsProfileOpen(false)
-                    showToast('Opening WaterMap Platform Documentation')
+                    setIsDocModalOpen(true)
                   }}
                 >
                   <HelpCircle size={15} />
@@ -367,22 +414,95 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
 
                 <div className="topbar__profile-divider" />
 
-                <button
-                  type="button"
-                  className="topbar__profile-menu-item topbar__profile-menu-item--danger"
-                  onClick={() => {
-                    setIsProfileOpen(false)
-                    showToast('Logged out of WaterMap session')
-                  }}
-                >
-                  <LogOut size={15} />
-                  <span>Sign Out</span>
-                </button>
+                {user.isGuest ? (
+                  <button
+                    type="button"
+                    className="topbar__profile-menu-item topbar__profile-menu-item--primary"
+                    onClick={() => {
+                      setIsProfileOpen(false)
+                      localStorage.removeItem('watermap_auth_state')
+                      setUser({
+                        name: 'Akarsh',
+                        fullName: 'Akarsh B.',
+                        role: 'City Water Planner • Admin',
+                        email: 'akarsh@watermap.org',
+                        isGuest: false,
+                      })
+                      showToast('Signed in as Akarsh (City Water Planner)')
+                    }}
+                  >
+                    <LogIn size={15} />
+                    <span>Sign In as City Planner</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="topbar__profile-menu-item topbar__profile-menu-item--danger"
+                    onClick={() => {
+                      setIsProfileOpen(false)
+                      setIsSignOutModalOpen(true)
+                    }}
+                  >
+                    <LogOut size={15} />
+                    <span>Sign Out</span>
+                  </button>
+                )}
               </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Profile & Settings Modals */}
+      <PlannerProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        onSaveProfile={(newProfile) => {
+          setUser((prev) => ({
+            ...prev,
+            name: newProfile.name || 'Akarsh',
+            fullName: newProfile.fullName || 'Akarsh B.',
+            role: newProfile.title || 'City Water Planner • Admin',
+            email: newProfile.email || 'akarsh@watermap.org',
+          }))
+        }}
+        onShowToast={showToast}
+      />
+
+      <PreferencesModal
+        isOpen={isPreferencesModalOpen}
+        onClose={() => setIsPreferencesModalOpen(false)}
+        onShowToast={showToast}
+      />
+
+      <ExportReportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        onShowToast={showToast}
+      />
+
+      <DocumentationModal
+        isOpen={isDocModalOpen}
+        onClose={() => setIsDocModalOpen(false)}
+        onShowToast={showToast}
+      />
+
+      <SignOutModal
+        isOpen={isSignOutModalOpen}
+        onClose={() => setIsSignOutModalOpen(false)}
+        userName={user.name}
+        onConfirmSignOut={() => {
+          localStorage.setItem('watermap_auth_state', 'guest')
+          setUser({
+            name: 'Guest User',
+            fullName: 'Guest Municipal Viewer',
+            role: 'Public Observer Mode',
+            email: 'guest@watermap.org',
+            isGuest: true,
+          })
+          showToast('Signed out of WaterMap (Guest Mode active)')
+        }}
+      />
     </header>
   )
 }

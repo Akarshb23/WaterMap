@@ -1,0 +1,1405 @@
+/* ==========================================================================
+   WaterMap Modal & Dialog Design System
+   ========================================================================== */
+
+.wm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background-color: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: wm-modal-fade-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+@keyframes wm-modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.wm-modal {
+  position: relative;
+  width: 100%;
+  max-width: 38rem;
+  max-height: calc(100vh - 2.5rem);
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.05);
+  animation: wm-modal-slide-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.wm-profile-modal {
+  max-width: 44rem;
+}
+
+.wm-preferences-modal {
+  max-width: 44rem;
+}
+
+.wm-export-modal {
+  max-width: 42rem;
+}
+
+.wm-doc-modal {
+  max-width: 46rem;
+}
+
+.wm-signout-modal {
+  max-width: 30rem;
+}
+
+@keyframes wm-modal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal Header */
+.wm-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.5rem 1.05rem;
+  border-bottom: 1px solid #f1f5f9;
+  background-color: #fafbfc;
+  flex-shrink: 0;
+}
+
+.wm-modal__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.wm-modal__title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.wm-modal__title-icon--emerald {
+  background: #e6f4f1;
+  color: #075d4c;
+}
+
+.wm-modal__title-icon--cyan {
+  background: #ecfeff;
+  color: #0891b2;
+}
+
+.wm-modal__title-icon--teal {
+  background: #ccfbf1;
+  color: #0d9488;
+}
+
+.wm-modal__title-icon--amber {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.wm-modal__title-icon--rose {
+  background: #ffe4e6;
+  color: #e11d48;
+}
+
+.wm-modal__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f2937;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.wm-modal__subtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+  display: block;
+  margin-top: 0.15rem;
+}
+
+.wm-modal__close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wm-modal__close-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f2937;
+}
+
+/* Modal Body */
+.wm-modal__body {
+  padding: 1.4rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  overscroll-behavior: contain;
+}
+
+.wm-modal__body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wm-modal__body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 99px;
+}
+
+/* Modal Footer */
+.wm-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #f1f5f9;
+  background-color: #fafbfc;
+  flex-shrink: 0;
+}
+
+/* Common Buttons */
+.wm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  text-decoration: none;
+  outline: none;
+}
+
+.wm-btn--sm {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.78rem;
+  border-radius: 8px;
+}
+
+.wm-btn--primary {
+  background-color: var(--wm-color-primary, #075d4c);
+  color: #ffffff;
+  border-color: var(--wm-color-primary, #075d4c);
+  box-shadow: 0 2px 6px rgba(7, 93, 76, 0.25);
+}
+
+.wm-btn--primary:hover:not(:disabled) {
+  background-color: #05483b;
+  transform: translateY(-1px);
+}
+
+.wm-btn--secondary {
+  background-color: #ffffff;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+.wm-btn--secondary:hover:not(:disabled) {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.wm-btn--ghost {
+  background-color: transparent;
+  color: #64748b;
+  border-color: transparent;
+}
+
+.wm-btn--ghost:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  color: #0f2937;
+}
+
+.wm-btn--danger {
+  background-color: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+}
+
+.wm-btn--danger:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.wm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   Profile Modal Styles
+   -------------------------------------------------------------------------- */
+
+.wm-profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  padding: 1.15rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0fdf9 0%, #e6f4f1 100%);
+  border: 1px solid #ccfbf1;
+  margin-bottom: 1.25rem;
+}
+
+.wm-profile-hero__avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.wm-profile-hero__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #075d4c 0%, #0d9488 100%);
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(7, 93, 76, 0.3);
+}
+
+.wm-profile-hero__online-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  background-color: #10b981;
+  border: 2px solid #ffffff;
+}
+
+.wm-profile-hero__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.wm-profile-hero__name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.wm-profile-hero__name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f2937;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.wm-profile-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background-color: #075d4c;
+  color: #ffffff;
+}
+
+.wm-profile-hero__title {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #0d9488;
+  margin-top: 0.2rem;
+}
+
+.wm-profile-hero__org {
+  font-size: 0.77rem;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+/* Profile Stats Grid */
+.wm-profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.wm-profile-stat-card {
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.wm-profile-stat-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 8px;
+  margin-bottom: 0.4rem;
+}
+
+.wm-profile-stat-card__icon--emerald {
+  background: #e6f4f1;
+  color: #075d4c;
+}
+
+.wm-profile-stat-card__icon--cyan {
+  background: #ecfeff;
+  color: #0891b2;
+}
+
+.wm-profile-stat-card__icon--teal {
+  background: #ccfbf1;
+  color: #0d9488;
+}
+
+.wm-profile-stat-card__icon--amber {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.wm-profile-stat-card__val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f2937;
+  line-height: 1.2;
+}
+
+.wm-profile-stat-card__lbl {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-top: 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Profile Details Cards */
+.wm-profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.wm-profile-detail-card {
+  padding: 0.95rem 1.15rem;
+  border-radius: 14px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.wm-profile-detail-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f2937;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.wm-profile-detail-card__icon {
+  color: #075d4c;
+}
+
+.wm-profile-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px dashed #f1f5f9;
+  font-size: 0.82rem;
+}
+
+.wm-profile-detail-row:last-child {
+  border-bottom: none;
+}
+
+.wm-profile-detail-label {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.wm-profile-detail-value {
+  color: #0f2937;
+  font-weight: 600;
+  text-align: right;
+}
+
+.wm-profile-id-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wm-profile-id-row code {
+  background: #f1f5f9;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #075d4c;
+  font-weight: 700;
+}
+
+.wm-profile-id-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: none;
+  background: none;
+  color: #075d4c;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+}
+
+.wm-profile-id-copy:hover {
+  background: #e6f4f1;
+}
+
+.wm-profile-bio-card {
+  padding: 0.95rem 1.15rem;
+  border-radius: 14px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.wm-profile-bio-card__title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f2937;
+  margin: 0 0 0.35rem 0;
+}
+
+.wm-profile-bio-card__text {
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.wm-profile-footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Profile Form */
+.wm-profile-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+.wm-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.wm-form-group--full {
+  grid-column: span 2;
+}
+
+.wm-form-group label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.wm-form-input,
+.wm-form-select,
+.wm-form-textarea {
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  font-size: 0.83rem;
+  color: #0f2937;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.wm-form-input:focus,
+.wm-form-select:focus,
+.wm-form-textarea:focus {
+  border-color: #075d4c;
+  box-shadow: 0 0 0 3px rgba(7, 93, 76, 0.12);
+}
+
+.wm-profile-form__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.wm-profile-form__footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* --------------------------------------------------------------------------
+   Preferences Modal Styles
+   -------------------------------------------------------------------------- */
+
+.wm-pref-section {
+  padding: 1.1rem;
+  border-radius: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+.wm-pref-section:last-child {
+  margin-bottom: 0;
+}
+
+.wm-pref-section__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.wm-pref-section__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f2937;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.wm-pref-section__desc {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin: 0.2rem 0 0 0;
+}
+
+.wm-pref-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+}
+
+.wm-pref-radio-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wm-pref-radio-card:hover {
+  background-color: #ffffff;
+  border-color: #94a3b8;
+}
+
+.wm-pref-radio-card--selected {
+  background-color: #f0fdf9;
+  border-color: #075d4c;
+  box-shadow: 0 0 0 1px #075d4c;
+}
+
+.wm-pref-radio-card__dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 1.5px solid #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #075d4c;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.wm-pref-radio-card--selected .wm-pref-radio-card__dot {
+  border-color: #075d4c;
+  background-color: #075d4c;
+  color: #ffffff;
+}
+
+.wm-pref-radio-card__title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f2937;
+  line-height: 1.3;
+}
+
+.wm-pref-radio-card__sub {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 0.2rem;
+  line-height: 1.35;
+}
+
+.wm-pref-controls-row {
+  display: flex;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.wm-flex-1 {
+  flex: 1;
+}
+
+.wm-slider-control {
+  padding: 0.85rem 1rem;
+  background-color: #fafbfc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.wm-slider-control__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.wm-slider-control__label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #0f2937;
+}
+
+.wm-slider-control__badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  background-color: #ffe4e6;
+  color: #e11d48;
+}
+
+.wm-slider {
+  width: 100%;
+  accent-color: #075d4c;
+  cursor: pointer;
+}
+
+.wm-slider-control__ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #94a3b8;
+  margin-top: 0.35rem;
+}
+
+.wm-pref-toggles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.wm-pref-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.wm-pref-toggle-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.wm-pref-toggle-row__title {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #0f2937;
+}
+
+.wm-pref-toggle-row__desc {
+  font-size: 0.74rem;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+.wm-switch {
+  position: relative;
+  display: inline-block;
+  width: 2.5rem;
+  height: 1.45rem;
+  flex-shrink: 0;
+}
+
+.wm-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.wm-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #cbd5e1;
+  transition: 0.2s;
+  border-radius: 99px;
+}
+
+.wm-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 1.15rem;
+  width: 1.15rem;
+  left: 2px;
+  bottom: 2.2px;
+  background-color: white;
+  transition: 0.2s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.wm-switch input:checked + .wm-switch-slider {
+  background-color: #075d4c;
+}
+
+.wm-switch input:checked + .wm-switch-slider:before {
+  transform: translateX(1.05rem);
+}
+
+.wm-pref-pill-group {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.wm-pref-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 99px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wm-pref-pill:hover {
+  background-color: #f1f5f9;
+  color: #0f2937;
+}
+
+.wm-pref-pill--active {
+  background-color: #e6f4f1;
+  border-color: #075d4c;
+  color: #075d4c;
+}
+
+/* --------------------------------------------------------------------------
+   Export Report Modal Styles
+   -------------------------------------------------------------------------- */
+
+.wm-export-format-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.wm-export-format-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 14px;
+  background-color: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wm-export-format-card:hover {
+  border-color: #94a3b8;
+  transform: translateY(-2px);
+}
+
+.wm-export-format-card--selected {
+  background-color: #f0fdf9;
+  border-color: #075d4c;
+  box-shadow: 0 4px 12px rgba(7, 93, 76, 0.1);
+}
+
+.wm-export-format-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.wm-export-format-card__tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.12rem 0.45rem;
+  border-radius: 99px;
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.wm-export-format-card--selected .wm-export-format-card__tag {
+  background-color: #ccfbf1;
+  color: #0f766e;
+}
+
+.wm-export-format-card__title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f2937;
+  line-height: 1.3;
+}
+
+.wm-export-format-card__desc {
+  font-size: 0.74rem;
+  color: #64748b;
+  margin-top: 0.35rem;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.wm-export-format-card__radio-indicator {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  color: #075d4c;
+}
+
+.wm-export-sections-card {
+  padding: 1.15rem;
+  border-radius: 14px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1.15rem;
+}
+
+.wm-export-sections-card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0f2937;
+  margin: 0 0 0.85rem 0;
+}
+
+.wm-export-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.wm-export-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: #334155;
+  cursor: pointer;
+}
+
+.wm-export-checkbox-row:hover {
+  color: #075d4c;
+}
+
+.wm-checkbox {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: #075d4c;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.wm-export-preview-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background-color: #eaf5f2;
+  border: 1px solid #ccfbf1;
+  font-size: 0.8rem;
+  color: #1e3a34;
+}
+
+.wm-spinner-inline {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: wm-spin 0.6s linear infinite;
+}
+
+@keyframes wm-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Documentation Modal Styles
+   -------------------------------------------------------------------------- */
+
+.wm-modal-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.5rem 1.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #fafbfc;
+  overflow-x: auto;
+}
+
+.wm-modal-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem 0.95rem;
+  border: none;
+  background: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.wm-modal-tab-btn:hover {
+  color: #0f2937;
+}
+
+.wm-modal-tab-btn--active {
+  color: #075d4c;
+  border-bottom-color: #075d4c;
+}
+
+.wm-doc-body {
+  padding: 1.25rem 1.5rem;
+}
+
+.wm-doc-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.wm-doc-callout {
+  padding: 1.1rem 1.25rem;
+  border-radius: 14px;
+  background-color: #f0fdf9;
+  border: 1px solid #ccfbf1;
+}
+
+.wm-doc-callout h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #075d4c;
+  margin: 0 0 0.4rem 0;
+}
+
+.wm-doc-callout p {
+  font-size: 0.82rem;
+  color: #1e3a34;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.wm-formula-box {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  text-align: center;
+}
+
+.wm-formula-box code {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #075d4c;
+}
+
+.wm-doc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.wm-doc-card {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.wm-doc-card h5 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f2937;
+  margin: 0 0 0.35rem 0;
+}
+
+.wm-doc-card p {
+  font-size: 0.76rem;
+  color: #64748b;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.wm-doc-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.wm-doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.wm-doc-table th,
+.wm-doc-table td {
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.wm-doc-table th {
+  background-color: #fafbfc;
+  font-weight: 700;
+  color: #334155;
+}
+
+.wm-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.wm-badge--low { background: #dcfce7; color: #166534; }
+.wm-badge--medium { background: #fef3c7; color: #92400e; }
+.wm-badge--high { background: #ffedd5; color: #9a3412; }
+.wm-badge--critical { background: #fee2e2; color: #991b1b; }
+
+.wm-datasource-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.wm-datasource-card {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.wm-datasource-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  color: #0f2937;
+}
+
+.wm-datasource-card__dataset {
+  font-size: 0.78rem;
+  color: #475569;
+  margin-top: 0.25rem;
+}
+
+.wm-datasource-card__meta {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+}
+
+.wm-climate-scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.wm-climate-card {
+  padding: 0.95rem;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.wm-climate-card--active {
+  background-color: #f0fdf9;
+  border-color: #075d4c;
+}
+
+.wm-climate-card__scenario {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.12rem 0.45rem;
+  border-radius: 99px;
+  background-color: #e2e8f0;
+  color: #334155;
+  display: inline-block;
+  margin-bottom: 0.4rem;
+}
+
+.wm-climate-card--active .wm-climate-card__scenario {
+  background-color: #075d4c;
+  color: #ffffff;
+}
+
+.wm-climate-card h5 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f2937;
+  margin: 0 0 0.35rem 0;
+}
+
+.wm-climate-card p {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.wm-api-endpoints-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.wm-api-endpoint-card {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.wm-api-endpoint-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.wm-method-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+}
+
+.wm-method-badge--get { background: #dbeafe; color: #1e40af; }
+.wm-method-badge--post { background: #dcfce7; color: #166534; }
+
+.wm-endpoint-path {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f2937;
+}
+
+.wm-endpoint-desc {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin-top: 0.35rem;
+  line-height: 1.35;
+}
+
+/* --------------------------------------------------------------------------
+   Sign Out Modal Styles
+   -------------------------------------------------------------------------- */
+
+.wm-signout-user-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem;
+  border-radius: 14px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1.15rem;
+}
+
+.wm-signout-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #075d4c 0%, #0d9488 100%);
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.wm-signout-info {
+  flex: 1;
+}
+
+.wm-signout-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f2937;
+}
+
+.wm-signout-role {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #0d9488;
+  margin-top: 0.15rem;
+}
+
+.wm-signout-org {
+  font-size: 0.74rem;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+.wm-signout-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.95rem 1.1rem;
+  border-radius: 12px;
+  background-color: #fffbeb;
+  border: 1px solid #fef3c7;
+}
+
+.wm-signout-notice p {
+  font-size: 0.8rem;
+  color: #92400e;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Helper Utilities */
+.wm-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.wm-text-emerald { color: #075d4c; }
+.wm-text-cyan { color: #0891b2; }
+.wm-text-teal { color: #0d9488; }
+.wm-text-amber { color: #d97706; }
+.wm-text-rose { color: #e11d48; }
+.wm-text-primary { color: var(--wm-color-primary, #075d4c); }
+.wm-flex-shrink-0 { flex-shrink: 0; }
+
+.wm-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.wm-tag--emerald {
+  background-color: #ccfbf1;
+  color: #0f766e;
+}
+
+.wm-link {
+  color: #075d4c;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.wm-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .wm-profile-stats,
+  .wm-pref-options-grid,
+  .wm-export-format-grid,
+  .wm-climate-scenarios-grid,
+  .wm-doc-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wm-profile-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wm-form-group--full {
+    grid-column: span 1;
+  }
+}

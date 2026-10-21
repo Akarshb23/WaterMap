@@ -12,6 +12,7 @@
 @import './styles/animations.css';
 @import './styles/accessibility.css';
 @import './styles/layout.css';
+@import './styles/modals.css';
 @import './styles/dashboard.css';
 @import './styles/map.css';
 @import './styles/city-map.css';
