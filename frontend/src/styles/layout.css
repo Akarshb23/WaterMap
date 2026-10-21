@@ -629,6 +629,55 @@
   transition: all 0.15s ease;
 }
 
+.topbar__notif-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.topbar__notif-item:hover .topbar__notif-remove-btn {
+  opacity: 1;
+}
+
+.topbar__notif-remove-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+  transform: scale(1.05);
+}
+
+.topbar__notif-empty {
+  padding: 2.2rem 1.5rem;
+  text-align: center;
+}
+
+.topbar__notif-empty-icon {
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.topbar__notif-empty-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f2937;
+}
+
+.topbar__notif-empty-desc {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin-top: 0.2rem;
+}
+
 .topbar__notif-view-all:hover {
   background-color: rgba(7, 93, 76, 0.08);
 }

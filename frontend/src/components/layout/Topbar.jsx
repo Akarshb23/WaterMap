@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
   Bell,
+  BellOff,
   Check,
   ChevronDown,
   CloudRain,
@@ -15,6 +16,7 @@ import {
   Settings,
   ShieldAlert,
   Sparkles,
+  Trash2,
   User,
 } from 'lucide-react'
 import { useFilters } from '../../context/FilterContext.jsx'
@@ -23,6 +25,7 @@ import PlannerProfileModal from './modals/PlannerProfileModal.jsx'
 import PreferencesModal from './modals/PreferencesModal.jsx'
 import ExportReportModal from './modals/ExportReportModal.jsx'
 import SignOutModal from './modals/SignOutModal.jsx'
+import AlertLogsModal from './modals/AlertLogsModal.jsx'
 
 const DEFAULT_NOTIFICATIONS = [
   {
@@ -32,6 +35,7 @@ const DEFAULT_NOTIFICATIONS = [
     description: 'Composite WSI calculated at 0.87. Immediate rainwater harvesting & aquifer recharge prioritized.',
     time: '10m ago',
     unread: true,
+    source: 'NWIC Hydrology Sensor BLR-04',
   },
   {
     id: 'notif-2',
@@ -40,6 +44,7 @@ const DEFAULT_NOTIFICATIONS = [
     description: 'Rooftop and community rainwater harvesting system committed to Bangalore Urban roadmap.',
     time: '42m ago',
     unread: true,
+    source: 'Bangalore Resilience Authority',
   },
   {
     id: 'notif-3',
@@ -48,6 +53,7 @@ const DEFAULT_NOTIFICATIONS = [
     description: 'NWIC and IMD rainfall dataset synchronized with 42 city boundary zones.',
     time: '2h ago',
     unread: true,
+    source: 'IMD Doppler Radar Grid',
   },
   {
     id: 'notif-4',
@@ -56,6 +62,25 @@ const DEFAULT_NOTIFICATIONS = [
     description: 'Monsoon simulation completed with +34% peak stormwater mitigation projection.',
     time: '1d ago',
     unread: false,
+    source: 'Simulation Engine CMIP6',
+  },
+  {
+    id: 'notif-5',
+    type: 'alert',
+    title: 'Aquifer Depletion Alert: Whitefield',
+    description: 'Observation piezometer reports groundwater level dropped 1.8m below seasonal mean.',
+    time: '2d ago',
+    unread: false,
+    source: 'CGWB Piezometer Node 18',
+  },
+  {
+    id: 'notif-6',
+    type: 'info',
+    title: 'Cauvery Stage V Flow Operational',
+    description: '775 MLD pipeline flow telemetry successfully calibrated into municipal water model.',
+    time: '3d ago',
+    unread: false,
+    source: 'BWSSB Bulk Meter SCADA',
   },
 ]
 
@@ -66,7 +91,14 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
 
   const [isNotifOpen, setIsNotifOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
-  const [notifications, setNotifications] = useState(DEFAULT_NOTIFICATIONS)
+  const [notifications, setNotifications] = useState(() => {
+    try {
+      const saved = localStorage.getItem('watermap_notifications')
+      return saved ? JSON.parse(saved) : DEFAULT_NOTIFICATIONS
+    } catch {
+      return DEFAULT_NOTIFICATIONS
+    }
+  })
   const [toastMessage, setToastMessage] = useState(null)
 
   // Profile Action Modals State
@@ -74,6 +106,7 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const [isPreferencesModalOpen, setIsPreferencesModalOpen] = useState(false)
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false)
+  const [isLogsModalOpen, setIsLogsModalOpen] = useState(false)
 
   // User Profile / Auth State
   const [user, setUser] = useState(() => {
@@ -145,14 +178,61 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   }, [])
 
   const handleMarkAllRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })))
+    setNotifications((prev) => {
+      const updated = prev.map((n) => ({ ...n, unread: false }))
+      try {
+        localStorage.setItem('watermap_notifications', JSON.stringify(updated))
+      } catch {
+        // storage fallback
+      }
+      return updated
+    })
     showToast('All notifications marked as read')
   }
 
   const handleNotificationClick = (id) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, unread: false } : n))
-    )
+    setNotifications((prev) => {
+      const updated = prev.map((n) => (n.id === id ? { ...n, unread: false } : n))
+      try {
+        localStorage.setItem('watermap_notifications', JSON.stringify(updated))
+      } catch {
+        // storage fallback
+      }
+      return updated
+    })
+  }
+
+  const handleRemoveNotification = (id) => {
+    setNotifications((prev) => {
+      const updated = prev.filter((n) => n.id !== id)
+      try {
+        localStorage.setItem('watermap_notifications', JSON.stringify(updated))
+      } catch {
+        // storage fallback
+      }
+      return updated
+    })
+    showToast('Notification removed')
+  }
+
+  const handleClearAllNotifications = () => {
+    setNotifications([])
+    try {
+      localStorage.setItem('watermap_notifications', JSON.stringify([]))
+    } catch {
+      // storage fallback
+    }
+    showToast('All notification logs cleared')
+  }
+
+  const handleRestoreDefaultNotifications = () => {
+    setNotifications(DEFAULT_NOTIFICATIONS)
+    try {
+      localStorage.setItem('watermap_notifications', JSON.stringify(DEFAULT_NOTIFICATIONS))
+    } catch {
+      // storage fallback
+    }
+    showToast('Default notification logs restored')
   }
 
   const isDistrictView = false
@@ -288,27 +368,47 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
               </header>
 
               <div className="topbar__notif-list" role="list">
-                {notifications.map((n) => (
-                  <div
-                    key={n.id}
-                    role="listitem"
-                    className={`topbar__notif-item${n.unread ? ' topbar__notif-item--unread' : ''}`}
-                    onClick={() => handleNotificationClick(n.id)}
-                  >
-                    <div className={`topbar__notif-icon-wrap topbar__notif-icon-wrap--${n.type}`}>
-                      {n.type === 'alert' && <ShieldAlert size={14} />}
-                      {n.type === 'success' && <CloudRain size={14} />}
-                      {n.type === 'info' && <Database size={14} />}
-                      {n.type === 'system' && <Check size={14} />}
-                    </div>
-                    <div className="topbar__notif-content">
-                      <div className="topbar__notif-item-title">{n.title}</div>
-                      <div className="topbar__notif-item-desc">{n.description}</div>
-                      <span className="topbar__notif-item-time">{n.time}</span>
-                    </div>
-                    {n.unread && <span className="topbar__notif-unread-dot" />}
+                {notifications.length === 0 ? (
+                  <div className="topbar__notif-empty">
+                    <BellOff size={26} className="topbar__notif-empty-icon" />
+                    <div className="topbar__notif-empty-title">All caught up!</div>
+                    <div className="topbar__notif-empty-desc">No new alert logs or notifications.</div>
                   </div>
-                ))}
+                ) : (
+                  notifications.map((n) => (
+                    <div
+                      key={n.id}
+                      role="listitem"
+                      className={`topbar__notif-item${n.unread ? ' topbar__notif-item--unread' : ''}`}
+                      onClick={() => handleNotificationClick(n.id)}
+                    >
+                      <div className={`topbar__notif-icon-wrap topbar__notif-icon-wrap--${n.type}`}>
+                        {n.type === 'alert' && <ShieldAlert size={14} />}
+                        {n.type === 'success' && <CloudRain size={14} />}
+                        {n.type === 'info' && <Database size={14} />}
+                        {n.type === 'system' && <Check size={14} />}
+                      </div>
+                      <div className="topbar__notif-content">
+                        <div className="topbar__notif-item-title">{n.title}</div>
+                        <div className="topbar__notif-item-desc">{n.description}</div>
+                        <span className="topbar__notif-item-time">{n.time}</span>
+                      </div>
+                      {n.unread && <span className="topbar__notif-unread-dot" />}
+                      <button
+                        type="button"
+                        className="topbar__notif-remove-btn"
+                        title="Remove notification"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleRemoveNotification(n.id)
+                        }}
+                        aria-label={`Remove notification ${n.title}`}
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  ))
+                )}
               </div>
 
               <footer className="topbar__notif-footer">
@@ -317,10 +417,10 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                   className="topbar__notif-view-all"
                   onClick={() => {
                     setIsNotifOpen(false)
-                    showToast('All activity logs up to date')
+                    setIsLogsModalOpen(true)
                   }}
                 >
-                  View All Alert Logs
+                  View all logs ({notifications.length})
                 </button>
               </footer>
             </div>
@@ -462,6 +562,17 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
       <ExportReportModal
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
+        onShowToast={showToast}
+      />
+
+      <AlertLogsModal
+        isOpen={isLogsModalOpen}
+        onClose={() => setIsLogsModalOpen(false)}
+        notifications={notifications}
+        onRemoveNotification={handleRemoveNotification}
+        onClearAll={handleClearAllNotifications}
+        onMarkAllRead={handleMarkAllRead}
+        onRestoreDefaults={handleRestoreDefaultNotifications}
         onShowToast={showToast}
       />
 
