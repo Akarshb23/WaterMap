@@ -5,11 +5,26 @@ const DEFAULT_TIMEOUT = Number(
   import.meta.env.VITE_API_TIMEOUT_MS || 15000,
 )
 
+const resolveBaseUrl = () => {
+  const envBase = import.meta.env.VITE_API_BASE_URL
+  if (envBase) return envBase.replace(/\/$/, '')
+
+  const envUrl = import.meta.env.VITE_API_URL
+  if (envUrl) {
+    const trimmed = envUrl.replace(/\/$/, '')
+    return trimmed.endsWith('/api/v1') ? trimmed : `${trimmed}/api/v1`
+  }
+
+  // When deployed on Cloud Run, connect directly to production backend
+  if (typeof window !== 'undefined' && window.location.hostname.includes('run.app')) {
+    return 'https://watermap-backend-120030173066.us-central1.run.app/api/v1'
+  }
+
+  return 'http://127.0.0.1:8000/api/v1'
+}
+
 const apiClient = axios.create({
-  baseURL: (
-    import.meta.env.VITE_API_BASE_URL ||
-    'http://127.0.0.1:8000/api/v1'
-  ).replace(/\/$/, ''),
+  baseURL: resolveBaseUrl(),
   timeout: DEFAULT_TIMEOUT,
   headers: {
     Accept: 'application/json',

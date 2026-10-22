@@ -20,10 +20,25 @@ const RAINFALL_BAR_HEIGHTS = [12, 18, 14, 28, 20, 16, 32, 24, 16, 24, 16, 20]
  *   3. Annual Rainfall: 12-bar mini histogram
  *   4. Population: Upward green curve
  */
-const CityDashboardKpis = ({ kpis = DASHBOARD_KPIS }) => {
+const CityDashboardKpis = ({ kpis = DASHBOARD_KPIS, dateRange = '30d' }) => {
+  const dynamicKpis = kpis.map((kpi) => {
+    if (kpi.id === 'water-stress') {
+      const wsiVal = dateRange === '30d' ? '0.34' : dateRange === '90d' ? '0.35' : dateRange === '6m' ? '0.36' : '0.34'
+      const trendStr = dateRange === '30d' ? '3% vs last month' : dateRange === '90d' ? '5% vs last quarter' : dateRange === '6m' ? '8% vs last half' : '12% vs last year'
+      return { ...kpi, value: wsiVal, trend: trendStr }
+    }
+    if (kpi.id === 'annual-rainfall') {
+      const rainVal = dateRange === '30d' ? '48' : dateRange === '90d' ? '184' : dateRange === '6m' ? '410' : '780'
+      const unitStr = dateRange === '12m' ? 'mm / yr' : 'mm'
+      const trendStr = dateRange === '30d' ? 'Normal for season' : '14% vs avg'
+      return { ...kpi, value: rainVal, unit: unitStr, trend: trendStr }
+    }
+    return kpi
+  })
+
   return (
     <section className="city-kpi-grid" aria-label="Key Performance Indicators">
-      {kpis.map((kpi) => {
+      {dynamicKpis.map((kpi) => {
         const Icon = KPI_ICONS[kpi.id] || Droplet
         const isNegative = kpi.trendTone === 'negative' || kpi.trendDirection === 'down'
 

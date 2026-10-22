@@ -17,11 +17,10 @@ const PERIOD_OPTIONS = [
 
 const ZONE_OPTIONS = [
   { value: 'all', label: 'All Zones' },
-  { value: 'north', label: 'North Bangalore' },
-  { value: 'central', label: 'Central Bangalore' },
-  { value: 'west', label: 'West Bangalore' },
-  { value: 'east', label: 'East Bangalore' },
-  { value: 'south', label: 'South Bangalore' },
+  { value: 'north', label: 'North Zone' },
+  { value: 'central', label: 'Central Zone' },
+  { value: 'south', label: 'South Zone' },
+  { value: 'west', label: 'West Zone' },
 ]
 
 /**

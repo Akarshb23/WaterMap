@@ -11,14 +11,14 @@ import ScenarioAnalysis from '../components/predictions/ScenarioAnalysis.jsx'
 import ProjectedResults from '../components/predictions/ProjectedResults.jsx'
 
 const DEFAULT_SIM_RESULTS = {
-  wsi: '0.74',
-  wsiTrend: '12% vs baseline',
-  highRiskWards: '15',
-  wardsTrend: '3 more than baseline',
-  rainfall: '612 mm',
-  rainTrend: '6% vs baseline',
-  demand: '128 MLD',
-  demandTrend: '18% vs baseline',
+  wsi: '0.46',
+  wsiTrend: '+35% vs baseline',
+  highRiskDistricts: '8',
+  districtsTrend: '3 more than current 5',
+  rainfall: '720 mm',
+  rainTrend: '8% deficit vs normal',
+  demand: '151 MLD',
+  demandTrend: '22% vs baseline',
 }
 
 const PredictionsPage = () => {

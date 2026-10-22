@@ -10,12 +10,12 @@ import {
 } from 'recharts'
 
 const TREND_DATA = [
-  { year: '2020', historical: 0.48, predicted: null, historicalArea: 0.48, predictedArea: null },
-  { year: '2022', historical: 0.56, predicted: null, historicalArea: 0.56, predictedArea: null },
-  { year: '2024', historical: 0.68, predicted: 0.68, historicalArea: 0.68, predictedArea: 0.68 },
-  { year: '2026', historical: null, predicted: 0.74, historicalArea: null, predictedArea: 0.74 },
-  { year: '2028', historical: null, predicted: 0.78, historicalArea: null, predictedArea: 0.78 },
-  { year: '2030', historical: null, predicted: 0.85, historicalArea: null, predictedArea: 0.85 },
+  { year: '2020', historical: 0.28, predicted: null, historicalArea: 0.28, predictedArea: null },
+  { year: '2022', historical: 0.31, predicted: null, historicalArea: 0.31, predictedArea: null },
+  { year: '2024', historical: 0.34, predicted: 0.34, historicalArea: 0.34, predictedArea: 0.34 },
+  { year: '2026', historical: null, predicted: 0.38, historicalArea: null, predictedArea: 0.38 },
+  { year: '2028', historical: null, predicted: 0.42, historicalArea: null, predictedArea: 0.42 },
+  { year: '2030', historical: null, predicted: 0.46, historicalArea: null, predictedArea: 0.46 },
 ]
 
 const TrendComparison = ({ forecastSeries }) => {

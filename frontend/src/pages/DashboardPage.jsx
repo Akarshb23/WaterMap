@@ -9,7 +9,7 @@ import RecentAlerts from '../components/dashboard/RecentAlerts.jsx'
 import '../styles/city-dashboard.css'
 
 export default function DashboardPage() {
-  const [dateRange, setDateRange] = useState('12m')
+  const [dateRange, setDateRange] = useState('30d')
 
   return (
     <div className="city-dashboard-page">
@@ -18,7 +18,7 @@ export default function DashboardPage() {
         onDateRangeChange={setDateRange}
       />
 
-      <CityDashboardKpis />
+      <CityDashboardKpis dateRange={dateRange} />
 
       <CityWaterStressMap />
 

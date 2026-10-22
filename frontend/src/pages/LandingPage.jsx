@@ -1,32 +1,20 @@
+import { useState } from 'react'
 import {
-
   ArrowRight,
-
   BarChart3,
-
   Leaf,
-
   Map,
-
   ShieldCheck,
-
   SlidersHorizontal,
-
   Database,
-
   Users,
-
   Lightbulb,
-
 } from 'lucide-react'
-
 import { Link } from 'react-router-dom'
-
 import { ROUTES } from '../constants/routes.js'
-
 import cityscape from '../assets/watermap-cityscape.png'
-
 import ctaBackground from '../assets/watermap-cta-background.png'
+import { PrivacyModal, TermsModal, ContactModal } from '../components/common/LandingLegalModals.jsx'
 
 
 
@@ -44,15 +32,6 @@ const GithubIcon = ({ size = 18 }) => (
 
 
 
-const LinkedinIcon = ({ size = 18 }) => (
-
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-
-    <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z" />
-
-  </svg>
-
-)
 
 
 
@@ -290,25 +269,25 @@ function SectionHeading({ title, description, action }) {
 
 
 
-const LandingPage = () => (
+const LandingPage = () => {
+  const [activeModal, setActiveModal] = useState(null)
 
-  <div className="landing-page">
-
-    <header className="landing-nav">
-
-      <Brand />
-
-      <nav aria-label="Main navigation">
-
-        <a className="is-current" href="#home">Home</a>
-
-        <a href="#about">About</a>
-
-        <a href="#features">Features</a>
-
-        <a href="#contact">Contact</a>
-
-      </nav>
+  return (
+    <div className="landing-page">
+      <header className="landing-nav">
+        <Brand />
+        <nav aria-label="Main navigation">
+          <a className="is-current" href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#features">Features</a>
+          <button
+            type="button"
+            className="landing-nav__link-btn"
+            onClick={() => setActiveModal('contact')}
+          >
+            Contact
+          </button>
+        </nav>
 
       <Link className="landing-nav__cta" to={ROUTES.DASHBOARD}>
 
@@ -535,51 +514,57 @@ const LandingPage = () => (
         </div>
 
         <nav aria-label="Footer navigation">
-
           <a href="#home">Home</a>
-
           <a href="#about">About</a>
-
           <a href="#features">Features</a>
-
-          <a href="#contact">Contact</a>
-
+          <button
+            type="button"
+            className="landing-footer__link-btn"
+            onClick={() => setActiveModal('contact')}
+          >
+            Contact
+          </button>
         </nav>
 
         <div className="landing-footer__socials" aria-label="Social links">
-
-          <a href="https://github.com/" aria-label="GitHub"><GithubIcon /></a>
-
-          <a href="https://x.com/" aria-label="X">𝕏</a>
-
-          <a href="https://linkedin.com/" aria-label="LinkedIn"><LinkedinIcon /></a>
-
+          <a href="https://github.com/Akarshb23/WaterMap.git" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository"><GithubIcon /></a>
         </div>
-
       </div>
 
       <div className="landing-footer__legal">
-
         <span>© 2026 WaterMap. All rights reserved.</span>
-
         <span>
-
-          <a href="#privacy">Privacy</a>
-
-          <a href="#terms">Terms</a>
-
-          <a href="#contact">Contact</a>
-
+          <button
+            type="button"
+            className="landing-footer__link-btn"
+            onClick={() => setActiveModal('privacy')}
+          >
+            Privacy
+          </button>
+          <button
+            type="button"
+            className="landing-footer__link-btn"
+            onClick={() => setActiveModal('terms')}
+          >
+            Terms
+          </button>
+          <button
+            type="button"
+            className="landing-footer__link-btn"
+            onClick={() => setActiveModal('contact')}
+          >
+            Contact
+          </button>
         </span>
-
       </div>
-
     </footer>
 
+    {/* Accessible Modals */}
+    <PrivacyModal isOpen={activeModal === 'privacy'} onClose={() => setActiveModal(null)} />
+    <TermsModal isOpen={activeModal === 'terms'} onClose={() => setActiveModal(null)} />
+    <ContactModal isOpen={activeModal === 'contact'} onClose={() => setActiveModal(null)} />
   </div>
-
-)
-
-
+  )
+}
 
 export default LandingPage

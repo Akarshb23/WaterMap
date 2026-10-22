@@ -1160,11 +1160,16 @@
 
 .landing-page .landing-footer__main nav { display: flex; align-items: center; justify-content: center; gap: 1.65rem; min-width: 0; }
 
-.landing-page .landing-footer__main nav a { color: #506a77; font-size: .76rem; font-weight: 500; white-space: nowrap; transition: color .18s ease; }
+.landing-page .landing-footer__main nav a,
+.landing-page .landing-footer__main nav .landing-footer__link-btn { color: #506a77; font-size: .76rem; font-weight: 500; white-space: nowrap; transition: color .18s ease; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
 
+.landing-page .landing-nav .landing-nav__link-btn { color: #506a77; font-size: .84rem; font-weight: 500; white-space: nowrap; transition: color .18s ease; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
+
+.landing-page .landing-nav .landing-nav__link-btn:hover,
 .landing-page .landing-footer__main nav a:hover,
-
-.landing-page .landing-footer__legal a:hover { color: #008365; }
+.landing-page .landing-footer__main nav .landing-footer__link-btn:hover,
+.landing-page .landing-footer__legal a:hover,
+.landing-page .landing-footer__legal .landing-footer__link-btn:hover { color: #008365; }
 
 .landing-page .landing-footer__socials { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; padding-left: 1.5rem; border-left: 1px solid #d9e8e3; }
 
@@ -1178,7 +1183,8 @@
 
 .landing-page .landing-footer__legal span:last-child { display: flex; align-items: center; gap: 1.5rem; }
 
-.landing-page .landing-footer__legal a { color: #506a77; font-size: inherit; white-space: nowrap; transition: color .18s ease; }
+.landing-page .landing-footer__legal a,
+.landing-page .landing-footer__legal .landing-footer__link-btn { color: #506a77; font-size: inherit; white-space: nowrap; transition: color .18s ease; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
 
 
 
@@ -1763,5 +1769,166 @@
 @media (min-width: 761px) {
   .landing-page .landing-cta {
     min-height: clamp(480px, 30vw, 550px);
+  }
+}
+
+/* ============================================================
+   MOBILE RESPONSIVENESS OVERRIDES FOR LANDING PAGE
+   ============================================================ */
+
+@media (max-width: 960px) {
+  .landing-page .landing-nav {
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 2rem);
+    height: 70px;
+  }
+
+  .landing-page .landing-nav nav {
+    display: none;
+  }
+
+  .landing-page .landing-hero {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: auto !important;
+    width: calc(100% - 2rem) !important;
+    padding: 1.25rem 0 2rem !important;
+    overflow: hidden !important;
+  }
+
+  .landing-page .landing-hero__copy {
+    width: 100% !important;
+    max-width: 100% !important;
+    transform: none !important;
+  }
+
+  /* Hide the desktop background cityscape that collides with stats on mobile */
+  .landing-page .landing-hero__art,
+  .landing-page .landing-hero__wave {
+    display: none !important;
+  }
+
+  .landing-page .landing-stats {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.85rem !important;
+    margin-top: 2rem !important;
+  }
+
+  .landing-page .landing-stats > div {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #dfede8;
+    border-radius: 12px;
+    padding: 0.65rem 0.75rem;
+    box-shadow: 0 2px 6px rgba(7, 93, 76, 0.04);
+  }
+
+  /* CTA Section: Full width readable card on mobile */
+  .landing-page .landing-cta {
+    display: flex !important;
+    flex-direction: column !important;
+    width: calc(100% - 2rem) !important;
+    max-width: 100% !important;
+    margin: 2rem auto !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 2.25rem 1.25rem !important;
+    border-radius: 16px !important;
+    background: #f0faf5 !important;
+    overflow: hidden !important;
+  }
+
+  .landing-page .landing-cta__copy {
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .landing-page .landing-cta__background {
+    display: none !important;
+  }
+
+  .landing-page .landing-cta h2 {
+    font-size: 1.85rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .landing-page .landing-cta__copy .landing-values {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 1.5rem !important;
+  }
+
+  .landing-page .landing-cta__copy .landing-values span {
+    font-size: 0.88rem !important;
+    padding: 0 !important;
+    gap: 0.65rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-page .landing-nav {
+    height: 62px;
+  }
+
+  .landing-page .landing-brand {
+    font-size: 1.1rem;
+  }
+
+  .landing-page .landing-nav__cta {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.82rem;
+  }
+
+  .landing-page .landing-hero h1 {
+    font-size: 2.1rem;
+    line-height: 1.14;
+  }
+
+  .landing-page .landing-hero__copy > p {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .landing-page .landing-hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.65rem;
+  }
+
+  .landing-page .landing-hero__actions .btn-primary,
+  .landing-page .landing-hero__actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+    font-size: 0.92rem;
+  }
+
+  .landing-page .landing-feature-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .landing-page .process-steps {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .landing-page .landing-footer {
+    width: calc(100% - 2rem);
+    padding: 2rem 0;
+  }
+
+  .landing-page .landing-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }

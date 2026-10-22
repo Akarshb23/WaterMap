@@ -83,27 +83,34 @@ const ScenarioAnalysis = ({ outlook, baseline = 0.79, onSimulate, onReset }) => 
   const handleRunSimulation = () => {
     setIsSimulating(true)
     setTimeout(() => {
-      // Deterministic calculation based on slider inputs
-      const demandImpact = Math.round(124 * (1 + (waterDemand + popGrowth * 0.4) / 100))
-      const rainImpact = Math.round(520 * (1 + annualRain / 100))
-      const simulatedWsi = (
-        0.82 * (1 + (demandImpact - 124) / 300) * (1 - (greenInfra * 0.6) / 100)
-      ).toFixed(2)
+      // Deterministic simulation calculation based on Karnataka baseline (0.34 avg WSI, 5 high risk districts)
+      const baseDemand = 124
+      const demandImpact = Math.round(baseDemand * (1 + (waterDemand + popGrowth * 0.4) / 100))
+      const rainImpact = Math.round(780 * (1 + annualRain / 100))
+      const simulatedWsi = Math.max(
+        0.15,
+        Math.min(
+          0.95,
+          +(0.46 * (1 + (demandImpact - baseDemand) / 200) * (1 - (greenInfra * 0.5) / 100)).toFixed(2)
+        )
+      )
 
-      const highRisk = Math.round(12 * (1 + (waterDemand - greenInfra) / 100))
+      const baselineHighRisk = 5
+      const deltaRisk = Math.round((waterDemand * 0.12) - (greenInfra * 0.08) - (annualRain * 0.08))
+      const highRisk = Math.max(2, Math.min(22, baselineHighRisk + 3 + deltaRisk))
 
       onSimulate?.({
-        wsi: simulatedWsi,
-        wsiTrend: `${Math.round(((simulatedWsi - 0.68) / 0.68) * 100)}% vs baseline`,
-        highRiskWards: String(Math.max(8, Math.min(25, highRisk))),
-        wardsTrend: `${Math.max(1, highRisk - 12)} more than baseline`,
+        wsi: simulatedWsi.toFixed(2),
+        wsiTrend: `${Math.round(((simulatedWsi - 0.34) / 0.34) * 100)}% vs baseline`,
+        highRiskDistricts: String(highRisk),
+        districtsTrend: `${Math.abs(highRisk - baselineHighRisk)} ${highRisk >= baselineHighRisk ? 'more' : 'fewer'} than current 5`,
         rainfall: `${rainImpact} mm`,
-        rainTrend: `${Math.abs(annualRain)}% vs baseline`,
+        rainTrend: `${Math.abs(annualRain)}% vs normal`,
         demand: `${demandImpact} MLD`,
-        demandTrend: `${Math.round(((demandImpact - 100) / 100) * 100)}% vs baseline`,
+        demandTrend: `${Math.round(((demandImpact - baseDemand) / baseDemand) * 100)}% vs baseline`,
       })
       setIsSimulating(false)
-    }, 200)
+    }, 250)
   }
 
   return (

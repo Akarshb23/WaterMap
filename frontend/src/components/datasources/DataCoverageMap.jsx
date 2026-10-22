@@ -8,13 +8,15 @@ import { COVERAGE_MAP_LEGEND, DATA_COVERAGE_SOURCES } from '../../data/dataSourc
 import { fetchDistrictsGeoJSON } from '../../services/districtMapService.js'
 import { fetchWardsGeoJSON } from '../../services/mapService.js'
 
-// Deterministic source mapping based on ward ID or index
-const SOURCES = ['bwssb', 'cgwb', 'imd', 'census']
+// Deterministic source mapping based on district ID or index
+const SOURCES = ['kwa', 'kgwb', 'imd', 'ksrsac', 'lulc', 'census']
 const SOURCE_COLORS = {
-  bwssb: '#34d399',
-  cgwb: '#10b981',
-  imd: '#60a5fa',
-  census: '#86efac',
+  kwa: '#10b981',
+  kgwb: '#34d399',
+  imd: '#38bdf8',
+  ksrsac: '#06b6d4',
+  lulc: '#fbbf24',
+  census: '#6ee7b7',
 }
 
 const getFeatureSource = (feature, index) => {
@@ -316,7 +318,7 @@ const DataCoverageMap = ({
                 color: '#075d4c',
               }}
             >
-              Loading Bangalore boundaries…
+              Loading Karnataka boundaries…
             </div>
           )}
 

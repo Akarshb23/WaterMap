@@ -17,6 +17,139 @@ import {
   BANGALORE_DASHBOARD_DISTRICTS,
 } from '../../data/bangaloreDashboardData.js'
 
+const KARNATAKA_DISTRICT_ZONES = {
+  bagalkote: 'north',
+  ballari: 'north',
+  belagavi: 'north',
+  bidar: 'north',
+  dharwad: 'north',
+  gadag: 'north',
+  haveri: 'north',
+  kalaburagi: 'north',
+  koppal: 'north',
+  raichur: 'north',
+  vijayanagara: 'north',
+  vijayapura: 'north',
+  yadgir: 'north',
+
+  'bengaluru urban': 'south',
+  'bengaluru rural': 'south',
+  'bengaluru south': 'south',
+  chamarajanagara: 'south',
+  chikkaballapura: 'south',
+  hassan: 'south',
+  kodagu: 'south',
+  kolar: 'south',
+  mandya: 'south',
+  mysuru: 'south',
+  ramanagara: 'south',
+  tumakuru: 'south',
+
+  chikkamagaluru: 'central',
+  chitradurga: 'central',
+  davanagere: 'central',
+  shivamogga: 'central',
+
+  'dakshina kannada': 'west',
+  udupi: 'west',
+  'uttara kannada': 'west',
+}
+
+const BANGALORE_EAST_DISTRICTS = ['whitefield', 'bellandur', 'varthur', 'mahadevapura', 'marathahalli', 'hal', 'kr puram']
+const BANGALORE_NORTH_DISTRICTS = ['hebbal', 'yelahanka', 'thanisandra', 'sahakarnagar', 'peenya', 'jalahalli']
+const BANGALORE_SOUTH_DISTRICTS = ['koramangala', 'electronic city', 'jayanagar', 'jp nagar', 'btm layout', 'bannerghatta', 'banashankari']
+const BANGALORE_WEST_DISTRICTS = ['rajajinagar', 'malleshwaram', 'vijayanagar', 'basaveshwaranagar', 'yeshwanthpur']
+const BANGALORE_CENTRAL_DISTRICTS = ['indiranagar', 'shanthi nagar', 'shivajinagar', 'chickpet', 'mg road']
+
+function getZoneForDistrict(props) {
+  if (props.zoneKey) return props.zoneKey.toLowerCase()
+  if (props.zone) {
+    const z = props.zone.toLowerCase()
+    if (z.includes('north')) return 'north'
+    if (z.includes('south')) return 'south'
+    if (z.includes('west')) return 'west'
+    if (z.includes('east')) return 'east'
+    if (z.includes('central')) return 'central'
+  }
+  const name = (props.district_name || props.name || '').toLowerCase().trim()
+  if (KARNATAKA_DISTRICT_ZONES[name]) return KARNATAKA_DISTRICT_ZONES[name]
+  if (BANGALORE_EAST_DISTRICTS.some((d) => name.includes(d))) return 'east'
+  if (BANGALORE_NORTH_DISTRICTS.some((d) => name.includes(d))) return 'north'
+  if (BANGALORE_WEST_DISTRICTS.some((d) => name.includes(d))) return 'west'
+  if (BANGALORE_CENTRAL_DISTRICTS.some((d) => name.includes(d))) return 'central'
+  return 'south'
+}
+
+function getMetricValue(props, metricKey) {
+  const scores = props.indicator_scores || {}
+  if (metricKey === 'groundwater') {
+    return scores.groundwater != null ? Number(scores.groundwater) : (props.groundwater_score ?? 0.55)
+  }
+  if (metricKey === 'demand') {
+    return scores.tanker_reliance != null ? Number(scores.tanker_reliance) : (props.demand_score ?? 0.45)
+  }
+  if (metricKey === 'supply') {
+    return scores.piped_supply != null ? Number(scores.piped_supply) : (props.supply_score ?? 0.40)
+  }
+  return props.water_stress_index != null ? Number(props.water_stress_index) : (props.wsi ?? 0.50)
+}
+
+function getMetricColor(value, metricKey) {
+  if (metricKey === 'groundwater') {
+    if (value >= 0.70) return '#ef4444'
+    if (value >= 0.40) return '#f59e0b'
+    return '#10b981'
+  }
+  if (metricKey === 'demand') {
+    if (value >= 0.55) return '#ef4444'
+    if (value >= 0.35) return '#f59e0b'
+    return '#10b981'
+  }
+  if (metricKey === 'supply') {
+    if (value >= 0.55) return '#ef4444'
+    if (value >= 0.35) return '#f59e0b'
+    return '#10b981'
+  }
+  if (value >= 0.55) return '#ef4444'
+  if (value >= 0.35) return '#f59e0b'
+  return '#10b981'
+}
+
+const LEGEND_CONFIGS = {
+  wsi: {
+    title: 'Water Stress Index',
+    items: [
+      { color: '#10b981', label: 'Low (0 – 0.35)' },
+      { color: '#f59e0b', label: 'Moderate (0.35 – 0.55)' },
+      { color: '#ef4444', label: 'High (0.55 – 1.0)' },
+    ],
+  },
+  groundwater: {
+    title: 'Groundwater Stage',
+    items: [
+      { color: '#10b981', label: 'Safe Extraction (< 40%)' },
+      { color: '#f59e0b', label: 'Semi-Critical (40 – 70%)' },
+      { color: '#ef4444', label: 'Critical / Over-exploited (> 70%)' },
+    ],
+  },
+  demand: {
+    title: 'Water Demand Pressure',
+    items: [
+      { color: '#10b981', label: 'Low Demand (< 35%)' },
+      { color: '#f59e0b', label: 'Moderate Demand (35 – 55%)' },
+      { color: '#ef4444', label: 'High Tanker / Demand (> 55%)' },
+    ],
+  },
+  supply: {
+    title: 'Per Capita Supply Deficit',
+    items: [
+      { color: '#10b981', label: 'Adequate Coverage (< 35% Deficit)' },
+      { color: '#f59e0b', label: 'Moderate Deficit (35 – 55%)' },
+      { color: '#ef4444', label: 'Severe Supply Deficit (> 55%)' },
+    ],
+  },
+}
+
 const MAP_METRIC_OPTIONS = [
   { value: 'wsi', label: 'Water Stress Index' },
   { value: 'groundwater', label: 'Groundwater Level' },
@@ -155,12 +288,11 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
 
     const features = geoJsonData.features.filter((f) => {
       const props = f.properties || {}
-      const zName = (props.zone || props.state_name || '').toLowerCase()
+      const dZone = getZoneForDistrict(props)
       const risk = (props.risk_category || 'moderate').toLowerCase()
 
       if (zone && zone !== 'all') {
-        const targetZone = zone.toLowerCase().replace(' zone', '').trim()
-        if (!zName.includes(targetZone)) return false
+        if (dZone !== zone.toLowerCase()) return false
       }
 
       if (districtFilter !== 'all') {
@@ -172,6 +304,16 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
 
     return { ...geoJsonData, features: features.length > 0 ? features : geoJsonData.features }
   }, [geoJsonData, zone, districtFilter])
+
+  // When zone or filter changes, auto-select a valid district
+  useEffect(() => {
+    if (filteredData?.features?.length) {
+      const firstId = getDistrictId(filteredData.features[0])
+      if (firstId) {
+        setSelectedDistrictId(firstId)
+      }
+    }
+  }, [zone, districtFilter, filteredData])
 
   const selectedDistrict = useMemo(() => {
     if (geoJsonData?.features?.length) {
@@ -190,26 +332,24 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
         const name = p.name || p.district_name || 'Koramangala'
         const risk = (p.risk_category || 'high').toLowerCase()
         const wsi = Number(p.water_stress_index ?? 0.87)
+        const gwVal = p.indicator_scores?.groundwater != null ? `${(p.indicator_scores.groundwater * 100).toFixed(0)}% stage` : '-18.4 m'
+        const demandVal = p.indicator_scores?.tanker_reliance != null ? `${(p.indicator_scores.tanker_reliance * 100).toFixed(0)}% demand stress` : '124 MLD'
 
         return {
           id: getDistrictId(match),
           districtNumber: p.ward_id || p.district_id || 12,
           wardNumber: p.ward_id || 12,
           name,
-          zone: p.zone ? `${p.zone} Bangalore` : 'Central Bangalore',
+          zone: p.zone ? `${p.zone}` : `${getZoneForDistrict(p).toUpperCase()} Karnataka`,
           risk,
           riskLabel: `${risk[0].toUpperCase()}${risk.slice(1)} Risk`,
           wsi,
           population: p.population ? Number(p.population).toLocaleString('en-IN') : '240,000',
-          rainfall: p.indicators?.rainfall_deficit_pct?.raw_value
-            ? `${Math.abs(p.indicators.rainfall_deficit_pct.raw_value)} mm`
+          rainfall: p.indicator_scores?.rainfall != null
+            ? `${(p.indicator_scores.rainfall * 100).toFixed(0)}% deficit`
             : '520 mm',
-          demand: p.indicators?.piped_water_supply_lpcd?.raw_value
-            ? `${Math.round(p.indicators.piped_water_supply_lpcd.raw_value)} MLD`
-            : '124 MLD',
-          groundwater: p.indicators?.groundwater_depth_mbgl?.raw_value
-            ? `-${p.indicators.groundwater_depth_mbgl.raw_value} m`
-            : '-18.4 m',
+          demand: demandVal,
+          groundwater: gwVal,
         }
       }
     }
@@ -229,15 +369,10 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
   }
 
   const handleResetZoom = () => {
-    setSelectedDistrictId('district-12')
-    if (mapRef.current) {
-      if (filteredData) {
-        const bounds = L.geoJSON(filteredData).getBounds()
-        if (bounds.isValid()) {
-          mapRef.current.fitBounds(bounds, { padding: [20, 20], maxZoom: 12 })
-        }
-      } else {
-        mapRef.current.setView([12.97, 77.59], 11)
+    if (mapRef.current && filteredData) {
+      const bounds = L.geoJSON(filteredData).getBounds()
+      if (bounds.isValid()) {
+        mapRef.current.fitBounds(bounds, { padding: [20, 20], maxZoom: 8 })
       }
     }
   }
@@ -247,11 +382,13 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
       const props = feature.properties || {}
       const dId = getDistrictId(feature)
       const name = props.name || props.district_name || 'Unnamed District'
-      const wsi = props.water_stress_index != null ? Number(props.water_stress_index).toFixed(2) : '0.50'
+      const mVal = getMetricValue(props, metric)
+      const metricLabel = MAP_METRIC_OPTIONS.find((o) => o.value === metric)?.label || 'Metric'
+      const formattedVal = (mVal * (metric === 'wsi' ? 1 : 100)).toFixed(metric === 'wsi' ? 2 : 1) + (metric === 'wsi' ? '' : '%')
       const risk = props.risk_category || 'Moderate'
 
       layer.bindTooltip(
-        `<div style="font-weight:700;font-size:12px;color:#0f172a">${name}</div><div style="font-size:11px;color:#475569">WSI: ${wsi} · ${risk}</div>`,
+        `<div style="font-weight:700;font-size:12px;color:#0f172a">${name}</div><div style="font-size:11px;color:#475569">${metricLabel}: <strong>${formattedVal}</strong> · ${risk}</div>`,
         {
           sticky: true,
           direction: 'auto',
@@ -271,7 +408,7 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
             riskLabel: `${risk[0].toUpperCase()}${risk.slice(1)} Risk`,
             wsi: Number(props.water_stress_index ?? 0.5),
             water_stress_index: props.water_stress_index,
-            zone: props.zone || 'Bangalore Region',
+            zone: props.zone || 'Karnataka Region',
             properties: props,
           }
           handleSelect?.(districtObj)
@@ -292,30 +429,42 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
         mouseout: (e) => {
           const l = e.target
           if (dId !== String(selectedDistrictId)) {
-            l.setStyle(getFeatureStyle(feature, selectedDistrictId))
+            const val = getMetricValue(props, metric)
+            const color = getMetricColor(val, metric)
+            l.setStyle({
+              weight: 1.5,
+              color: '#ffffff',
+              fillColor: color,
+              fillOpacity: 0.82,
+            })
           }
         },
       })
     },
-    [selectedDistrictId, handleSelect]
+    [selectedDistrictId, metric, handleSelect]
   )
 
   const featureStyle = useCallback(
     (feature) => {
-      const base = getFeatureStyle(feature, selectedDistrictId)
+      const isSelected = String(getDistrictId(feature)) === String(selectedDistrictId)
+      const val = getMetricValue(feature.properties || {}, metric)
+      const color = getMetricColor(val, metric)
+
       return {
-        ...base,
-        stroke: true,
-        weight: String(getDistrictId(feature)) === String(selectedDistrictId) ? 3 : 1.5,
-        fillOpacity: 0.85,
+        fillColor: color,
+        fillOpacity: isSelected ? 0.95 : 0.82,
+        color: isSelected ? '#075f50' : '#ffffff',
+        weight: isSelected ? 3.2 : 1.4,
       }
     },
-    [selectedDistrictId]
+    [selectedDistrictId, metric]
   )
 
   const geoJsonKey = useMemo(() => {
-    return (filteredData?.features ?? []).map((f) => getDistrictId(f)).join('-')
-  }, [filteredData])
+    return `${metric}-${zone}-${districtFilter}-${(filteredData?.features ?? []).map((f) => getDistrictId(f)).join('-')}`
+  }, [metric, zone, districtFilter, filteredData])
+
+  const activeLegend = LEGEND_CONFIGS[metric] || LEGEND_CONFIGS.wsi
 
   return (
     <article className="card city-map-card" aria-labelledby="city-water-stress-map-title">
@@ -411,22 +560,16 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
             </button>
           </div>
 
-          {/* Floating Legend: Bottom-Left */}
+          {/* Floating Dynamic Legend: Bottom-Left */}
           <div className="city-map-legend" aria-label="Risk category legend">
-            <h4 className="city-map-legend__title">Water Stress Index</h4>
+            <h4 className="city-map-legend__title">{activeLegend.title}</h4>
             <ul className="city-map-legend__list">
-              <li className="city-map-legend__item">
-                <span className="city-map-legend__dot" style={{ backgroundColor: '#10b981' }} />
-                <span>Low (0 – 0.3)</span>
-              </li>
-              <li className="city-map-legend__item">
-                <span className="city-map-legend__dot" style={{ backgroundColor: '#f59e0b' }} />
-                <span>Moderate (0.3 – 0.6)</span>
-              </li>
-              <li className="city-map-legend__item">
-                <span className="city-map-legend__dot" style={{ backgroundColor: '#ef4444' }} />
-                <span>High (0.6 – 1.0)</span>
-              </li>
+              {activeLegend.items.map((item, idx) => (
+                <li key={idx} className="city-map-legend__item">
+                  <span className="city-map-legend__dot" style={{ backgroundColor: item.color }} />
+                  <span>{item.label}</span>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -541,7 +684,7 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
 
           {/* Stats List */}
           <dl className="city-ward-panel__stats">
-            <div className="city-ward-panel__stat-row">
+            <div className={`city-ward-panel__stat-row ${metric === 'wsi' ? 'city-ward-panel__stat-row--highlighted' : ''}`}>
               <dt className="city-ward-panel__stat-label">Water Stress Index</dt>
               <dd className="city-ward-panel__stat-val city-ward-panel__stat-val--danger">
                 {selectedDistrict.wsi.toFixed(2)}
@@ -555,26 +698,15 @@ const CityWaterStressMap = ({ onSelectWard, onSelectDistrict }) => {
               <dt className="city-ward-panel__stat-label">Annual Rainfall</dt>
               <dd className="city-ward-panel__stat-val">{selectedDistrict.rainfall}</dd>
             </div>
-            <div className="city-ward-panel__stat-row">
+            <div className={`city-ward-panel__stat-row ${metric === 'demand' ? 'city-ward-panel__stat-row--highlighted' : ''}`}>
               <dt className="city-ward-panel__stat-label">Water Demand</dt>
               <dd className="city-ward-panel__stat-val">{selectedDistrict.demand}</dd>
             </div>
-            <div className="city-ward-panel__stat-row">
+            <div className={`city-ward-panel__stat-row ${metric === 'groundwater' ? 'city-ward-panel__stat-row--highlighted' : ''}`}>
               <dt className="city-ward-panel__stat-label">Groundwater Level</dt>
               <dd className="city-ward-panel__stat-val">{selectedDistrict.groundwater}</dd>
             </div>
           </dl>
-
-          {/* Action Button */}
-          <div className="city-ward-panel__action">
-            <button
-              type="button"
-              className="city-ward-panel__btn"
-              onClick={() => navigate(`/districts/${selectedDistrict.districtNumber || selectedDistrict.wardNumber || 12}`)}
-            >
-              View Full Details <ArrowRight size={15} aria-hidden="true" />
-            </button>
-          </div>
         </aside>
       </div>
     </article>

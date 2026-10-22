@@ -10,18 +10,54 @@ import {
   YAxis,
 } from 'recharts'
 
-const DEFAULT_DEMAND_DATA = [
-  { year: '2020', demand: 105 },
-  { year: '2022', demand: 140 },
-  { year: '2024', demand: 170 },
-  { year: '2026', demand: 205 },
-  { year: '2028', demand: 240 },
-  { year: '2030', demand: 250 },
-]
+const REGIONAL_DEMAND_DATA = {
+  'State Wide': [
+    { year: '2020', demand: 112 },
+    { year: '2022', demand: 118 },
+    { year: '2024', demand: 124 },
+    { year: '2026', demand: 132 },
+    { year: '2028', demand: 142 },
+    { year: '2030', demand: 151 },
+  ],
+  'North Zone': [
+    { year: '2020', demand: 88 },
+    { year: '2022', demand: 94 },
+    { year: '2024', demand: 101 },
+    { year: '2026', demand: 109 },
+    { year: '2028', demand: 118 },
+    { year: '2030', demand: 126 },
+  ],
+  'South Zone': [
+    { year: '2020', demand: 145 },
+    { year: '2022', demand: 156 },
+    { year: '2024', demand: 168 },
+    { year: '2026', demand: 182 },
+    { year: '2028', demand: 198 },
+    { year: '2030', demand: 215 },
+  ],
+  'Central Zone': [
+    { year: '2020', demand: 102 },
+    { year: '2022', demand: 108 },
+    { year: '2024', demand: 115 },
+    { year: '2026', demand: 123 },
+    { year: '2028', demand: 131 },
+    { year: '2030', demand: 140 },
+  ],
+  'West Zone': [
+    { year: '2020', demand: 92 },
+    { year: '2022', demand: 98 },
+    { year: '2024', demand: 104 },
+    { year: '2026', demand: 110 },
+    { year: '2028', demand: 117 },
+    { year: '2030', demand: 125 },
+  ],
+}
 
-const WaterDemandForecast = ({ data = DEFAULT_DEMAND_DATA }) => {
-  const [selectedArea, setSelectedArea] = useState('City Wide')
-  const chartData = data && data.length > 0 ? data : DEFAULT_DEMAND_DATA
+const WaterDemandForecast = ({ data }) => {
+  const [selectedArea, setSelectedArea] = useState('State Wide')
+  const chartData = (data && data.length > 0 && selectedArea === 'State Wide') 
+    ? data 
+    : (REGIONAL_DEMAND_DATA[selectedArea] || REGIONAL_DEMAND_DATA['State Wide'])
 
   return (
     <section className="card forecast-card demand-card" aria-label="Water Demand Forecast">
@@ -33,12 +69,11 @@ const WaterDemandForecast = ({ data = DEFAULT_DEMAND_DATA }) => {
           onChange={(e) => setSelectedArea(e.target.value)}
           aria-label="Select area for demand forecast"
         >
-          <option value="City Wide">City Wide</option>
-          <option value="North Bangalore">North Bangalore</option>
-          <option value="South Bangalore">South Bangalore</option>
-          <option value="Central Bangalore">Central Bangalore</option>
-          <option value="East Bangalore">East Bangalore</option>
-          <option value="West Bangalore">West Bangalore</option>
+          <option value="State Wide">State Wide</option>
+          <option value="North Zone">North Zone</option>
+          <option value="South Zone">South Zone</option>
+          <option value="Central Zone">Central Zone</option>
+          <option value="West Zone">West Zone</option>
         </select>
       </div>
 

@@ -2133,7 +2133,7 @@
 .implementation-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 9999;
   background-color: rgba(20, 46, 59, 0.45);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);

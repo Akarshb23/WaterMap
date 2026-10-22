@@ -26,7 +26,8 @@ const IndicatorTable = ({ indicators = [] }) => (
 )
 
 const WardDetailsPage = () => {
-  const { wardId } = useParams()
+  const { wardId: paramWardId, districtId: paramDistrictId } = useParams()
+  const wardId = paramWardId || paramDistrictId || '12'
   const [activeTab, setActiveTab] = useState('overview')
   const { ward: remoteWard, isLoading, error } = useWardDetails(wardId)
   const ward = isApiMode() ? remoteWard : (remoteWard ?? { ...WARD_DETAILS, name: WARD_DETAILS.name || `District ${wardId ?? WARD_DETAILS.id}` })

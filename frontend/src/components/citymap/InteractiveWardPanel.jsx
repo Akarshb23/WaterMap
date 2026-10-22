@@ -315,16 +315,8 @@ const InteractiveWardPanel = ({
               <button
                 type="button"
                 className="interactive-ward-btn interactive-ward-btn--primary"
-                onClick={() => navigate(`/districts/${currentDistrict.districtNumber || currentDistrict.wardNumber || 12}`)}
-              >
-                View Detailed Analysis
-                <ArrowRight size={14} aria-hidden="true" />
-              </button>
-
-              <button
-                type="button"
-                className="interactive-ward-btn interactive-ward-btn--secondary"
                 onClick={() => onCompare?.(currentDistrict)}
+                style={{ width: '100%', justifyContent: 'center' }}
               >
                 <BarChart2 size={15} aria-hidden="true" />
                 Compare Districts

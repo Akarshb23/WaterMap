@@ -52,10 +52,10 @@ export const DASHBOARD_KPIS = [
   {
     id: 'high-risk-districts',
     title: 'High Risk Districts',
-    value: '12',
+    value: '5',
     tone: 'red',
-    note: 'of 42 total',
-    visual: { type: 'progress', color: '#EF4444', percent: 28.6 },
+    note: 'of 31 total',
+    visual: { type: 'progress', color: '#EF4444', percent: 16.1 },
   },
   {
     id: 'annual-rainfall',
@@ -112,14 +112,14 @@ export const DASHBOARD_KPIS = [
   },
 ]
 
-/** Donut chart: district counts by water-stress risk band. */
+/** Donut chart: district counts by water-stress risk band for Karnataka. */
 export const RISK_DISTRIBUTION = [
-  { name: 'High Risk', value: 12, percent: '29%', color: '#EF4444' },
-  { name: 'Moderate Risk', value: 18, percent: '43%', color: '#FFCC59' },
-  { name: 'Low Risk', value: 12, percent: '28%', color: '#45BD9B' },
+  { name: 'High Risk', value: 5, percent: '16.1%', color: '#EF4444' },
+  { name: 'Moderate Risk', value: 7, percent: '22.6%', color: '#F59E0B' },
+  { name: 'Low Risk', value: 19, percent: '61.3%', color: '#10B981' },
 ]
 
-export const RISK_DISTRIBUTION_TOTAL = { value: 42, label: 'Districts' }
+export const RISK_DISTRIBUTION_TOTAL = { value: 31, label: 'Districts' }
 
 /** Monthly average water-stress index (WSI) across a calendar year. */
 export const WATER_STRESS_TREND = [

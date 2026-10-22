@@ -50,3 +50,15 @@
   --wm-font-sans: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial,
     sans-serif;
 }
+
+@media (max-width: 900px) {
+  :root {
+    --wm-sidebar-width: 0px;
+  }
+}
+
+/* Ensure Leaflet maps create their own local stacking context so map panes never leak into modal dialogs */
+.leaflet-container {
+  isolation: isolate;
+  z-index: 1 !important;
+}

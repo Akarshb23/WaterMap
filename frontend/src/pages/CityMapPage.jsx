@@ -5,6 +5,8 @@ import InteractiveCityMap from '../components/citymap/InteractiveCityMap.jsx'
 import InteractiveWardPanel from '../components/citymap/InteractiveWardPanel.jsx'
 import { BANGALORE_DASHBOARD_DISTRICTS } from '../data/bangaloreDashboardData.js'
 import cityscape from '../assets/watermap-cityscape.png'
+import CompareDistrictsModal from '../components/citymap/CompareDistrictsModal.jsx'
+import '../styles/modals.css'
 import '../styles/interactive-city-map.css'
 
 export default function CityMapPage() {
@@ -16,6 +18,7 @@ export default function CityMapPage() {
     () => BANGALORE_DASHBOARD_DISTRICTS.find((w) => w.id === 'district-12') || BANGALORE_DASHBOARD_DISTRICTS[0]
   )
   const [isPanelOpen, setIsPanelOpen] = useState(true)
+  const [isCompareOpen, setIsCompareOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState(null)
 
   const handleSelectDistrict = (district) => {
@@ -23,9 +26,8 @@ export default function CityMapPage() {
     setIsPanelOpen(true)
   }
 
-  const handleCompareDistricts = (district) => {
-    setToastMessage(`Comparing ${district.name} with city average. Full comparison matrix loaded.`)
-    setTimeout(() => setToastMessage(null), 3500)
+  const handleCompareDistricts = () => {
+    setIsCompareOpen(true)
   }
 
   return (
@@ -98,6 +100,8 @@ export default function CityMapPage() {
           <InteractiveCityMap
             selectedDistrictId={selectedDistrict?.id || 'district-12'}
             onSelectDistrict={handleSelectDistrict}
+            view={view}
+            period={period}
             zone={zone}
             searchQuery={searchQuery}
           />
@@ -121,6 +125,14 @@ export default function CityMapPage() {
           />
         )}
       </div>
+
+      {/* Compare Districts Interactive Modal */}
+      {isCompareOpen && (
+        <CompareDistrictsModal
+          currentDistrict={selectedDistrict}
+          onClose={() => setIsCompareOpen(false)}
+        />
+      )}
     </div>
   )
 }

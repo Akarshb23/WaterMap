@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Calendar, ChevronDown } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Calendar, ChevronDown, Check } from 'lucide-react'
 import cityscape from '../../assets/watermap-cityscape.png'
 import { CITY_DASHBOARD_HEADER } from '../../data/bangaloreDashboardData.js'
 
@@ -12,11 +12,28 @@ const CityDashboardHeader = ({
   onDateRangeChange,
 }) => {
   const [currentRange, setCurrentRange] = useState(dateRange)
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
 
-  const handleChange = (e) => {
-    const value = e.target.value
-    setCurrentRange(value)
-    onDateRangeChange?.(value)
+  const activeLabel =
+    CITY_DASHBOARD_HEADER.dateRanges.find((r) => r.value === currentRange)?.label ||
+    'Last 30 days'
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleSelect = (val) => {
+    setCurrentRange(val)
+    setIsOpen(false)
+    onDateRangeChange?.(val)
   }
 
   return (
@@ -38,22 +55,47 @@ const CityDashboardHeader = ({
         <div className="city-dashboard-header__blur-veil" aria-hidden="true" />
 
         {/* Date Filter Card on Top Right */}
-        <div className="city-dashboard-header__filter-wrap">
-          <Calendar className="city-dashboard-header__calendar-icon" size={16} aria-hidden="true" />
-          <select
-            id="city-dashboard-date-range"
-            className="native-select city-dashboard-header__select"
-            value={currentRange}
-            onChange={handleChange}
-            aria-label="Filter timeline"
+        <div className="city-dashboard-header__filter-wrap" ref={dropdownRef}>
+          <button
+            type="button"
+            className="city-dashboard-header__filter-btn"
+            onClick={() => setIsOpen((prev) => !prev)}
+            aria-expanded={isOpen}
+            aria-haspopup="listbox"
+            aria-label={`Filter timeline: currently ${activeLabel}`}
           >
-            {CITY_DASHBOARD_HEADER.dateRanges.map((range) => (
-              <option key={range.value} value={range.value}>
-                {range.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="city-dashboard-header__chevron" size={14} aria-hidden="true" />
+            <Calendar className="city-dashboard-header__calendar-icon" size={16} aria-hidden="true" />
+            <span className="city-dashboard-header__filter-label">{activeLabel}</span>
+            <ChevronDown
+              className={`city-dashboard-header__chevron ${isOpen ? 'city-dashboard-header__chevron--open' : ''}`}
+              size={14}
+              aria-hidden="true"
+            />
+          </button>
+
+          {/* Custom Dropdown Menu */}
+          {isOpen && (
+            <div className="city-dashboard-header__dropdown-menu" role="listbox">
+              {CITY_DASHBOARD_HEADER.dateRanges.map((range) => {
+                const isSelected = range.value === currentRange
+                return (
+                  <button
+                    key={range.value}
+                    type="button"
+                    role="option"
+                    aria-selected={isSelected}
+                    className={`city-dashboard-header__dropdown-item ${
+                      isSelected ? 'city-dashboard-header__dropdown-item--active' : ''
+                    }`}
+                    onClick={() => handleSelect(range.value)}
+                  >
+                    <span>{range.label}</span>
+                    {isSelected && <Check size={14} className="city-dashboard-header__check-icon" />}
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
       </div>
     </header>

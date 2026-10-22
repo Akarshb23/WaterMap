@@ -89,7 +89,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   const { selectedCityId, setSelectedCityId } = useCity()
 
   const [isNotifOpen, setIsNotifOpen] = useState(false)
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [notifications, setNotifications] = useState(() => {
     try {
       const saved = localStorage.getItem('watermap_notifications')
@@ -140,7 +139,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
   })
 
   const notifRef = useRef(null)
-  const profileRef = useRef(null)
 
   const unreadCount = notifications.filter((n) => n.unread).length
 
@@ -155,15 +153,11 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
       if (notifRef.current && !notifRef.current.contains(event.target)) {
         setIsNotifOpen(false)
       }
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setIsProfileOpen(false)
-      }
     }
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         setIsNotifOpen(false)
-        setIsProfileOpen(false)
       }
     }
 
@@ -331,7 +325,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
             className={`topbar__bell${isNotifOpen ? ' topbar__bell--active' : ''}`}
             onClick={() => {
               setIsNotifOpen((prev) => !prev)
-              setIsProfileOpen(false)
             }}
             aria-label={`Notifications (${unreadCount} unread)`}
             aria-expanded={isNotifOpen}
@@ -402,115 +395,6 @@ const Topbar = ({ isSidebarOpen = false, onToggleSidebar }) => {
                       </button>
                     </div>
                   ))
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Functional Profile Button with popover */}
-        <div className="topbar__action-wrapper" ref={profileRef}>
-          <button
-            type="button"
-            className={`topbar__profile${isProfileOpen ? ' topbar__profile--active' : ''}`}
-            onClick={() => {
-              setIsProfileOpen((prev) => !prev)
-              setIsNotifOpen(false)
-            }}
-            aria-label={`User profile ${user.name}`}
-            aria-expanded={isProfileOpen}
-            aria-haspopup="true"
-          >
-            <span className="topbar__avatar">{user.name.charAt(0)}</span>
-            <span className="topbar__profile-name">{user.name}</span>
-            <ChevronDown
-              size={14}
-              className={`topbar__profile-chevron${isProfileOpen ? ' topbar__profile-chevron--open' : ''}`}
-            />
-          </button>
-
-          {isProfileOpen && (
-            <div className="topbar__profile-popover" role="dialog" aria-label="User profile menu">
-              <div className="topbar__profile-header">
-                <div className="topbar__profile-avatar-large">{user.name.charAt(0)}</div>
-                <div className="topbar__profile-info">
-                  <div className="topbar__profile-user-name">{user.fullName || user.name}</div>
-                  <div className="topbar__profile-user-role">{user.role}</div>
-                  <div className="topbar__profile-user-email">{user.email}</div>
-                </div>
-              </div>
-
-              <div className="topbar__profile-menu">
-                <button
-                  type="button"
-                  className="topbar__profile-menu-item"
-                  onClick={() => {
-                    setIsProfileOpen(false)
-                    setIsProfileModalOpen(true)
-                  }}
-                >
-                  <User size={15} />
-                  <span>Planner Profile</span>
-                </button>
-
-                <button
-                  type="button"
-                  className="topbar__profile-menu-item"
-                  onClick={() => {
-                    setIsProfileOpen(false)
-                    setIsPreferencesModalOpen(true)
-                  }}
-                >
-                  <Settings size={15} />
-                  <span>City & Model Preferences</span>
-                </button>
-
-                <button
-                  type="button"
-                  className="topbar__profile-menu-item"
-                  onClick={() => {
-                    setIsProfileOpen(false)
-                    setIsExportModalOpen(true)
-                  }}
-                >
-                  <Download size={15} />
-                  <span>Export Resilience Report</span>
-                </button>
-
-                <div className="topbar__profile-divider" />
-
-                {user.isGuest ? (
-                  <button
-                    type="button"
-                    className="topbar__profile-menu-item topbar__profile-menu-item--primary"
-                    onClick={() => {
-                      setIsProfileOpen(false)
-                      localStorage.removeItem('watermap_auth_state')
-                      setUser({
-                        name: 'Akarsh',
-                        fullName: 'Akarsh B.',
-                        role: 'City Water Planner • Admin',
-                        email: 'akarsh@watermap.org',
-                        isGuest: false,
-                      })
-                      showToast('Signed in as Akarsh (City Water Planner)')
-                    }}
-                  >
-                    <LogIn size={15} />
-                    <span>Sign In as City Planner</span>
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="topbar__profile-menu-item topbar__profile-menu-item--danger"
-                    onClick={() => {
-                      setIsProfileOpen(false)
-                      setIsSignOutModalOpen(true)
-                    }}
-                  >
-                    <LogOut size={15} />
-                    <span>Sign Out</span>
-                  </button>
                 )}
               </div>
             </div>

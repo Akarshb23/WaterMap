@@ -16,11 +16,11 @@ const PredictionKpis = () => {
             <Droplet size={19} className="pred-kpi-icon-svg" />
           </div>
           <div className="pred-kpi-info">
-            <span className="pred-kpi-value">0.68</span>
-            <span className="pred-kpi-label">Current WSI</span>
-            <div className="pred-kpi-trend pred-kpi-trend--red">
+            <span className="pred-kpi-value">0.34</span>
+            <span className="pred-kpi-label">Current WSI (Karnataka Avg)</span>
+            <div className="pred-kpi-trend pred-kpi-trend--up">
               <ArrowUp size={13} strokeWidth={2.5} />
-              <span>12% vs last year</span>
+              <span>5 High-Risk of 31 Districts</span>
             </div>
           </div>
         </div>
@@ -52,11 +52,11 @@ const PredictionKpis = () => {
             <BarChart2 size={19} className="pred-kpi-icon-svg" />
           </div>
           <div className="pred-kpi-info">
-            <span className="pred-kpi-value">0.79</span>
+            <span className="pred-kpi-value">0.46</span>
             <span className="pred-kpi-label">Predicted WSI (2030)</span>
             <div className="pred-kpi-trend pred-kpi-trend--red">
               <ArrowUp size={13} strokeWidth={2.5} />
-              <span>16% vs 2024</span>
+              <span>+35% vs Current Baseline</span>
             </div>
           </div>
         </div>
@@ -98,11 +98,11 @@ const PredictionKpis = () => {
             <AlertTriangle size={19} className="pred-kpi-icon-svg" />
           </div>
           <div className="pred-kpi-info">
-            <span className="pred-kpi-value">12</span>
+            <span className="pred-kpi-value">8</span>
             <span className="pred-kpi-label">High Risk Districts (2030)</span>
             <div className="pred-kpi-trend pred-kpi-trend--red">
               <ArrowUp size={13} strokeWidth={2.5} />
-              <span>5 more than 2024</span>
+              <span>3 more than current 5</span>
             </div>
           </div>
         </div>
@@ -134,11 +134,11 @@ const PredictionKpis = () => {
             <Users size={19} className="pred-kpi-icon-svg" />
           </div>
           <div className="pred-kpi-info">
-            <span className="pred-kpi-value">24%</span>
+            <span className="pred-kpi-value">22%</span>
             <span className="pred-kpi-label">Increase in Water Demand</span>
             <div className="pred-kpi-trend pred-kpi-trend--red">
               <ArrowUp size={13} strokeWidth={2.5} />
-              <span>by 2030</span>
+              <span>projected by 2030</span>
             </div>
           </div>
         </div>
