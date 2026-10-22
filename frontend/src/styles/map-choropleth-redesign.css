@@ -1,0 +1,110 @@
+/* WaterMap shared choropleth system — intentionally scoped to map layers. */
+:root {
+  --wm-risk-low: #34d399;
+  --wm-risk-moderate: #facc15;
+  --wm-risk-high: #fb923c;
+  --wm-risk-critical: #ef4444;
+  --wm-map-boundary: #ffffff;
+  --wm-map-selection: #064e3b;
+}
+
+/* The custom SVG maps share a single crisp, interactive polygon treatment. */
+.interactive-map-polygons polygon,
+.city-map-polygons polygon,
+.priority-wards-map__polygons polygon,
+.ward-risk-illustration polygon {
+  stroke: var(--wm-map-boundary);
+  stroke-width: 1.35px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+  transition: fill 160ms ease, opacity 160ms ease, stroke 160ms ease, stroke-width 160ms ease, filter 160ms ease;
+}
+
+.interactive-map-polygons polygon:hover,
+.city-map-polygons polygon:hover,
+.priority-wards-map__polygons polygon:hover,
+.ward-risk-illustration polygon:hover {
+  opacity: 1 !important;
+  stroke: #064e3b;
+  stroke-width: 2.6px;
+  filter: brightness(1.035) drop-shadow(0 2px 3px rgb(15 23 42 / 18%));
+}
+
+.interactive-map-polygons polygon:focus-visible,
+.city-map-polygons polygon:focus-visible,
+.priority-wards-map__polygons polygon:focus-visible,
+.ward-risk-illustration polygon:focus-visible {
+  outline: none;
+  stroke: #064e3b;
+  stroke-width: 3px;
+}
+
+.interactive-map-poly--selected,
+.city-map-poly--selected,
+.priority-wards-map__poly--selected {
+  stroke: var(--wm-map-selection) !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 2px 3px rgb(6 78 59 / 22%));
+}
+
+/* Legend swatches are square-ended colour chips rather than ambiguous dots. */
+.interactive-map-legend-card__dot,
+.city-map-legend__dot,
+.priority-wards-map__legend-swatch,
+.district-map-legend__swatch {
+  border: 1px solid rgb(15 23 42 / 10%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 12%);
+}
+
+/* Consistent clean canvas for SVG and real GeoJSON maps. */
+.interactive-map-viewport,
+.city-dashboard-map,
+.city-map-canvas,
+.priority-wards-map__canvas,
+.district-map-canvas,
+.leaflet-ward-map {
+  background: #f5f8f6;
+}
+
+.interactive-map-svg,
+.city-map-svg,
+.priority-wards-map__svg {
+  shape-rendering: geometricPrecision;
+}
+
+/* Leaflet polygon hover is applied by Leaflet's path element. */
+.leaflet-ward-map .leaflet-interactive,
+.district-map-leaflet .leaflet-interactive {
+  transition: fill-opacity 150ms ease, stroke-width 150ms ease, filter 150ms ease;
+  outline: none;
+}
+
+.leaflet-ward-map .leaflet-interactive:hover,
+.district-map-leaflet .leaflet-interactive:hover {
+  fill-opacity: 0.98 !important;
+  stroke: #064e3b !important;
+  stroke-width: 2.8px !important;
+  filter: drop-shadow(0 2px 3px rgb(15 23 42 / 16%));
+}
+
+/* Compact responsive legends, without changing any map component layout. */
+.interactive-map-legend-card,
+.city-map-legend,
+.priority-wards-map__legend,
+.district-map-legend {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgb(15 23 42 / 10%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive-map-polygons polygon,
+  .city-map-polygons polygon,
+  .priority-wards-map__polygons polygon,
+  .leaflet-ward-map .leaflet-interactive,
+  .district-map-leaflet .leaflet-interactive {
+    transition: none;
+  }
+}
